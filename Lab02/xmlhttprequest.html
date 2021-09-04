@@ -1,0 +1,36 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+<body>
+    <button id="button">Get name</button>
+    <p>
+        Received name:
+    </p>
+    <p id="name"></p>
+    <script>
+        const nameElement = document.querySelector("#name");
+
+        document.querySelector("#button").addEventListener("click", () => {
+            const xhr = new XMLHttpRequest();
+            xhr.open('GET', '/api/name');
+            xhr.send();
+            xhr.onload = () => {
+                if (xhr.status !== 200)
+                {
+                    nameElement.innerHTML = `Ошибка ${xhr.status}: ${xhr.statusText}`;
+                }
+                else
+                {
+                    nameElement.innerHTML = xhr.responseText;
+                }
+            };
+        })
+    </script>
+</body>
+</html>
