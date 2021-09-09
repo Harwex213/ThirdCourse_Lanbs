@@ -1,0 +1,56 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+<body>
+<button id="sync">Sync</button>
+<button id="nextTick">nextTick</button>
+<button id="immediate">Immediate</button>
+<p>Factorial counter:</p>
+<p id="chosenType"></p>
+<p id="result"></p>
+<script>
+    let requestUrl = "";
+    const elementToWrite = document.querySelector("#result");
+    const elementChosenType = document.querySelector("#chosenType");
+
+    const getFactorial = async (x) => {
+        const response = await fetch(`/${requestUrl}?k=${x}`);
+        console.log("now i'm parsing!!!");
+        return await response.json();
+    }
+
+    const makeCycleFetch = (url) => {
+        requestUrl = url;
+        const startedTime = Date.now();
+        for (let i = 1; i <= 20; i++) {
+            console.log("fetch number " + i);
+            getFactorial(i).then(result => {
+                elementToWrite.innerHTML += `${i}. Результат: ${Date.now() - startedTime}-${i}/${result.fact}<br>`
+            })
+        }
+    }
+
+    document.querySelector("#sync").addEventListener("click", () => {
+        elementChosenType.innerHTML = "sync";
+        elementToWrite.innerHTML = "";
+        makeCycleFetch("fact");
+    });
+    document.querySelector("#nextTick").addEventListener("click", () => {
+        elementChosenType.innerHTML = "next-tick";
+        elementToWrite.innerHTML = "";
+        makeCycleFetch("fact/next-tick");
+    });
+    document.querySelector("#immediate").addEventListener("click", () => {
+        elementChosenType.innerHTML = "immediate";
+        elementToWrite.innerHTML = "";
+        makeCycleFetch("fact/immediate");
+    });
+</script>
+</body>
+</html>
