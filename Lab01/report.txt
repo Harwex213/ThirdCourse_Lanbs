@@ -1,0 +1,406 @@
+
+Активные подключения
+
+  Имя    Локальный адрес        Внешний адрес          Состояние
+  TCP    0.0.0.0:135            DESKTOP-2QTVKAR:0      LISTENING
+  RpcSs
+ [svchost.exe]
+  TCP    0.0.0.0:443            DESKTOP-2QTVKAR:0      LISTENING
+ [vmware-hostd.exe]
+  TCP    0.0.0.0:445            DESKTOP-2QTVKAR:0      LISTENING
+ Не удается получить сведения о владельце
+  TCP    0.0.0.0:902            DESKTOP-2QTVKAR:0      LISTENING
+ [vmware-authd.exe]
+  TCP    0.0.0.0:912            DESKTOP-2QTVKAR:0      LISTENING
+ [vmware-authd.exe]
+  TCP    0.0.0.0:1433           DESKTOP-2QTVKAR:0      LISTENING
+ [sqlservr.exe]
+  TCP    0.0.0.0:5040           DESKTOP-2QTVKAR:0      LISTENING
+  CDPSvc
+ [svchost.exe]
+  TCP    0.0.0.0:5357           DESKTOP-2QTVKAR:0      LISTENING
+ Не удается получить сведения о владельце
+  TCP    0.0.0.0:49664          DESKTOP-2QTVKAR:0      LISTENING
+ [lsass.exe]
+  TCP    0.0.0.0:49665          DESKTOP-2QTVKAR:0      LISTENING
+ Не удается получить сведения о владельце
+  TCP    0.0.0.0:49666          DESKTOP-2QTVKAR:0      LISTENING
+  Schedule
+ [svchost.exe]
+  TCP    0.0.0.0:49667          DESKTOP-2QTVKAR:0      LISTENING
+  EventLog
+ [svchost.exe]
+  TCP    0.0.0.0:49668          DESKTOP-2QTVKAR:0      LISTENING
+ [spoolsv.exe]
+  TCP    0.0.0.0:58741          DESKTOP-2QTVKAR:0      LISTENING
+ Не удается получить сведения о владельце
+  TCP    10.208.97.9:139        DESKTOP-2QTVKAR:0      LISTENING
+ Не удается получить сведения о владельце
+  TCP    10.208.97.9:49904      fra24s07-in-f14:https  ESTABLISHED
+ [chrome.exe]
+  TCP    10.208.97.9:49918      52.109.88.174:https    TIME_WAIT
+  TCP    10.208.97.9:49932      20.54.232.160:https    ESTABLISHED
+  CDPUserSvc_312b479
+ [svchost.exe]
+  TCP    10.208.97.9:50646      server-54-192-229-84:https  ESTABLISHED
+ [chrome.exe]
+  TCP    10.208.97.9:52915      server-52-84-199-48:https  ESTABLISHED
+ [chrome.exe]
+  TCP    10.208.97.9:54202      server-52-84-199-48:https  ESTABLISHED
+ [chrome.exe]
+  TCP    10.208.97.9:54377      20.199.120.85:https    ESTABLISHED
+  WpnService
+ [svchost.exe]
+  TCP    10.208.97.9:54946      wb-in-f188:5228        ESTABLISHED
+ [chrome.exe]
+  TCP    10.208.97.9:56484      DESKTOP-2QTVKAR:0      LISTENING
+ [RvControlSvc.exe]
+  TCP    10.208.97.9:56484      ns3058076:17301        ESTABLISHED
+ [RvControlSvc.exe]
+  TCP    10.208.97.9:56683      13.107.255.190:https   ESTABLISHED
+ [SearchApp.exe]
+  TCP    10.208.97.9:57337      fra24s11-in-f14:https  TIME_WAIT
+  TCP    10.208.97.9:57578      server-54-192-229-98:https  ESTABLISHED
+ [chrome.exe]
+  TCP    10.208.97.9:57711      a23-197-104-28:https   CLOSE_WAIT
+ [vmware.exe]
+  TCP    10.208.97.9:58199      fra16s53-in-f10:https  ESTABLISHED
+ [googledrivesync.exe]
+  TCP    10.208.97.9:59881      fra24s08-in-f10:https  CLOSE_WAIT
+ [googledrivesync.exe]
+  TCP    10.208.97.9:59923      52.98.56.210:https     ESTABLISHED
+ [SearchApp.exe]
+  TCP    10.208.97.9:59949      server-52-84-199-61:https  ESTABLISHED
+ [chrome.exe]
+  TCP    10.208.97.9:60241      80.94.168.134:5001     ESTABLISHED
+ [chrome.exe]
+  TCP    10.208.97.9:62093      server-52-84-199-56:https  ESTABLISHED
+ [chrome.exe]
+  TCP    26.5.200.135:139       DESKTOP-2QTVKAR:0      LISTENING
+ Не удается получить сведения о владельце
+  TCP    127.0.0.1:1434         DESKTOP-2QTVKAR:0      LISTENING
+ [sqlservr.exe]
+  TCP    127.0.0.1:8307         DESKTOP-2QTVKAR:0      LISTENING
+ [vmware-hostd.exe]
+  TCP    127.0.0.1:9010         DESKTOP-2QTVKAR:0      LISTENING
+ [lghub_agent.exe]
+  TCP    127.0.0.1:9010         DESKTOP-2QTVKAR:57338  ESTABLISHED
+ [lghub_agent.exe]
+  TCP    127.0.0.1:9080         DESKTOP-2QTVKAR:0      LISTENING
+ [lghub_agent.exe]
+  TCP    127.0.0.1:9100         DESKTOP-2QTVKAR:0      LISTENING
+ [lghub_updater.exe]
+  TCP    127.0.0.1:9100         DESKTOP-2QTVKAR:54569  ESTABLISHED
+ [lghub_updater.exe]
+  TCP    127.0.0.1:9180         DESKTOP-2QTVKAR:0      LISTENING
+ [lghub_updater.exe]
+  TCP    127.0.0.1:45654        DESKTOP-2QTVKAR:0      LISTENING
+ [lghub_agent.exe]
+  TCP    127.0.0.1:49934        DESKTOP-2QTVKAR:6464   SYN_SENT
+ [lghub_agent.exe]
+  TCP    127.0.0.1:52030        DESKTOP-2QTVKAR:52031  ESTABLISHED
+ [vmware.exe]
+  TCP    127.0.0.1:52031        DESKTOP-2QTVKAR:52030  ESTABLISHED
+ [vmware.exe]
+  TCP    127.0.0.1:52032        DESKTOP-2QTVKAR:52033  ESTABLISHED
+ [vmware.exe]
+  TCP    127.0.0.1:52033        DESKTOP-2QTVKAR:52032  ESTABLISHED
+ [vmware.exe]
+  TCP    127.0.0.1:52034        DESKTOP-2QTVKAR:52035  ESTABLISHED
+ [vmware.exe]
+  TCP    127.0.0.1:52035        DESKTOP-2QTVKAR:52034  ESTABLISHED
+ [vmware.exe]
+  TCP    127.0.0.1:54565        DESKTOP-2QTVKAR:65001  ESTABLISHED
+ [nvcontainer.exe]
+  TCP    127.0.0.1:54569        DESKTOP-2QTVKAR:9100   ESTABLISHED
+ [lghub_agent.exe]
+  TCP    127.0.0.1:57338        DESKTOP-2QTVKAR:9010   ESTABLISHED
+ [lghub.exe]
+  TCP    127.0.0.1:58522        DESKTOP-2QTVKAR:58523  ESTABLISHED
+ [vmware-authd.exe]
+  TCP    127.0.0.1:58523        DESKTOP-2QTVKAR:58522  ESTABLISHED
+ [vmware-authd.exe]
+  TCP    127.0.0.1:62889        DESKTOP-2QTVKAR:63870  ESTABLISHED
+ [NVIDIA Share.exe]
+  TCP    127.0.0.1:63870        DESKTOP-2QTVKAR:0      LISTENING
+ [NVIDIA Web Helper.exe]
+  TCP    127.0.0.1:63870        DESKTOP-2QTVKAR:62889  ESTABLISHED
+ [NVIDIA Web Helper.exe]
+  TCP    127.0.0.1:65001        DESKTOP-2QTVKAR:0      LISTENING
+ [nvcontainer.exe]
+  TCP    127.0.0.1:65001        DESKTOP-2QTVKAR:54565  ESTABLISHED
+ [nvcontainer.exe]
+  TCP    192.168.62.1:139       DESKTOP-2QTVKAR:0      LISTENING
+ Не удается получить сведения о владельце
+  TCP    192.168.245.1:139      DESKTOP-2QTVKAR:0      LISTENING
+ Не удается получить сведения о владельце
+  TCP    [::]:135               DESKTOP-2QTVKAR:0      LISTENING
+  RpcSs
+ [svchost.exe]
+  TCP    [::]:443               DESKTOP-2QTVKAR:0      LISTENING
+ [vmware-hostd.exe]
+  TCP    [::]:445               DESKTOP-2QTVKAR:0      LISTENING
+ Не удается получить сведения о владельце
+  TCP    [::]:1433              DESKTOP-2QTVKAR:0      LISTENING
+ [sqlservr.exe]
+  TCP    [::]:5357              DESKTOP-2QTVKAR:0      LISTENING
+ Не удается получить сведения о владельце
+  TCP    [::]:49664             DESKTOP-2QTVKAR:0      LISTENING
+ [lsass.exe]
+  TCP    [::]:49665             DESKTOP-2QTVKAR:0      LISTENING
+ Не удается получить сведения о владельце
+  TCP    [::]:49666             DESKTOP-2QTVKAR:0      LISTENING
+  Schedule
+ [svchost.exe]
+  TCP    [::]:49667             DESKTOP-2QTVKAR:0      LISTENING
+  EventLog
+ [svchost.exe]
+  TCP    [::]:49668             DESKTOP-2QTVKAR:0      LISTENING
+ [spoolsv.exe]
+  TCP    [::]:58741             DESKTOP-2QTVKAR:0      LISTENING
+ Не удается получить сведения о владельце
+  TCP    [::1]:1434             DESKTOP-2QTVKAR:0      LISTENING
+ [sqlservr.exe]
+  TCP    [::1]:8307             DESKTOP-2QTVKAR:0      LISTENING
+ [vmware-hostd.exe]
+  TCP    [::1]:58524            DESKTOP-2QTVKAR:58525  ESTABLISHED
+ [vmware.exe]
+  TCP    [::1]:58525            DESKTOP-2QTVKAR:58524  ESTABLISHED
+ [vmware.exe]
+  TCP    [::1]:61065            DESKTOP-2QTVKAR:0      LISTENING
+ [jhi_service.exe]
+  UDP    0.0.0.0:500            *:*                    
+  IKEEXT
+ [svchost.exe]
+  UDP    0.0.0.0:3544           *:*                    
+  iphlpsvc
+ [svchost.exe]
+  UDP    0.0.0.0:3702           *:*                    
+  FDResPub
+ [svchost.exe]
+  UDP    0.0.0.0:3702           *:*                    
+  FDResPub
+ [svchost.exe]
+  UDP    0.0.0.0:4500           *:*                    
+  IKEEXT
+ [svchost.exe]
+  UDP    0.0.0.0:5050           *:*                    
+  CDPSvc
+ [svchost.exe]
+  UDP    0.0.0.0:5353           *:*                    
+ [chrome.exe]
+  UDP    0.0.0.0:5353           *:*                    
+ [chrome.exe]
+  UDP    0.0.0.0:5353           *:*                    
+ [chrome.exe]
+  UDP    0.0.0.0:5353           *:*                    
+ [chrome.exe]
+  UDP    0.0.0.0:5353           *:*                    
+ [chrome.exe]
+  UDP    0.0.0.0:5353           *:*                    
+ [chrome.exe]
+  UDP    0.0.0.0:5353           *:*                    
+ [chrome.exe]
+  UDP    0.0.0.0:5353           *:*                    
+  Dnscache
+ [svchost.exe]
+  UDP    0.0.0.0:5353           *:*                    
+ [chrome.exe]
+  UDP    0.0.0.0:5353           *:*                    
+ [chrome.exe]
+  UDP    0.0.0.0:5353           *:*                    
+ [chrome.exe]
+  UDP    0.0.0.0:5353           *:*                    
+ [chrome.exe]
+  UDP    0.0.0.0:5353           *:*                    
+ [chrome.exe]
+  UDP    0.0.0.0:5353           *:*                    
+ [chrome.exe]
+  UDP    0.0.0.0:5353           *:*                    
+ [chrome.exe]
+  UDP    0.0.0.0:5353           *:*                    
+ [chrome.exe]
+  UDP    0.0.0.0:5353           *:*                    
+ [chrome.exe]
+  UDP    0.0.0.0:5353           *:*                    
+ [chrome.exe]
+  UDP    0.0.0.0:5353           *:*                    
+ [chrome.exe]
+  UDP    0.0.0.0:5355           *:*                    
+  Dnscache
+ [svchost.exe]
+  UDP    0.0.0.0:54820          *:*                    
+ [nvcontainer.exe]
+  UDP    0.0.0.0:54915          *:*                    
+ [lghub_agent.exe]
+  UDP    0.0.0.0:63681          *:*                    
+  FDResPub
+ [svchost.exe]
+  UDP    10.208.97.9:137        *:*                    
+ Не удается получить сведения о владельце
+  UDP    10.208.97.9:138        *:*                    
+ Не удается получить сведения о владельце
+  UDP    10.208.97.9:1900       *:*                    
+  SSDPSRV
+ [svchost.exe]
+  UDP    10.208.97.9:2177       *:*                    
+  QWAVE
+ [svchost.exe]
+  UDP    10.208.97.9:5353       *:*                    
+ [nvcontainer.exe]
+  UDP    10.208.97.9:56155      *:*                    
+  SSDPSRV
+ [svchost.exe]
+  UDP    10.208.97.9:56283      *:*                    
+  iphlpsvc
+ [svchost.exe]
+  UDP    26.5.200.135:137       *:*                    
+ Не удается получить сведения о владельце
+  UDP    26.5.200.135:138       *:*                    
+ Не удается получить сведения о владельце
+  UDP    26.5.200.135:1900      *:*                    
+  SSDPSRV
+ [svchost.exe]
+  UDP    26.5.200.135:2177      *:*                    
+  QWAVE
+ [svchost.exe]
+  UDP    26.5.200.135:5353      *:*                    
+ [nvcontainer.exe]
+  UDP    26.5.200.135:56152     *:*                    
+  SSDPSRV
+ [svchost.exe]
+  UDP    127.0.0.1:1900         *:*                    
+  SSDPSRV
+ [svchost.exe]
+  UDP    127.0.0.1:10020        *:*                    
+ [NVIDIA Web Helper.exe]
+  UDP    127.0.0.1:56156        *:*                    
+  SSDPSRV
+ [svchost.exe]
+  UDP    127.0.0.1:61034        *:*                    
+ [nvcontainer.exe]
+  UDP    127.0.0.1:63551        *:*                    
+  iphlpsvc
+ [svchost.exe]
+  UDP    192.168.62.1:137       *:*                    
+ Не удается получить сведения о владельце
+  UDP    192.168.62.1:138       *:*                    
+ Не удается получить сведения о владельце
+  UDP    192.168.62.1:1900      *:*                    
+  SSDPSRV
+ [svchost.exe]
+  UDP    192.168.62.1:2177      *:*                    
+  QWAVE
+ [svchost.exe]
+  UDP    192.168.62.1:5353      *:*                    
+ [nvcontainer.exe]
+  UDP    192.168.62.1:56153     *:*                    
+  SSDPSRV
+ [svchost.exe]
+  UDP    192.168.245.1:137      *:*                    
+ Не удается получить сведения о владельце
+  UDP    192.168.245.1:138      *:*                    
+ Не удается получить сведения о владельце
+  UDP    192.168.245.1:1900     *:*                    
+  SSDPSRV
+ [svchost.exe]
+  UDP    192.168.245.1:2177     *:*                    
+  QWAVE
+ [svchost.exe]
+  UDP    192.168.245.1:5353     *:*                    
+ [nvcontainer.exe]
+  UDP    192.168.245.1:56154    *:*                    
+  SSDPSRV
+ [svchost.exe]
+  UDP    [::]:500               *:*                    
+  IKEEXT
+ [svchost.exe]
+  UDP    [::]:3702              *:*                    
+  FDResPub
+ [svchost.exe]
+  UDP    [::]:3702              *:*                    
+  FDResPub
+ [svchost.exe]
+  UDP    [::]:4500              *:*                    
+  IKEEXT
+ [svchost.exe]
+  UDP    [::]:5353              *:*                    
+ [chrome.exe]
+  UDP    [::]:5353              *:*                    
+ [chrome.exe]
+  UDP    [::]:5353              *:*                    
+ [chrome.exe]
+  UDP    [::]:5353              *:*                    
+ [chrome.exe]
+  UDP    [::]:5353              *:*                    
+ [chrome.exe]
+  UDP    [::]:5353              *:*                    
+ [chrome.exe]
+  UDP    [::]:5353              *:*                    
+ [chrome.exe]
+  UDP    [::]:5353              *:*                    
+  Dnscache
+ [svchost.exe]
+  UDP    [::]:5353              *:*                    
+ [chrome.exe]
+  UDP    [::]:5353              *:*                    
+ [chrome.exe]
+  UDP    [::]:5353              *:*                    
+ [chrome.exe]
+  UDP    [::]:5355              *:*                    
+  Dnscache
+ [svchost.exe]
+  UDP    [::]:54821             *:*                    
+ [nvcontainer.exe]
+  UDP    [::]:54915             *:*                    
+ [lghub_agent.exe]
+  UDP    [::]:63682             *:*                    
+  FDResPub
+ [svchost.exe]
+  UDP    [::1]:1900             *:*                    
+  SSDPSRV
+ [svchost.exe]
+  UDP    [::1]:5353             *:*                    
+ [nvcontainer.exe]
+  UDP    [::1]:56151            *:*                    
+  SSDPSRV
+ [svchost.exe]
+  UDP    [fdfd::1a05:c887]:2177  *:*                    
+  QWAVE
+ [svchost.exe]
+  UDP    [fe80::7c3d:8801:4eb6:455a%6]:1900  *:*                    
+  SSDPSRV
+ [svchost.exe]
+  UDP    [fe80::7c3d:8801:4eb6:455a%6]:2177  *:*                    
+  QWAVE
+ [svchost.exe]
+  UDP    [fe80::7c3d:8801:4eb6:455a%6]:56147  *:*                    
+  SSDPSRV
+ [svchost.exe]
+  UDP    [fe80::911b:fce0:3dba:e299%46]:1900  *:*                    
+  SSDPSRV
+ [svchost.exe]
+  UDP    [fe80::911b:fce0:3dba:e299%46]:2177  *:*                    
+  QWAVE
+ [svchost.exe]
+  UDP    [fe80::911b:fce0:3dba:e299%46]:56149  *:*                    
+  SSDPSRV
+ [svchost.exe]
+  UDP    [fe80::a151:b833:a5ac:b813%17]:1900  *:*                    
+  SSDPSRV
+ [svchost.exe]
+  UDP    [fe80::a151:b833:a5ac:b813%17]:2177  *:*                    
+  QWAVE
+ [svchost.exe]
+  UDP    [fe80::a151:b833:a5ac:b813%17]:56150  *:*                    
+  SSDPSRV
+ [svchost.exe]
+  UDP    [fe80::cc58:f22f:9c3d:e434%45]:1900  *:*                    
+  SSDPSRV
+ [svchost.exe]
+  UDP    [fe80::cc58:f22f:9c3d:e434%45]:2177  *:*                    
+  QWAVE
+ [svchost.exe]
+  UDP    [fe80::cc58:f22f:9c3d:e434%45]:56148  *:*                    
+  SSDPSRV
+ [svchost.exe]
