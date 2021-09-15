@@ -24,6 +24,11 @@ int main() {
         if (listen(serverSocket, SOMAXCONN) == SOCKET_ERROR)
             throw Error::SetErrorMsgText("Listen: ", WSAGetLastError());
 
+        cout << "server is listening on: "
+            << htons(serverSocketInfo.sin_addr.S_un.S_addr)
+            << ":" << htons(serverSocketInfo.sin_port)
+            << endl;
+
         SOCKET clientSocket;
         SOCKADDR_IN clientSocketInfo;
         int clientSocketInfoLength = sizeof(clientSocketInfo);
@@ -52,8 +57,9 @@ int main() {
             throw Error::SetErrorMsgText("Cleanup: ", WSAGetLastError());
     }
     catch (string& errorMsgText) {
-        cout << endl << "WSAGetLastError: " << errorMsgText;
+        cout << endl << "WSAGetLastError: " << errorMsgText << endl;;
     }
 
+    system("pause");
     return 0;
 }
