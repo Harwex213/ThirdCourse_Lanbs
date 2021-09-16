@@ -25,7 +25,7 @@ int main() {
             throw Error::SetErrorMsgText("Listen: ", WSAGetLastError());
 
         cout << "server is listening on: "
-            << htons(serverSocketInfo.sin_addr.S_un.S_addr)
+            << inet_ntoa(serverSocketInfo.sin_addr)
             << ":" << htons(serverSocketInfo.sin_port)
             << endl;
 
@@ -39,17 +39,22 @@ int main() {
                                    &clientSocketInfoLength)) == INVALID_SOCKET)
             throw  Error::SetErrorMsgText("Accept: ", WSAGetLastError());
 
+        cout << "client connected: "
+             << inet_ntoa(serverSocketInfo.sin_addr)
+             << ":" << htons(clientSocketInfo.sin_port)
+             << endl;
+
         char inputBuffer[50];
-        char outputBuffer[50] = "server: принято";
-        int outputBufferLength = 0;
 
-        if (recv(clientSocket, inputBuffer, sizeof(inputBuffer), NULL) == SOCKET_ERROR)
-            throw Error::SetErrorMsgText("Receive:",WSAGetLastError());
+        do {
+            if (recv(clientSocket, inputBuffer, sizeof(inputBuffer), NULL) == SOCKET_ERROR)
+                throw Error::SetErrorMsgText("Receive:",WSAGetLastError());
 
-        _itoa(outputBufferLength, outputBuffer + strlen("server: принято") + 1,10);
+            cout << "received from Client: " <<  inputBuffer << endl;
 
-        if (send(clientSocket, outputBuffer, strlen(outputBuffer) + 1, NULL) == SOCKET_ERROR)
-            throw Error::SetErrorMsgText("send:",WSAGetLastError());
+            if (send(clientSocket, inputBuffer, strlen(inputBuffer) + 1, NULL) == SOCKET_ERROR)
+                throw Error::SetErrorMsgText("send:",WSAGetLastError());
+        } while (inputBuffer[0] != '\0');
 
         if (closesocket(serverSocket) == SOCKET_ERROR)
             throw Error::SetErrorMsgText("CloseSocket: ", WSAGetLastError());
