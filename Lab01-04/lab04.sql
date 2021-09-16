@@ -8,7 +8,6 @@ select instance_name, host_name, status, instance_role, version from v$instance;
 select * from v$sga_dynamic_components;
 select comp_name,version, status from dba_registry;
 
-
 -- My PDB exploration
 SELECT  *  FROM  DICTIONARY;
 ALTER DATABASE OPEN;

@@ -64,7 +64,7 @@ create table TABLE_1
 );
 
 drop table TABLE_1;
-  
+
 create view VIEW_1 (x, y) as select * from TABLE_1; 
 
 -- Create table in tablespace
@@ -93,3 +93,5 @@ insert into KOA_T1
     
 insert into KOA_T1
     values (3, 'c');
+    
+select * from KOA_T1;
