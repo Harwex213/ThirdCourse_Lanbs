@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <title>Lab 4</title>
+    <script>
+        const insert = () => fetch("/api/db", {
+            method: "POST",
+            mode: "no-cors",
+            headers: {
+                "Content-Type": "application/json",
+                "Accept": "application/json; charset=utf-8"
+            },
+            body: JSON.stringify({
+                id: document.getElementById("Id").value,
+                name: document.getElementById("Name").value,
+                bDay: document.getElementById("BDay").value })
+        });
+
+        const select = async () => {
+            const response = await fetch("/api/db", {
+                method: "GET",
+                mode: "no-cors",
+                headers: {
+                    "Content-Type": "application/json",
+                    "Accept": "application/json; charset=utf-8"
+                }
+            });
+            const data = await response.json();
+            console.log(data);
+
+            document.getElementById("select_result").innerHTML = "Entities:<br>";
+            data.forEach(el => {
+                document.getElementById("select_result").innerHTML += (el.id + ". " + el.name + " " + el.bDay.substring(10, 0) + "<br/>");
+            });
+        }
+
+        const update = () => fetch("/api/db", {
+            method: "PUT",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify({
+                id: document.getElementById("Id").value,
+                name: document.getElementById("Name").value,
+                bDay: document.getElementById("BDay").value })
+        });
+
+        const remove = () => fetch(`/api/db?id=${document.getElementById("Id").value}`, {
+            method: "DELETE",
+            body: JSON.stringify({
+                id: document.getElementById("Id").value,
+                name: document.getElementById("Name").value,
+                bDay: document.getElementById("BDay").value })
+        });
+    </script>
+</head>
+<body>
+<h1 style="padding-left: 20px; margin-bottom: 0;">Lab 4</h1>
+<div style="padding: 5px 20px; display: flex;">
+    <div style="width: 70vw;">
+        <button onclick="select()">Select</button>
+        <div id="select_result">Entities:<br></div>
+    </div>
+    <div>
+        <div style="display: flex; flex-direction: column;">
+            <label for="Id">Id</label>
+            <input type="number" id="Id" min="0" />
+            <label for="Name">Name</label>
+            <input type="text" id="Name" />
+            <label for="BDay">Birthday</label>
+            <input type="date" id="BDay" />
+        </div>
+        <div style="display: flex; flex-direction: column; margin-top: 10px;">
+            <button style="margin: 5px 40px;" onclick="insert()">Add</button>
+            <button style="margin: 5px 40px;" onclick="update()">Update by Id</button>
+            <button style="margin: 5px 40px;" onclick="remove()">Remove by Id</button>
+        </div>
+    </div>
+</div>
+</body>
+
+</html>
