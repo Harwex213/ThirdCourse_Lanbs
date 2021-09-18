@@ -1,0 +1,14 @@
+{
+  "name": "m0603_harwex",
+  "version": "1.0.1",
+  "description": "Send email ",
+  "main": "m0603.js",
+  "author": "Harwex213",
+  "license": "ISC",
+  "dependencies": {
+    "nodemailer": "^6.6.3"
+  },
+  "publishConfig": {
+    "access": "public"
+  }
+}
