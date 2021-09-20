@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <title>Lab 4</title>
+    <script>
+        let isSending = false;
+        const send = async () => {
+            if (isSending) {
+                return;
+            }
+            isSending = !isSending;
+            document.getElementById("Response").innerHTML = "";
+            const response = await fetch("/sendMail", {
+                method: "POST",
+                mode: "no-cors",
+                headers: {
+                    "Content-Type": "application/json",
+                    "Accept": "application/json; charset=utf-8"
+                },
+                body: JSON.stringify({
+                    subject: document.getElementById("Subject").value,
+                    message: document.getElementById("Message").value,
+                })
+            });
+            document.getElementById("Response").innerHTML = await response.text();
+            isSending = !isSending;
+        };
+    </script>
+</head>
+<body>
+    <div style="display: flex; flex-direction: column;">
+        <label for="Subject">Subject</label>
+        <input type="text" id="Subject" />
+
+        <label for="Message">Message</label>
+        <textarea id="Message"></textarea>
+
+        <button type="submit" onclick="send()">Send</button>
+    </div>
+    <div id="Response"></div>
+</body>
+
+</html>

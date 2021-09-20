@@ -3,7 +3,7 @@ const nodemailer = require("nodemailer");
 const fromMail = "brionna.gleichner@ethereal.email";
 const toMail = "brionna.gleichner@ethereal.email";
 
-exports.send = async (subject, message) => {
+module.exports = async (subject, message) => {
     const transporter = nodemailer.createTransport({
         host: "smtp.ethereal.email",
         port: 587,

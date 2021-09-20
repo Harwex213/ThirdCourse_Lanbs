@@ -1,7 +1,7 @@
 {
   "name": "m0603_harwex",
-  "version": "1.0.1",
-  "description": "Send email ",
+  "version": "1.0.2",
+  "description": "Send email via nodemailer",
   "main": "m0603.js",
   "author": "Harwex213",
   "license": "ISC",
