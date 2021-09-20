@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<root>
+    <student>
+        <name>Oleg</name>
+        <surname>Kaportsev</surname>
+        <speciality>POIT</speciality>
+        <course>3</course>
+        <group>6</group>
+    </student>
+    <student>
+        <name>Igor</name>
+        <surname>Skvortsoff</surname>
+        <speciality>POIT</speciality>
+        <course>3</course>
+        <group>6</group>
+    </student>
+    <student>
+        <name>Lera</name>
+        <surname>Fedoruk</surname>
+        <speciality>POIT</speciality>
+        <course>3</course>
+        <group>6</group>
+    </student>
+    <student>
+        <name>Vika</name>
+        <surname>Novik</surname>
+        <speciality>POIT</speciality>
+        <course>3</course>
+        <group>6</group>
+    </student>
+</root>

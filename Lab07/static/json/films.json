@@ -1,0 +1,14 @@
+[
+  {
+    "name": "Film A",
+    "type": "Fantasy"
+  },
+  {
+    "name": "Film B",
+    "type": "Comedy"
+  },
+  {
+    "name": "Film C",
+    "type": "Thrill "
+  }
+]
