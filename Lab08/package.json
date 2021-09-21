@@ -1,0 +1,15 @@
+{
+  "name": "lab08",
+  "version": "1.0.0",
+  "description": "",
+  "main": "8-00.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "fast-xml-parser": "^3.20.0",
+    "multiparty": "^4.2.2"
+  }
+}
