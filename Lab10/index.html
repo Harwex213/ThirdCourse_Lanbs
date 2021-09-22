@@ -1,0 +1,59 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <style>
+        @import url("https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@300&display=swap");
+
+        body {
+            font-family: "Be Vietnam Pro", sans-serif;
+        }
+    </style>
+</head>
+<body>
+    <h1>10-01</h1>
+    <button onclick="startWs()">startWS</button>
+
+    <script>
+        let globalId = 0;
+        const startWs = () => {
+            const localId = globalId++;
+            const webSocket = new WebSocket("ws://localhost:4000/ws-server");
+
+            webSocket.onopen = () =>
+            {
+                console.log(`WebSocket: ${localId} connected to ws-server`);
+                let n = 1;
+                const sendingInterval = setInterval(() => {
+                    webSocket.send(`10-01-client: ${n++}`);
+                    }, 3000);
+
+                setTimeout(()=>
+                {
+                    clearInterval(sendingInterval);
+                    webSocket.close();
+                }, 25000);
+            };
+
+            webSocket.onmessage = (serverResponse) =>
+            {
+                console.log(`WebSocket, ${localId} new message: ${serverResponse.data}`);
+            };
+
+            webSocket.onerror = (error) =>
+            {
+                console.log(`WebSocket: ${localId} error disappeared`);
+                console.log(`error: ${error.message}`);
+            };
+
+            webSocket.onclose = () => {
+                console.log(`WebSocket: ${localId} disconnected from ws-server`);
+            };
+        }
+    </script>
+</body>
+</html>
