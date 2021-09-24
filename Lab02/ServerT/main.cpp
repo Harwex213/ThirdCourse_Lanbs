@@ -12,7 +12,7 @@ int main() {
         SOCKADDR_IN serverSocketInfo;
         serverSocketInfo.sin_family = AF_INET;
         serverSocketInfo.sin_port = htons(2000);
-        serverSocketInfo.sin_addr.S_un.S_addr = INADDR_ANY;
+        serverSocketInfo.sin_addr.S_un.S_addr = inet_addr("127.0.0.1");
 
         if (WSAStartup(MAKEWORD(2, 0), &wsaData) != 0)
             throw Error::SetErrorMsgText("Startup: ", WSAGetLastError());
@@ -31,35 +31,44 @@ int main() {
 
         SOCKET clientSocket;
         SOCKADDR_IN clientSocketInfo;
-        int clientSocketInfoLength = sizeof(clientSocketInfo);
-        memset(&clientSocketInfo, 0, clientSocketInfoLength);
+        int clientSocketInfoLength = 0;
 
-        if ((clientSocket = accept(serverSocket,
-                                   (sockaddr*)&clientSocketInfo,
-                                   &clientSocketInfoLength)) == INVALID_SOCKET)
-            throw  Error::SetErrorMsgText("Accept: ", WSAGetLastError());
+        while (true) {
+            clientSocketInfoLength = sizeof(clientSocketInfo);
+            memset(&clientSocketInfo, 0, clientSocketInfoLength);
 
-        cout << "client connected: "
-             << inet_ntoa(serverSocketInfo.sin_addr)
-             << ":" << htons(clientSocketInfo.sin_port)
-             << endl;
+            if ((clientSocket = accept(serverSocket,
+                                       (sockaddr*)&clientSocketInfo,
+                                       &clientSocketInfoLength)) == INVALID_SOCKET)
+                throw  Error::SetErrorMsgText("Accept: ", WSAGetLastError());
 
-        char inputBuffer[50];
+            cout << "client connected: "
+                 << inet_ntoa(clientSocketInfo.sin_addr)
+                 << ":" << htons(clientSocketInfo.sin_port)
+                 << endl;
 
-        do {
-            if (recv(clientSocket, inputBuffer, sizeof(inputBuffer), NULL) == SOCKET_ERROR)
-                throw Error::SetErrorMsgText("Receive:",WSAGetLastError());
+            char inputBuffer[50];
 
-            cout << "received from Client: " <<  inputBuffer << endl;
+            do {
+                if (recv(clientSocket, inputBuffer, sizeof(inputBuffer), NULL) == SOCKET_ERROR)
+                    throw Error::SetErrorMsgText("Receive:",WSAGetLastError());
 
-            if (send(clientSocket, inputBuffer, strlen(inputBuffer) + 1, NULL) == SOCKET_ERROR)
-                throw Error::SetErrorMsgText("send:",WSAGetLastError());
-        } while (inputBuffer[0] != '\0');
+                cout << "received from Client: " <<  inputBuffer << endl;
 
-        if (closesocket(serverSocket) == SOCKET_ERROR)
-            throw Error::SetErrorMsgText("CloseSocket: ", WSAGetLastError());
-        if (WSACleanup() == SOCKET_ERROR)
-            throw Error::SetErrorMsgText("Cleanup: ", WSAGetLastError());
+                if (send(clientSocket, inputBuffer, strlen(inputBuffer) + 1, NULL) == SOCKET_ERROR)
+                    throw Error::SetErrorMsgText("send:",WSAGetLastError());
+            } while (inputBuffer[0] != '\0');
+
+            cout << "client disconnected: "
+                 << inet_ntoa(clientSocketInfo.sin_addr)
+                 << ":" << htons(clientSocketInfo.sin_port)
+                 << endl;
+        }
+
+//        if (closesocket(serverSocket) == SOCKET_ERROR)
+//            throw Error::SetErrorMsgText("CloseSocket: ", WSAGetLastError());
+//        if (WSACleanup() == SOCKET_ERROR)
+//            throw Error::SetErrorMsgText("Cleanup: ", WSAGetLastError());
     }
     catch (string& errorMsgText) {
         cout << endl << "WSAGetLastError: " << errorMsgText << endl;;
