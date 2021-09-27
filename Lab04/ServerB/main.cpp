@@ -60,7 +60,7 @@ int main()
         SOCKADDR_IN serverSocketInfo;
         serverSocketInfo.sin_family = AF_INET;
         serverSocketInfo.sin_port = htons(2000);
-        serverSocketInfo.sin_addr.S_un.S_addr = inet_addr("127.0.0.1");
+        serverSocketInfo.sin_addr.S_un.S_addr = INADDR_ANY;
         if (bind(serverSocket, (LPSOCKADDR) &serverSocketInfo, sizeof(serverSocketInfo)) == SOCKET_ERROR)
             throw Error::SetErrorMsgText("Bind: ", WSAGetLastError());
 
