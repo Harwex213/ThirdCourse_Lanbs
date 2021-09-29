@@ -99,9 +99,15 @@ int main()
                                                                               (char *)callSign,
                                                                               &clientSocketInfo,
                                                                               &clientSocketInfoLength);
+
+        char hostname[50];
+        gethostname(hostname, sizeof(hostname));
         cout << "server is open on: "
              << inet_ntoa(serverSocketInfo.sin_addr)
              << ":" << htons(serverSocketInfo.sin_port)
+             << endl;
+        cout << "\thostname: "
+             << hostname
              << endl;
 
         while(true)
@@ -115,6 +121,11 @@ int main()
                      << inet_ntoa(clientSocketInfo.sin_addr)
                      << ":"
                      << htons(clientSocketInfo.sin_port)
+                     << endl;
+                cout << "\thostname: "
+                     << gethostbyaddr((char*)&clientSocketInfo.sin_addr,
+                                      sizeof(clientSocketInfo.sin_addr),
+                                      AF_INET)->h_name
                      << endl;
             }
         }
