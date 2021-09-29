@@ -15,7 +15,19 @@ int main()
             throw Error::SetErrorMsgText("Startup: ", WSAGetLastError());
 
         SOCKADDR_IN serverSocketInfo;
-        if (EstablishConnection(2000, (char *) "Hello", serverSocketInfo)) {
+//        if (EstablishConnectionViaBroadcast(2000, (char *) "Hello", serverSocketInfo))
+//        {
+//            cout << "Was established connection with server "
+//                 << inet_ntoa(serverSocketInfo.sin_addr)
+//                 << ":"
+//                 << htons(serverSocketInfo.sin_port)
+//                 << endl;
+//        }
+        if (EstablishConnectionViaHostname((char *)"DESKTOP-2QTVKAR",
+                                           2000,
+                                           (char *)"Hello",
+                                           serverSocketInfo))
+        {
             cout << "Was established connection with server "
                  << inet_ntoa(serverSocketInfo.sin_addr)
                  << ":"
