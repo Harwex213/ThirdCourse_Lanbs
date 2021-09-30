@@ -1,25 +1,25 @@
 const getRequest = async (request, response, db) => {
     response.writeHead(200, {'Content-Type': 'application/json; charset=utf-8'});
-    response.end(JSON.stringify(db.select()));
+    response.end(JSON.stringify(await db.select()));
 }
 
-const postRequest = async (request, response, db) => {
+const postRequest = (request, response, db) => {
     let user;
 
-    request.on("data", data => {
-        user = db.insert(JSON.parse(data));
+    request.on("data", async data => {
+        user = await db.insert(JSON.parse(data));
     });
 
     request.on("end", () => response.end(JSON.stringify(user)))
 }
 
-const putRequest = async (request, response, db) => {
-    request.on("data", data => {
+const putRequest = (request, response, db) => {
+    request.on("data", async data => {
         try {
-            db.update(JSON.parse(data));
+            await db.update(JSON.parse(data));
         } catch (e) {
             response.statusCode = 404;
-            response.end(e.message);
+            response.end(e);
         }
     });
 
@@ -38,11 +38,11 @@ const deleteRequest = async (request, response, db) => {
     }
 
     try {
-        const deletedUser = db.delete(Number(id));
+        const deletedUser = await db.delete(Number(id));
         response.end(JSON.stringify(deletedUser));
     } catch (e) {
         response.statusCode = 404;
-        response.end(e.message);
+        response.end(e);
     }
 }
 

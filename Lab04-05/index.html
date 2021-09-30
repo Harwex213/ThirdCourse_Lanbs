@@ -17,7 +17,30 @@
                 bDay: document.getElementById("BDay").value })
         });
 
+        const selectOne = async () => {
+            await select();
+            const response = await fetch("/api/db", {
+                method: "GET",
+                mode: "no-cors",
+                headers: {
+                    "Content-Type": "application/json",
+                    "Accept": "application/json; charset=utf-8"
+                }
+            });
+            const data = await response.json();
+            const item = data.find(student => Number(student.id) === Number(document.getElementById("Id").value));
+
+            if (item) {
+                document.getElementById("Name").value = item.name;
+                document.getElementById("BDay").value = item.bDay.substring(0, 10);
+            }
+            else {
+                alert("User doesn't found");
+            }
+        }
+
         const select = async () => {
+            document.getElementById("select_result").innerHTML = "";
             const response = await fetch("/api/db", {
                 method: "GET",
                 mode: "no-cors",
@@ -64,8 +87,13 @@
     </div>
     <div>
         <div style="display: flex; flex-direction: column;">
-            <label for="Id">Id</label>
-            <input type="number" id="Id" min="0" />
+            <div style="display: flex; flex-direction: row;">
+                <div style="display: flex; flex-direction: column;">
+                    <label for="Id">Id</label>
+                    <input value="0" type="number" id="Id" min="0" />
+                </div>
+                <button style="margin: 5px 40px;" onclick="selectOne()">Get this</button>
+            </div>
             <label for="Name">Name</label>
             <input type="text" id="Name" />
             <label for="BDay">Birthday</label>

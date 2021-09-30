@@ -14,41 +14,48 @@ class Database extends EventEmitter
         super(props);
     }
 
-    select() {
-        return this.data;
+    async select() {
+        return await new Promise(resolve => resolve(this.data));
     }
 
-    insert(newEntity) {
-        const entityToAdd = {
-            ...newEntity,
-            id: id++,
-            bDay: new Date(newEntity.bDay),
-        };
-        this.data.push(entityToAdd);
-        return entityToAdd;
+    async insert(newEntity) {
+        return await new Promise(resolve => {
+            const entityToAdd = {
+                ...newEntity,
+                id: id++,
+                bDay: new Date(newEntity.bDay),
+            };
+            this.data.push(entityToAdd);
+            resolve(entityToAdd);
+        })
     }
 
-    update(newEntity) {
-        const updatedEntity = {
-            ...newEntity,
-            id: Number(newEntity.id),
-            bDay: new Date(newEntity.bDay)
-        }
-        const index = this.data.findIndex(entity => entity.id === updatedEntity.id);
-        if (index === -1) {
-            throw new Error("Specified id is invalid");
-        }
-        this.data[index] = updatedEntity;
+    async update(newEntity) {
+        return await new Promise((resolve, reject) => {
+            const updatedEntity = {
+                ...newEntity,
+                id: Number(newEntity.id),
+                bDay: new Date(newEntity.bDay)
+            }
+            const index = this.data.findIndex(entity => entity.id === updatedEntity.id);
+            if (index === -1) {
+                reject("Specified id is invalid");
+            }
+            this.data[index] = updatedEntity;
+            resolve();
+        })
     }
 
-    delete(id) {
-        const index = this.data.findIndex(entity => entity.id === id);
-        if (index === -1) {
-            throw new Error("Specified id is invalid");
-        }
-        const returnData = this.data[index];
-        this.data.splice(index, 1);
-        return returnData;
+    async delete(id) {
+        return await new Promise((resolve, reject) => {
+            const index = this.data.findIndex(entity => entity.id === id);
+            if (index === -1) {
+                reject("Specified id is invalid");
+            }
+            const returnData = this.data[index];
+            this.data.splice(index, 1);
+            resolve(returnData);
+        })
     }
 
     commit() {

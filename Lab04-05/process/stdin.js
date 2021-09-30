@@ -11,6 +11,7 @@ const getDuration = (stringToParse) => {
 let stopServerTimerId = null;
 let autoCommitIntervalId = null;
 
+process.stdin.unref();
 process.stdin.setEncoding("utf-8");
 process.stdin.on("readable", () => {
     let chunk = null;
@@ -22,9 +23,7 @@ process.stdin.on("readable", () => {
                     clearTimeout(stopServerTimerId);
                 }
                 if (x) {
-                    stopServerTimerId = setTimeout(() => server.close(() => {
-                        process.stdin.destroy();
-                    }), getDuration(x));
+                    stopServerTimerId = setTimeout(() => server.close(), getDuration(x));
                 }
                 break;
             case "sc":
