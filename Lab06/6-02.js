@@ -39,5 +39,10 @@ http.createServer((request, response) => {
     const requestUrl = new URL(request.url, baseURL);
 
     const controllerMethod = routes[requestUrl.pathname];
-    controllerMethod(request, response);
+    if (controllerMethod) {
+        controllerMethod(request, response);
+    }
+    else {
+        response.end();
+    }
 }).listen(4000, "localhost", () => console.log("We started"));
