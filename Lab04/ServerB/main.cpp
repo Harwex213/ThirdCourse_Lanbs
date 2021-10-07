@@ -7,71 +7,6 @@
 using namespace std;
 using namespace connectionCustomizer;
 
-void FindAnotherServers(char* callSign)
-{
-    SOCKET broadcastSocket;
-    cout << "Start searching for other server with \"" << callSign << "\" call sign" << endl;
-
-    try {
-        if ((broadcastSocket = socket(AF_INET, SOCK_DGRAM, NULL)) == INVALID_SOCKET)
-            throw Error::SetErrorMsgText("Open broadcast Socket: ", WSAGetLastError());
-
-        int broadcastOption = 1;
-        int timeoutOption = 2500;
-        if (setsockopt(broadcastSocket,
-                       SOL_SOCKET,
-                       SO_BROADCAST,
-                       (char *) &broadcastOption,
-                       sizeof(int)) == SOCKET_ERROR)
-            throw Error::SetErrorMsgText("Set broadcast socket option: ", WSAGetLastError());
-
-        if (setsockopt(broadcastSocket,
-                       SOL_SOCKET,
-                       SO_RCVTIMEO,
-                       (char *) &timeoutOption,
-                       sizeof(long)) == SOCKET_ERROR)
-            throw Error::SetErrorMsgText("Set socket timeout option: ", WSAGetLastError());
-
-        SOCKADDR_IN broadcastSocketInfo;
-        broadcastSocketInfo.sin_family = AF_INET;
-        broadcastSocketInfo.sin_port = htons(2000);
-        broadcastSocketInfo.sin_addr.S_un.S_addr = INADDR_BROADCAST;
-        int broadcastSocketInfoLength = sizeof(broadcastSocketInfo);
-        char answer[50];
-
-        if (sendto(broadcastSocket,
-                   callSign,
-                   strlen(callSign) + 1,
-                   NULL,
-                   (sockaddr *) &broadcastSocketInfo,
-                   sizeof(broadcastSocketInfo)) == SOCKET_ERROR)
-            throw Error::SetErrorMsgText("Send broadcast msg: ",WSAGetLastError());
-
-        while(true) {
-            if (recvfrom(broadcastSocket,
-                         answer,
-                         sizeof(answer),
-                         NULL,
-                         (sockaddr *) &broadcastSocketInfo,
-                         &broadcastSocketInfoLength) == SOCKET_ERROR)
-                throw Error::SetErrorMsgText("Receive broadcast msg: ",WSAGetLastError());
-
-            cout << "!!!Attention!!!" << endl
-                 << "Was found another server with such call sign: "
-                    << inet_ntoa(broadcastSocketInfo.sin_addr)
-                    << ":" << htons(broadcastSocketInfo.sin_port)
-                    << endl;
-        }
-    }
-    catch (string& errorMsgText) {
-        cout << "WSAGetLastError: " << errorMsgText << endl;;
-    }
-
-    if (closesocket(broadcastSocket) == SOCKET_ERROR)
-        throw Error::SetErrorMsgText("Close broadcast Socket: ", WSAGetLastError());
-    cout << "Searching ended" << endl;
-}
-
 int main()
 {
     try {
@@ -80,7 +15,6 @@ int main()
             throw Error::SetErrorMsgText("Startup: ", WSAGetLastError());
 
         const char* callSign = "Hello";
-        FindAnotherServers((char *)callSign);
 
         SOCKET serverSocket;
         if ((serverSocket = socket(AF_INET, SOCK_DGRAM, NULL)) == INVALID_SOCKET)

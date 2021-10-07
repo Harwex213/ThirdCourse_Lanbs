@@ -50,7 +50,7 @@ namespace connectionCustomizer
             throw Error::SetErrorMsgText("Open broadcast Socket:", WSAGetLastError());
 
         int optionValue = 1;
-        if (setsockopt(broadcastSocket, SOL_SOCKET, SO_BROADCAST, (char*)&optionValue, sizeof(int) == SOCKET_ERROR))
+        if (setsockopt(broadcastSocket, SOL_SOCKET, SO_BROADCAST, (char*)&optionValue, sizeof(int)) == SOCKET_ERROR)
             throw Error::SetErrorMsgText("Set broadcast socket option:", WSAGetLastError());
 
         SOCKADDR_IN broadcastSocketInfo;
