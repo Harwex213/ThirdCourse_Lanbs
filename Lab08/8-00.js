@@ -13,6 +13,8 @@ const xmlController = require("./api/8-11");
 const filesController = require("./api/8-12");
 const uploadController = require("./api/8-14");
 
+const showKeepAliveTimeout = false;
+
 const getRoutes = {
     "/connection": connectionController.getConnection,
     "/headers": headersController.getHeaders,
@@ -65,12 +67,17 @@ const server = http.createServer((request, response) => {
     }
 }).listen(4000, "localhost", () => console.log("We started"));
 
-const connections = [];
+let id = 0;
+
 server.on("connection", (socket) => {
-    connections.push(socket);
-})
-server.on("startingClose", () => {
-    connections.forEach(socket => {
-        socket.destroy();
-    })
+    socket.unref();
+
+    if (showKeepAliveTimeout) {
+        const socketId = id++;
+        console.log(`new Connection! id ${id}`)
+        console.time(`connection live ${socketId}`);
+        socket.on("close", () => {
+            console.timeEnd(`connection live ${socketId}`);
+        });
+    }
 })

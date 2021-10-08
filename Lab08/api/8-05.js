@@ -1,10 +1,10 @@
 const closeServer = (request, response, args) => {
     const { server } = args;
 
+    console.log("Start closing server");
     setTimeout(() => {
-        server.emit("startingClose");
         server.close(() => console.log("Server close"));
-    }, 10000)
+    }, 1000);
 
     response.writeHead(200, {
         "Content-Type" : "text/plain; charset=utf-8"

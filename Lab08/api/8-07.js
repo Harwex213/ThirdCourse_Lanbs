@@ -7,9 +7,8 @@ const analyzeRequest = (request, response) => {
     request.on("end", () =>
     {
         console.log("All chunks received");
+        response.end("done");
     });
-
-    response.end("done");
 };
 
 module.exports = {

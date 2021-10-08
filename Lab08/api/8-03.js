@@ -17,7 +17,7 @@ const getParameters = (request, response, args) => {
         }
         else {
             response.writeHead(400);
-            response.write(isCalcByRoute ? requestUrl.href : "x & y must be strings");
+            response.write(isCalcByRoute ? requestUrl.href : "x & y must not be strings");
         }
     }
 

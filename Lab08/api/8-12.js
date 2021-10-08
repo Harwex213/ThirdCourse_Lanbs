@@ -5,10 +5,10 @@ const getFiles = (request, response, args) => {
         fs.readdir(staticDirectory, (err, files) =>
         {
             response.writeHead(200, {
-                "Content-Type" : "text/plain; charset=utf-8",
+                "Content-Type" : "application/json; charset=utf-8",
                 "X-static-files-count": files.length,
             });
-            response.end();
+            response.end(JSON.stringify(files));
         });
     }
 
@@ -24,7 +24,12 @@ const getFiles = (request, response, args) => {
     }
 
     const { routePaths, staticDirectory } = args;
-    routePaths.length === 1 ? showFilesCount() : sendFile();
+    if (routePaths.length === 1) {
+        showFilesCount();
+    }
+    else {
+        sendFile();
+    }
 };
 
 module.exports = {
