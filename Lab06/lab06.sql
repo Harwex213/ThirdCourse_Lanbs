@@ -5,7 +5,7 @@ select * from v$sga;
 select component,
       current_size,
       max_size,
-      granule_size from v$sga_dynamic_components where current_size > 0;
+      granule_size from v$sga_dynamic_components
       
 -- free memory
 select current_size from v$sga_dynamic_free_memory;
@@ -16,6 +16,9 @@ from v$sga_dynamic_components
 where component like '%DEFAULT%'
   or  component like '%KEEP%'
   or  component like '%RECYCLE%';
+  
+  alter system set large_pool_size = 12m;
+  show parameter large_pool_size;
   
 -- table keep
 create table TestTable_keep (k int, s varchar(50)) storage(buffer_pool keep);
