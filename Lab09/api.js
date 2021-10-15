@@ -119,16 +119,10 @@ const handleTask8 = (request, response) => {
     response.writeHead(200, {
         "Content-Type" : "text/plain; base64"
     })
-    const boundary = "--divider";
-    let body = `--${boundary}\r\n`;
-    body += `Content-Disposition: form-data; name=\"file\"; Filename=\"task8.png\"\r\n`;
-    body += `Content-Type: text/plain; base64\r\n\r\n`;
     const fileData = fs.readFileSync(`task8.png`, {
         encoding: "base64"
     });
-    body += fileData;
-    body += `\r\n--${boundary}--\r\n`;
-    response.write(body);
+    response.write(fileData);
     response.end();
 }
 

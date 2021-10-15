@@ -1,4 +1,5 @@
 const http = require("http");
+const fs = require("fs");
 
 const options = {
     host: "localhost",
@@ -17,6 +18,8 @@ http.request(options,(response)=>
         data += chunk;
     });
     response.on("end",() => {
-        console.log(`Body response:\n ${data.substring(0, 1000)}.............`);
+        fs.writeFileSync(`./static/art.png`, data, {
+            encoding: "base64"
+        })
     });
 }).end();
