@@ -1,9 +1,10 @@
 const express = require("express");
-const auditoriumsService = require("../services/auditoriumsService");
+const tables = require("../services/tablesDto");
+const auditoriumsService = require("../services/crudService")(tables.auditoriumsService);
 
 const getAuditoriums = async (request, response, next) => {
     try {
-        response.status(200).json(await auditoriumsService.getAllAuditoriums());
+        response.status(200).json(await auditoriumsService.getAllModels());
     } catch (e) {
         next(e);
     }
@@ -17,7 +18,7 @@ const postAuditoriums = async (request, response, next) => {
             value: body.auditorium
         };
         const values = [body.auditorium, body.auditorium_name, body.auditorium_capacity, body.auditorium_type];
-        response.status(200).json(await auditoriumsService.createAuditorium(id, values));
+        response.status(200).json(await auditoriumsService.createModel(id, values));
     } catch (e) {
         next(e);
     }
@@ -35,7 +36,7 @@ const putAuditoriums = async (request, response, next) => {
             auditorium_capacity: body.auditorium_capacity,
             auditorium_type: body.auditorium_type
         };
-        response.status(200).json(await auditoriumsService.updateAuditorium(id, values));
+        response.status(200).json(await auditoriumsService.updateModel(id, values));
     } catch (e) {
         next(e);
     }
@@ -47,7 +48,7 @@ const deleteAuditoriums = async (request, response, next) => {
             name: "auditorium",
             value: request.params.auditoriumId.toString()
         };
-        response.status(200).json(await auditoriumsService.deleteAuditorium(id));
+        response.status(200).json(await auditoriumsService.deleteModel(id));
     } catch (e) {
         next(e);
     }
