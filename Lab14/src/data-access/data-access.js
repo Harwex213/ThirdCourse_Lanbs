@@ -30,7 +30,7 @@ const createEntity = async (id, values) => {
     let valuesString = "";
     for (let i = 0; i < values.length; i++) {
         valuesString += typeof values[i] === "string" ? `'${values[i]}'` : values[i];
-        valuesString += i + 1 !== values.length ? `, ` : ``;
+        valuesString += i + 1 !== values.length ? `, ` : ` `;
     }
 
     await pool.request().query(`Insert into ${table} values(${valuesString})`);
@@ -50,11 +50,14 @@ const updateEntity = async (id, values) => {
 
     let updatedColumnsString = `set `;
     for (const [key, value] of Object.entries(values)) {
+        if (key === id.name) {
+            continue;
+        }
         updatedColumnsString += `${key} = `;
-        updatedColumnsString += typeof value === "string" ? `'${value}'` : value;
+        updatedColumnsString += typeof value === "string" ? `'${value}'` : `${value}`;
         updatedColumnsString += `, `;
     }
-    updatedColumnsString = updatedColumnsString.substring(0, updatedColumnsString.length - 2);
+    updatedColumnsString = updatedColumnsString.substring(0, updatedColumnsString.length - 2) + " ";
 
     await pool.request().query(`Update ${table} ` + updatedColumnsString + `where ${id.name} = ${idValue}`);
     return (await pool.request().query(`Select * from ${table} where ${id.name} = ${idValue}`)).recordset[0];
