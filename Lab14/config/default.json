@@ -1,0 +1,16 @@
+{
+  "database": "mongodb",
+  "mssql": {
+    "config": {
+      "database": "KOA",
+      "server": "localhost",
+      "options": {
+        "trustedConnection": true
+      }
+    }
+  },
+  "mongodb": {
+    "uri": "mongodb+srv://harwex213:qwerty1234@university.nev5b.mongodb.net/myFirstDatabase?retryWrites=true&w=majority"
+  },
+  "useGraphQl": false
+}

@@ -1,12 +1,7 @@
 const sql = require("mssql/msnodesqlv8");
+const config = require("config");
 
-const pool = new sql.ConnectionPool({
-    database: "KOA",
-    server: "localhost",
-    options: {
-        trustedConnection: true,
-    }
-});
+const pool = new sql.ConnectionPool(config.get("mssql.config"));
 const connectedPool = pool.connect();
 
 let table = null;

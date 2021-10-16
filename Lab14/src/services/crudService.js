@@ -1,5 +1,6 @@
 let table = null;
-const dataAccess = require("../data-access/data-access");
+const config = require("config");
+const dataAccess = require(`../data-access/${config.get("database")}/data-access`);
 
 const getAllModels = async () => {
     return (await dataAccess(table).getEntities());
