@@ -12,7 +12,11 @@ const postPulpit = async (request, response, next) => {
         name: "pulpit",
         value: body.pulpit
     };
-    const values = [body.pulpit, body.pulpit_name, body.faculty];
+    const values = {
+        pulpit: body.pulpit,
+        pulpit_name: body.pulpit_name,
+        faculty: body.faculty
+    };
     next({ table, id, values });
 };
 

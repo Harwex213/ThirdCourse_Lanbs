@@ -12,7 +12,11 @@ const postSubject = async (request, response, next) => {
         name: "subject",
         value: body.subject
     };
-    const values = [body.subject, body.subject_name, body.pulpit];
+    const values = {
+        subject: body.subject,
+        subject_name: body.subject_name,
+        pulpit: body.pulpit
+    };
     next({ table, id, values });
 };
 
@@ -23,7 +27,6 @@ const putSubject = async (request, response, next) => {
         value: body.subject
     };
     const values = {
-        subject: body.subject,
         subject_name: body.subject_name,
         pulpit: body.pulpit
     };

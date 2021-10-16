@@ -12,7 +12,10 @@ const postAuditoriumType = async (request, response, next) => {
         name: "auditorium_type",
         value: body.auditorium_type
     };
-    const values = [body.auditorium_type, body.auditorium_typename];
+    const values = {
+        auditorium_type: body.auditorium_type,
+        auditorium_typename: body.auditorium_typename,
+    };
     next({ table, id, values });
 };
 

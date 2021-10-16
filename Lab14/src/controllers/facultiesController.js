@@ -12,7 +12,10 @@ const postFaculty = async (request, response, next) => {
         name: "faculty",
         value: body.faculty
     };
-    const values = [body.faculty, body.faculty_name];
+    const values = {
+        faculty: body.faculty,
+        faculty_name: body.faculty_name,
+    };
     next({ table, id, values });
 };
 
