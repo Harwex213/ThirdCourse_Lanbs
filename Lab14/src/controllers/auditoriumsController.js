@@ -1,64 +1,48 @@
 const express = require("express");
-const tables = require("../services/tablesDto");
-const auditoriumsService = require("../services/crudService")(tables.auditoriumsService);
+const table = require("../services/tablesDto").auditoriumsService;
+const crudController = require("./crudController")
 
-const getAuditoriums = async (request, response, next) => {
-    try {
-        response.status(200).json(await auditoriumsService.getAllModels());
-    } catch (e) {
-        next(e);
-    }
+const getAuditoriums = (request, response, next) => {
+    next({ table });
 };
 
-const postAuditoriums = async (request, response, next) => {
-    try {
-        const body = request.body;
-        const id = {
-            name: "auditorium",
-            value: body.auditorium
-        };
-        const values = [body.auditorium, body.auditorium_name, body.auditorium_capacity, body.auditorium_type];
-        response.status(200).json(await auditoriumsService.createModel(id, values));
-    } catch (e) {
-        next(e);
-    }
+const postAuditorium = async (request, response, next) => {
+    const body = request.body;
+    const id = {
+        name: "auditorium",
+        value: body.auditorium
+    };
+    const values = [body.auditorium, body.auditorium_name, body.auditorium_capacity, body.auditorium_type];
+    next({ table, id, values });
 };
 
-const putAuditoriums = async (request, response, next) => {
-    try {
-        const body = request.body;
-        const id = {
-            name: "auditorium",
-            value: body.auditorium
-        };
-        const values = {
-            auditorium_name: body.auditorium_name,
-            auditorium_capacity: body.auditorium_capacity,
-            auditorium_type: body.auditorium_type
-        };
-        response.status(200).json(await auditoriumsService.updateModel(id, values));
-    } catch (e) {
-        next(e);
-    }
+const putAuditorium = async (request, response, next) => {
+    const body = request.body;
+    const id = {
+        name: "auditorium",
+        value: body.auditorium
+    };
+    const values = {
+        auditorium_name: body.auditorium_name,
+        auditorium_capacity: body.auditorium_capacity,
+        auditorium_type: body.auditorium_type
+    };
+    next({ table, id, values });
 };
 
-const deleteAuditoriums = async (request, response, next) => {
-    try {
-        const id = {
-            name: "auditorium",
-            value: request.params.auditoriumId.toString()
-        };
-        response.status(200).json(await auditoriumsService.deleteModel(id));
-    } catch (e) {
-        next(e);
-    }
+const deleteAuditorium = async (request, response, next) => {
+    const id = {
+        name: "auditorium",
+        value: request.params.auditoriumId.toString()
+    };
+    next({ table, id });
 };
 
 const router = express.Router();
 
-router.get("/", getAuditoriums);
-router.post("/", postAuditoriums);
-router.put("/", putAuditoriums)
-router.delete("/:auditoriumId", deleteAuditoriums);
+router.get("/", getAuditoriums, crudController.getModels);
+router.post("/", postAuditorium, crudController.postModel);
+router.put("/", putAuditorium, crudController.putModel)
+router.delete("/:auditoriumId", deleteAuditorium, crudController.deleteModel);
 
 module.exports = router;
