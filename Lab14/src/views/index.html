@@ -174,12 +174,9 @@
         }
 
         const updateTBody = (data, table) => {
-            if (data.length === 0) {
-                return;
-            }
-
             const tbody = table.querySelector("tbody");
             tbody.textContent = "";
+
             for (const dataElement of data) {
                 const newRow = document.createElement("tr");
                 tbody.append(newRow);
@@ -215,8 +212,8 @@
                 let option;
                 for (const faculty of faculties) {
                     option = document.createElement("option");
-                    option.value = faculty["FACULTY"];
-                    option.innerHTML = faculty["FACULTY"];
+                    option.value = faculty["FACULTY"] ?? faculty["faculty"];
+                    option.innerHTML = faculty["FACULTY"] ?? faculty["faculty"];
                     selector.append(option);
                 }
             })
@@ -233,8 +230,8 @@
                 let option;
                 for (const faculty of pulpits) {
                     option = document.createElement("option");
-                    option.value = faculty["PULPIT"];
-                    option.innerHTML = faculty["PULPIT"];
+                    option.value = faculty["PULPIT"] ?? faculty["pulpit"];
+                    option.innerHTML = faculty["PULPIT"] ?? faculty["pulpit"];
                     selector.append(option);
                 }
             })

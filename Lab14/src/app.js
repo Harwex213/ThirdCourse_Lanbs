@@ -1,6 +1,7 @@
 const express = require("express");
 const bodyParser = require("body-parser");
 const morgan = require("morgan");
+const isMsSql = require("config").get("database") === "mssql";
 const auditoriumsRoutes = require("./controllers/auditoriumsController");
 const facultiesRoutes = require("./controllers/facultiesController");
 const auditoriumTypesRoutes = require("./controllers/auditoriumTypesController");
@@ -17,11 +18,13 @@ app.use(bodyParser.json());
 
 app.use("/", express.static(__dirname + "/views"));
 
-app.use("/auditoriums", auditoriumsRoutes);
-app.use("/auditorium-types", auditoriumTypesRoutes);
 app.use("/faculties", facultiesRoutes);
 app.use("/pulpits", pulpitsRoutes);
-app.use("/subjects", subjectsRoutes);
+if (isMsSql) {
+    app.use("/auditoriums", auditoriumsRoutes);
+    app.use("/auditorium-types", auditoriumTypesRoutes);
+    app.use("/subjects", subjectsRoutes);
+}
 
 app.use((request, response, next) => {
     const error = new Error("Bad request");

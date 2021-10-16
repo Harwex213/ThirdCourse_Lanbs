@@ -1,0 +1,63 @@
+POST http://localhost:4000/faculties
+Content-Type: application/json
+
+{
+  "faculty": "ИДиП",
+  "faculty_name": "Издателькое дело и полиграфия"
+}
+
+###
+POST http://localhost:4000/faculties
+Content-Type: application/json
+
+{
+  "faculty": "ХТиТ",
+  "faculty_name": "Химическая технология и техника"
+}
+
+###
+POST http://localhost:4000/faculties
+Content-Type: application/json
+
+{
+  "faculty": "ИДиП",
+  "faculty_name": "Издателькое дело и полиграфия"
+}
+
+###
+POST http://localhost:4000/faculties
+Content-Type: application/json
+
+{
+  "faculty": "ТОВ",
+  "faculty_name": "Технология органических веществ"
+}
+
+###
+POST http://localhost:4000/faculties
+Content-Type: application/json
+
+{
+  "faculty": "ТТЛП",
+  "faculty_name": "Технология и техника лесной промышленности"
+}
+
+###
+POST http://localhost:4000/faculties
+Content-Type: application/json
+
+{
+  "faculty": "ИЭФ",
+  "faculty_name": "Инженерно-экономический факультет"
+}
+
+###
+POST http://localhost:4000/faculties
+Content-Type: application/json
+
+{
+  "faculty": "ЛХФ",
+  "faculty_name": "Лесохозяйственный факультет"
+}
+
+###
