@@ -15,7 +15,7 @@ app.use(bodyParser.urlencoded({
 }));
 app.use(bodyParser.json());
 
-app.use("/", express.static("./views"));
+app.use("/", express.static(__dirname + "/views"));
 
 app.use("/auditoriums", auditoriumsRoutes);
 app.use("/auditorium-types", auditoriumTypesRoutes);

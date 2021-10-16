@@ -7,20 +7,308 @@
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Document</title>
 
-<!--    <link rel="shortcut icon" href="data:image/x-icon;," type="image/x-icon">-->
+    <link rel="shortcut icon" href="data:image/x-icon;," type="image/x-icon">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
     <style>
         @import url("https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@300&display=swap");
 
         body {
             font-family: "Be Vietnam Pro", sans-serif;
+            margin: 15px;
+        }
+
+        .error {
+            display: flex;
+            margin: 15px;
+        }
+
+        .error__button {
+            margin-left: auto;
+        }
+
+        .pulpits {
+            margin-top: 15px;
+        }
+
+        .crudFormContainer {
+            display: flex;
+        }
+
+        .crudFormContainer__form {
+            margin-right: 100px;
+            width: 300px;
+        }
+
+        .crudFormContainer__form--getAll {
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-end;
+            width: auto;
+        }
+
+        #getPulpits {
+            margin-top: 15px;
         }
     </style>
 </head>
 <body>
-    <h1>Lab 14</h1>
+    <h1 class="display-1">Pulpits</h1>
+    <div class="crudFormContainer">
+        <form class="crudFormContainer__form" onsubmit="createPulpitAction(); return false;">
+            <div class="mb-3">
+                <label for="createPulpit" class="form-label">Faculty</label>
+                <input class="form-control" id="createPulpit">
+            </div>
+            <div class="mb-3">
+                <label for="createPulpitName" class="form-label">Faculty name</label>
+                <input class="form-control" id="createPulpitName">
+            </div>
+            <div class="mb-3">
+                <label for="createPulpitFaculty" class="form-label">Faculty</label>
+                <select class="form-select selectFaculty" id="createPulpitFaculty">
+                    <option> </option>
+                </select>
+            </div>
+            <button type="submit" class="btn btn-primary">Create</button>
+        </form>
+        <form class="crudFormContainer__form" onsubmit="updatePulpitAction(); return false;">
+            <div class="mb-3">
+                <label for="updatePulpit" class="form-label">Pulpit</label>
+                <select class="form-select selectPulpit" id="updatePulpit">
+                    <option> </option>
+                </select>
+            </div>
+            <div class="mb-3">
+                <label for="updatePulpitName" class="form-label">Faculty name</label>
+                <input class="form-control" id="updatePulpitName">
+            </div>
+            <div class="mb-3">
+                <label for="updatePulpitFaculty" class="form-label">Faculty</label>
+                <select class="form-select selectFaculty" id="updatePulpitFaculty">
+                    <option> </option>
+                </select>
+            </div>
+            <button type="submit" class="btn btn-primary">Update</button>
+        </form>
+        <div class="crudFormContainer__form crudFormContainer__form--getAll">
+            <button type="button" class="btn btn-outline-primary" id="getFaculties">Get Faculties</button>
+            <button type="button" class="btn btn-outline-primary" id="getPulpits">Get Pulpits</button>
+        </div>
+    </div>
+    <div id="errorMessageContainer">
+    </div>
+    <div class="pulpits table-responsive">
+        <h4 id="pulpitsCount">Count: </h4>
+        <table class="table table-bordered" id="pulpitsTable">
+            <thead>
+                <tr>
+                    <td>Pulpit</td>
+                    <td>Pulpit name</td>
+                    <td>Faculty</td>
+                    <td>Action</td>
+                </tr>
+            </thead>
+            <tbody></tbody>
+        </table>
+    </div>
+    <script>
+        const getPulpits = async () => {
+            const response = await fetch("/pulpits");
+            const data = await response.json();
+            if (!response.ok) {
+                displayError(data.error);
+            }
+            return data;
+        };
 
 
+        const getFaculties = async () => {
+            const response = await fetch("/faculties");
+            const data = await response.json();
+            if (!response.ok) {
+                displayError(data.error);
+            }
+            return data;
+        }
+
+        const createPulpit = async (pulpit) => {
+            const response = await fetch("/pulpits", {
+                method: "POST",
+                headers: {
+                    "content-type": "application/json"
+                },
+                body: JSON.stringify(pulpit)
+            });
+            if (!response.ok) {
+                displayError((await response.json()).error);
+            }
+        };
+
+        const updatePulpit = async (pulpit) => {
+            const response = await fetch("/pulpits", {
+                method: "PUT",
+                headers: {
+                    "content-type": "application/json"
+                },
+                body: JSON.stringify(pulpit)
+            });
+            if (!response.ok) {
+                displayError((await response.json()).error);
+            }
+        };
+
+        const deletePulpit = async (pulpitId) => {
+            const response = await fetch(`/pulpits/${pulpitId}`, {
+                method: "DELETE"
+            });
+            if (!response.ok) {
+                displayError((await response.json()).error);
+            }
+        };
+
+        const createDeleteButton = () => {
+            const button = document.createElement("button");
+            button.classList.add("deletePulpit", "btn", "btn-outline-danger");
+            button.innerHTML = "Delete";
+            return button;
+        }
+
+        const updateTBody = (data, table) => {
+            if (data.length === 0) {
+                return;
+            }
+
+            const tbody = table.querySelector("tbody");
+            tbody.textContent = "";
+            for (const dataElement of data) {
+                const newRow = document.createElement("tr");
+                tbody.append(newRow);
+
+                let newColumn = document.createElement("td");
+                if (typeof dataElement === "object") {
+                    for (const [_, elementProperty] of Object.entries(dataElement)) {
+                        newColumn.innerHTML = String(elementProperty);
+                        newRow.append(newColumn);
+                        newColumn = document.createElement("td");
+                    }
+                } else {
+                    newColumn.innerHTML = String(dataElement);
+                    newRow.append(newColumn);
+                }
+
+                newColumn.innerHTML = "";
+                newColumn.append(createDeleteButton());
+                newRow.append(newColumn);
+            }
+
+            table.append(tbody);
+        };
+
+        const updateSelectFaculties = (faculties) => {
+            if (faculties.length === 0) {
+                return;
+            }
+
+            document.querySelectorAll(".selectFaculty").forEach(selector => {
+                selector.textContent = ""
+
+                let option;
+                for (const faculty of faculties) {
+                    option = document.createElement("option");
+                    option.value = faculty["FACULTY"];
+                    option.innerHTML = faculty["FACULTY"];
+                    selector.append(option);
+                }
+            })
+        }
+
+        const updateSelectPulpits = (pulpits) => {
+            if (pulpits.length === 0) {
+                return;
+            }
+
+            document.querySelectorAll(".selectPulpit").forEach(selector => {
+                selector.textContent = ""
+
+                let option;
+                for (const faculty of pulpits) {
+                    option = document.createElement("option");
+                    option.value = faculty["PULPIT"];
+                    option.innerHTML = faculty["PULPIT"];
+                    selector.append(option);
+                }
+            })
+        }
+
+        const displayError = (error) => {
+            const errorContainer = document.querySelector("#errorMessageContainer");
+            errorContainer.textContent = "";
+
+            const errorEl = document.createElement("div");
+            errorEl.classList.add("error", "alert", "alert-danger");
+            errorEl.role = "alert";
+            errorEl.prepend(error.message);
+
+            const errorButtonEl = document.createElement("button");
+            errorButtonEl.type = "button";
+            errorButtonEl.classList.add("error__button", "btn-close");
+            errorButtonEl.ariaLabel = "Close";
+            const closeAttribute = document.createAttribute("data-bs-dismiss");
+            closeAttribute.value = "alert";
+            errorButtonEl.attributes.setNamedItem(closeAttribute);
+            errorEl.append(errorButtonEl);
+
+            errorContainer.append(errorEl);
+        }
+
+        const getPulpitsAction = async () => {
+            const pulpits = await getPulpits();
+
+            document.querySelector("#pulpitsCount").innerHTML = `Count: ${pulpits.length}`;
+            updateTBody(pulpits, document.querySelector("#pulpitsTable"));
+            updateSelectPulpits(pulpits);
+
+            document.querySelectorAll("button.deletePulpit").forEach(button => {
+                button.addEventListener("click", () => deletePulpitAction(button));
+            });
+        }
+
+        const getFacultiesAction = async () => {
+            updateSelectFaculties(await getFaculties());
+        }
+
+        const deletePulpitAction = async (button) => {
+            await deletePulpit(button.parentElement.parentElement.children[0].innerHTML);
+            await getPulpitsAction();
+        }
+
+        const createPulpitAction = async () => {
+            const pulpit = { };
+
+            pulpit.pulpit = document.querySelector("#createPulpit").value;
+            pulpit.pulpit_name = document.querySelector("#createPulpitName").value;
+            pulpit.faculty = document.querySelector("#createPulpitFaculty").value;
+
+            await createPulpit(pulpit);
+            await getPulpitsAction();
+        }
+
+        const updatePulpitAction = async () => {
+            const pulpit = { };
+
+            pulpit.pulpit = document.querySelector("#updatePulpit").value;
+            pulpit.pulpit_name = document.querySelector("#updatePulpitName").value;
+            pulpit.faculty = document.querySelector("#updatePulpitFaculty").value;
+
+            await updatePulpit(pulpit);
+            await getPulpitsAction();
+        }
+
+        document.querySelector("#getPulpits").addEventListener("click", getPulpitsAction);
+        document.querySelector("#getFaculties").addEventListener("click", getFacultiesAction);
+
+        getPulpitsAction();
+    </script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p" crossorigin="anonymous"></script>
 </body>
 </html>
