@@ -4,14 +4,13 @@ const config = require("config");
 const pool = new sql.ConnectionPool(config.get("mssql.config"));
 const connectedPool = pool.connect();
 
-let table = null;
-const getEntities = async () => {
+const getEntities = async (table) => {
     await connectedPool;
 
     return (await pool.request().query(`Select * from ${table}`)).recordset;
 }
 
-const createEntity = async (id, values) => {
+const createEntity = async (table, id, values) => {
     await connectedPool;
 
     const idValue = getIdValue(id);
@@ -36,7 +35,7 @@ const createEntity = async (id, values) => {
     return (await pool.request().query(`Select * from ${table} where ${id.name} = ${idValue}`)).recordset[0];
 }
 
-const updateEntity = async (id, values) => {
+const updateEntity = async (table, id, values) => {
     await connectedPool;
 
     const idValue = getIdValue(id);
@@ -62,7 +61,7 @@ const updateEntity = async (id, values) => {
     return (await pool.request().query(`Select * from ${table} where ${id.name} = ${idValue}`)).recordset[0];
 }
 
-const deleteEntity = async (id) => {
+const deleteEntity = async (table, id) => {
     await connectedPool;
 
     const idValue = getIdValue(id);
@@ -77,6 +76,12 @@ const deleteEntity = async (id) => {
     return entity;
 }
 
+const query = async (queryString) => {
+    await connectedPool;
+
+    return pool.request().query(queryString);
+}
+
 const getIdValue = (id) => typeof id.value === "string" ? `'${id.value}'` : id.value;
 
 const findEntity = async (idName, idValue) => {
@@ -87,12 +92,12 @@ const findEntity = async (idName, idValue) => {
     }
 }
 
-module.exports = (manipulationTable) => {
-    table = manipulationTable;
+module.exports = (table) => {
     return {
-        getEntities,
-        createEntity,
-        updateEntity,
-        deleteEntity
+        getEntities: () => getEntities(table),
+        createEntity: (id, values) => createEntity(table, id, values),
+        updateEntity: (id, values) => updateEntity(table, id, values),
+        deleteEntity: (table) => deleteEntity(table),
+        query
     }
 }

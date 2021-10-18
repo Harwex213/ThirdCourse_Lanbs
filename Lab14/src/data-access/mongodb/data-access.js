@@ -1,4 +1,3 @@
-let Entity = null;
 const mongoose = require("mongoose");
 const config = require("config");
 
@@ -12,7 +11,7 @@ const initializeConnection = async () => {
 
 initializeConnection();
 
-const makeSelectString = () => {
+const makeSelectString = (Entity) => {
     let selectString = "";
     for (const [key, _] of Object.entries(Entity.schema.obj)) {
         if (key === "_id") {
@@ -23,11 +22,11 @@ const makeSelectString = () => {
     return selectString;
 }
 
-const getEntities = async () => {
+const getEntities = async (Entity) => {
     return await Entity.find({}, `-_id ${makeSelectString()}`);
 };
 
-const createEntity = async (id, values) => {
+const createEntity = async (Entity, id, values) => {
     if (await Entity.exists({ [id.name]: id.value })) {
         const error = new Error(`Entity with such ${id.name} = ${id.value} is existing already`);
         error.status = 400;
@@ -41,7 +40,7 @@ const createEntity = async (id, values) => {
     return values;
 };
 
-const updateEntity = async (id, values) => {
+const updateEntity = async (Entity, id, values) => {
     if (!(await Entity.exists({ [id.name]: id.value }))) {
         const error = new Error("Not found");
         error.status = 404;
@@ -55,7 +54,7 @@ const updateEntity = async (id, values) => {
     }
 };
 
-const deleteEntity = async (id) => {
+const deleteEntity = async (Entity, id) => {
     if (!(await Entity.exists({ [id.name]: id.value }))) {
         const error = new Error("Not found");
         error.status = 404;
@@ -65,12 +64,11 @@ const deleteEntity = async (id) => {
     return await Entity.findOneAndDelete({ [id.name]: id.value }).select(`-_id ${makeSelectString()}`);
 };
 
-module.exports = (ManipulationEntity) => {
-    Entity = ManipulationEntity;
+module.exports = (Entity) => {
     return {
-        getEntities,
-        createEntity,
-        updateEntity,
-        deleteEntity
+        getEntities: () => getEntities(Entity),
+        createEntity: (id, values) => createEntity(Entity, id, values),
+        updateEntity: (id, values) => updateEntity(Entity, id, values),
+        deleteEntity: (id) => deleteEntity(Entity, id)
     }
 }
