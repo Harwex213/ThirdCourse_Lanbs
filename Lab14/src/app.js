@@ -2,6 +2,7 @@ const express = require("express");
 const bodyParser = require("body-parser");
 const morgan = require("morgan");
 const isMsSql = require("config").get("database") === "mssql";
+const isUseGraphQl = require("config").get("useGraphQl");
 const auditoriumsRoutes = require("./controllers/auditoriumsController");
 const facultiesRoutes = require("./controllers/facultiesController");
 const auditoriumTypesRoutes = require("./controllers/auditoriumTypesController");
@@ -26,6 +27,17 @@ if (isMsSql) {
     app.use("/auditorium-types", auditoriumTypesRoutes);
     app.use("/subjects", subjectsRoutes);
     app.use("/teachers", teachersRoutes);
+}
+if (isUseGraphQl) {
+    const { graphqlHTTP } = require("express-graphql");
+    const schema = require("./graphql/buildSchema");
+    const resolvers = require("./graphql/resolvers");
+
+    app.use("/graphql", graphqlHTTP({
+        schema: schema,
+        rootValue: resolvers,
+        graphiql: true
+    }))
 }
 
 app.use((request, response, next) => {

@@ -4,6 +4,18 @@ const config = require("config");
 const pool = new sql.ConnectionPool(config.get("mssql.config"));
 const connectedPool = pool.connect();
 
+const _getIdValue = (id) => typeof id.value === "string" ? `'${id.value}'` : id.value;
+
+const tryFindEntity = async (table, idName, idValue) => {
+    await connectedPool;
+
+    const response = await pool.request().query(`Select * from ${table} where ${idName} = ${idValue}`);
+    return {
+        isExist: response.recordset.length !== 0,
+        entity: response.recordset.length !== 0 ? response.recordset[0] : {}
+    }
+}
+
 const getEntities = async (table) => {
     await connectedPool;
 
@@ -13,8 +25,8 @@ const getEntities = async (table) => {
 const createEntity = async (table, id, values) => {
     await connectedPool;
 
-    const idValue = getIdValue(id);
-    const { isExist } = await findEntity(id.name, idValue);
+    const idValue = _getIdValue(id);
+    const { isExist } = await tryFindEntity(table, id.name, idValue);
     if (isExist) {
         const error = new Error(`Entity with such ${id.name} = ${idValue} is existing already`);
         error.status = 400;
@@ -38,8 +50,8 @@ const createEntity = async (table, id, values) => {
 const updateEntity = async (table, id, values) => {
     await connectedPool;
 
-    const idValue = getIdValue(id);
-    const { isExist } = await findEntity(id.name, idValue);
+    const idValue = _getIdValue(id);
+    const { isExist } = await tryFindEntity(table, id.name, idValue);
     if (!isExist) {
         const error = new Error("Not found");
         error.status = 404;
@@ -64,8 +76,8 @@ const updateEntity = async (table, id, values) => {
 const deleteEntity = async (table, id) => {
     await connectedPool;
 
-    const idValue = getIdValue(id);
-    const { isExist, entity } = await findEntity(id.name, idValue);
+    const idValue = _getIdValue(id);
+    const { isExist, entity } = await tryFindEntity(table, id.name, idValue);
     if (!isExist) {
         const error = new Error("Not found");
         error.status = 404;
@@ -79,25 +91,16 @@ const deleteEntity = async (table, id) => {
 const query = async (queryString) => {
     await connectedPool;
 
-    return pool.request().query(queryString);
-}
-
-const getIdValue = (id) => typeof id.value === "string" ? `'${id.value}'` : id.value;
-
-const findEntity = async (idName, idValue) => {
-    const response = await pool.request().query(`Select * from ${table} where ${idName} = ${idValue}`);
-    return {
-        isExist: response.recordset.length !== 0,
-        entity: response.recordset[0]
-    }
+    return (await pool.request().query(queryString)).recordset;
 }
 
 module.exports = (table) => {
     return {
-        getEntities: () => getEntities(table),
-        createEntity: (id, values) => createEntity(table, id, values),
-        updateEntity: (id, values) => updateEntity(table, id, values),
-        deleteEntity: (table) => deleteEntity(table),
+        getEntities: async () => await getEntities(table),
+        tryFindEntity: async (id) => await tryFindEntity(table, id.name, _getIdValue(id)),
+        createEntity: async (id, values) => await createEntity(table, id, values),
+        updateEntity: async (id, values) => await updateEntity(table, id, values),
+        deleteEntity: async (id) => await deleteEntity(table, id),
         query
     }
 }

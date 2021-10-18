@@ -1,5 +1,5 @@
 {
-  "database": "mongodb",
+  "database": "mssql",
   "mssql": {
     "config": {
       "database": "KOA",
@@ -12,5 +12,5 @@
   "mongodb": {
     "uri": "mongodb+srv://harwex213:qwerty1234@university.nev5b.mongodb.net/BSTU?retryWrites=true&w=majority"
   },
-  "useGraphQl": false
+  "useGraphQl": true
 }

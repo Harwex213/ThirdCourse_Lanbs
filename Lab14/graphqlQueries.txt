@@ -1,0 +1,23 @@
+mutation setFaculty{
+  setFaculty(faculty:{
+    FACULTY: "TEST2",
+    FACULTY_NAME: "MEGATEST423REDS SSSS"
+  }) {
+    FACULTY
+    FACULTY_NAME
+  }
+}
+
+query getTeachersByFaculty{
+  getTeachersByFaculty(faculty: "") {
+    TEACHER
+    TEACHER_NAME
+  }
+}
+
+query getFaculties{
+    getFaculties {
+    FACULTY
+    FACULTY_NAME
+  }
+}
