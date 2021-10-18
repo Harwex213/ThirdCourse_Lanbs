@@ -1,5 +1,5 @@
 const express = require("express");
-const table = require("../services/tablesDto").auditoriumsService;
+const table = require("../dto/tables").auditoriums;
 const crudController = require("./crudController")
 
 const getAuditoriums = (request, response, next) => {

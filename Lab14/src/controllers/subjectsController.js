@@ -1,5 +1,5 @@
 const express = require("express");
-const table = require("../services/tablesDto").subjectsService;
+const table = require("../dto/tables").subjects;
 const crudController = require("./crudController");
 
 const getSubjects = (request, response, next) => {
