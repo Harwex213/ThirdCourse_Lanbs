@@ -7,6 +7,7 @@ const facultiesRoutes = require("./controllers/facultiesController");
 const auditoriumTypesRoutes = require("./controllers/auditoriumTypesController");
 const pulpitsRoutes = require("./controllers/pulpitsController");
 const subjectsRoutes = require("./controllers/subjectsController");
+const teachersRoutes = require("./controllers/teachersController");
 
 const app = express();
 
@@ -24,6 +25,7 @@ if (isMsSql) {
     app.use("/auditoriums", auditoriumsRoutes);
     app.use("/auditorium-types", auditoriumTypesRoutes);
     app.use("/subjects", subjectsRoutes);
+    app.use("/teachers", teachersRoutes);
 }
 
 app.use((request, response, next) => {
