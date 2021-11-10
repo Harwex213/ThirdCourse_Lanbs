@@ -1,2 +1,5 @@
 .idea
 cmake-build-debug
+/Lab04
+.vs
+x64
