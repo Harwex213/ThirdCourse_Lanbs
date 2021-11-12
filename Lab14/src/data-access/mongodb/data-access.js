@@ -23,7 +23,7 @@ const makeSelectString = (Entity) => {
 }
 
 const getEntities = async (Entity) => {
-    return await Entity.find({}, `-_id ${makeSelectString()}`);
+    return await Entity.find({}, `-_id ${makeSelectString(Entity)}`);
 };
 
 const createEntity = async (Entity, id, values) => {
@@ -61,7 +61,7 @@ const deleteEntity = async (Entity, id) => {
         throw error;
     }
 
-    return await Entity.findOneAndDelete({ [id.name]: id.value }).select(`-_id ${makeSelectString()}`);
+    return await Entity.findOneAndDelete({ [id.name]: id.value }).select(`-_id ${makeSelectString(Entity)}`);
 };
 
 module.exports = (Entity) => {

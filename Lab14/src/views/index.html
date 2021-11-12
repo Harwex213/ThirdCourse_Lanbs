@@ -279,6 +279,22 @@
             await getPulpitsAction();
         }
 
+        const handleGetPulpitChange = async (event) => {
+            await getFacultiesAction();
+            const pulpits = await getPulpits();
+            const selectedPulpit = event.srcElement.value;
+            const foundPulpit = pulpits.find(pulpit => (
+                pulpit.PULPIT === selectedPulpit || pulpit.pulpit === selectedPulpit
+            ));
+
+            if (!foundPulpit)
+            {
+                return;
+            }
+            document.querySelector("#updatePulpitName").value = foundPulpit["PULPIT_NAME"] ?? foundPulpit["pulpit_name"];
+            document.querySelector("#updatePulpitFaculty").value = foundPulpit["FACULTY"] ?? foundPulpit["faculty"];
+        }
+
         const createPulpitAction = async () => {
             const pulpit = { };
 
@@ -303,8 +319,15 @@
 
         document.querySelector("#getPulpits").addEventListener("click", getPulpitsAction);
         document.querySelector("#getFaculties").addEventListener("click", getFacultiesAction);
+        document.querySelector("#updatePulpit").addEventListener("change", handleGetPulpitChange);
+        document.querySelector("#updatePulpit").addEventListener("click", (e) => {
+            if (document.querySelector("#updatePulpit").value === document.querySelector("#updatePulpit").value) {
+                document.querySelector("#updatePulpit").dispatchEvent(new Event('change'));
+            }
+        });
 
         getPulpitsAction();
+        document.querySelector("#updatePulpit").dispatchEvent(new Event('change'));
     </script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p" crossorigin="anonymous"></script>
 </body>
