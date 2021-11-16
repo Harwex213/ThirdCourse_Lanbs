@@ -1,14 +1,29 @@
 const controllers = {};
 
 const findController = (resolverEndpoint) => {
+    let isRouteRight = true;
+    const requestEndpointRoutes = resolverEndpoint.split("/");
+    requestEndpointRoutes.shift();
+
     for (const [key, value] of Object.entries(controllers)) {
-        if (resolverEndpoint.includes(key)) {
+        const endpointRoutes = key.split("/");
+        endpointRoutes.shift();
+
+        for (let i = 0; i < endpointRoutes.length; i++) {
+            if (requestEndpointRoutes.length < i + 1 || endpointRoutes[i] !== requestEndpointRoutes[i]) {
+                isRouteRight = false;
+                break;
+            }
+        }
+
+        if (isRouteRight) {
             const controllerEndpoint = resolverEndpoint.replace(key, "");
             return {
                 controller: value,
                 controllerEndpoint: controllerEndpoint === "" ? "/" : controllerEndpoint
-            };
+            }
         }
+        isRouteRight = true;
     }
 
     throw new Error();
