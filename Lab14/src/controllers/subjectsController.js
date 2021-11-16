@@ -1,12 +1,12 @@
-const express = require("express");
 const table = require("../dto/tables").subjects;
 const crudController = require("./crudController");
+const router = require("../router/router")();
 
-const getSubjects = (request, response, next) => {
-    next({ table });
+const getSubjects = async (request, response) => {
+    await crudController.getModels({ table }, request, response);
 }
 
-const postSubject = async (request, response, next) => {
+const postSubject = async (request, response) => {
     const body = request.body;
     const id = {
         name: "subject",
@@ -17,10 +17,10 @@ const postSubject = async (request, response, next) => {
         subject_name: body.subject_name,
         pulpit: body.pulpit
     };
-    next({ table, id, values });
+    await crudController.postModel({ table, id, values }, request, response);
 };
 
-const putSubject = async (request, response, next) => {
+const putSubject = async (request, response) => {
     const body = request.body;
     const id = {
         name: "subject",
@@ -30,22 +30,20 @@ const putSubject = async (request, response, next) => {
         subject_name: body.subject_name,
         pulpit: body.pulpit
     };
-    next({ table, id, values });
+    await crudController.putModel({ table, id, values }, request, response);
 };
 
-const deleteSubject = async (request, response, next) => {
+const deleteSubject = async (request, response) => {
     const id = {
         name: "subject",
         value: request.params.subjectId.toString()
     };
-    next({ table, id });
+    await crudController.deleteModel({ table, id }, request, response);
 };
 
-const router = express.Router();
-
-router.get("/", getSubjects, crudController.getModels);
-router.post("/", postSubject, crudController.postModel);
-router.put("/", putSubject, crudController.putModel)
-router.delete("/:subjectId", deleteSubject, crudController.deleteModel);
+router.get("/", getSubjects);
+router.post("/", postSubject);
+router.put("/", putSubject)
+router.delete("/:subjectId", deleteSubject);
 
 module.exports = router;

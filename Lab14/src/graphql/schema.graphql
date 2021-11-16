@@ -59,8 +59,8 @@ type Query
     getTeachers(teacher: String): [Teacher]
     getSubjects(subject: String): [Subject]
 
-    getTeachersByFaculty(faculty: String): [Teacher]
-    getSubjectsByFaculty(faculty: String): [Subject]
+    getTeachersByFaculty(faculty: String!): [Teacher]
+    getSubjectsByFaculty(faculty: String!): [Subject]
 }
 
 type Mutation
@@ -70,8 +70,8 @@ type Mutation
     setTeacher(teacher: InputTeacher!): Teacher
     setSubject(subject: InputSubject!): Subject
 
-    delFaculty(faculty: String): Boolean
-    delPulpit(pulpit: String): Boolean
-    delTeacher(teacher: String): Boolean
-    delSubject(subject: String): Boolean
+    delFaculty(faculty: String!): Boolean
+    delPulpit(pulpit: String!): Boolean
+    delTeacher(teacher: String!): Boolean
+    delSubject(subject: String!): Boolean
 }

@@ -1,12 +1,12 @@
-const express = require("express");
 const table = require("../dto/tables").faculties;
 const crudController = require("./crudController");
+const router = require("../router/router")();
 
-const getFaculties = (request, response, next) => {
-    next({ table });
+const getFaculties = async (request, response) => {
+    await crudController.getModels({ table }, request, response);
 }
 
-const postFaculty = async (request, response, next) => {
+const postFaculty = async (request, response) => {
     const body = request.body;
     const id = {
         name: "faculty",
@@ -16,10 +16,10 @@ const postFaculty = async (request, response, next) => {
         faculty: body.faculty,
         faculty_name: body.faculty_name,
     };
-    next({ table, id, values });
+    await crudController.postModel({ table, id, values }, request, response);
 };
 
-const putFaculty = async (request, response, next) => {
+const putFaculty = async (request, response) => {
     const body = request.body;
     const id = {
         name: "faculty",
@@ -28,22 +28,20 @@ const putFaculty = async (request, response, next) => {
     const values = {
         faculty_name: body.faculty_name,
     };
-    next({ table, id, values });
+    await crudController.putModel({ table, id, values }, request, response);
 };
 
-const deleteFaculty = async (request, response, next) => {
+const deleteFaculty = async (request, response) => {
     const id = {
         name: "faculty",
         value: request.params.facultyId.toString()
     };
-    next({ table, id });
+    await crudController.deleteModel({ table, id }, request, response);
 };
 
-const router = express.Router();
-
-router.get("/", getFaculties, crudController.getModels);
-router.post("/", postFaculty, crudController.postModel);
-router.put("/", putFaculty, crudController.putModel)
-router.delete("/:facultyId", deleteFaculty, crudController.deleteModel);
+router.get("/", getFaculties);
+router.post("/", postFaculty);
+router.put("/", putFaculty)
+router.delete("/:facultyId", deleteFaculty);
 
 module.exports = router;

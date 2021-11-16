@@ -1,0 +1,103 @@
+query($faculty: String) {
+    getFaculties(faculty: $faculty) {
+        FACULTY
+        FACULTY_NAME
+    }
+}
+
+mutation setSomething {
+    setFaculty(faculty: {
+        FACULTY: "TEST2",
+        FACULTY_NAME: "MEGATEST423REDS SSSS"
+    }) {
+        FACULTY
+        FACULTY_NAME
+    }
+    setPulpit(pulpit: {
+        PULPIT: "TESET",
+        PULPIT_NAME: "TEST 2222222222",
+        FACULTY: "TEST2"
+    }) {
+        PULPIT
+        PULPIT_NAME
+        FACULTY
+    }
+    setTeacher(teacher: {
+        TEACHER: "OLEG",
+        TEACHER_NAME: "OLEG KAPORTSEV",
+        PULPIT: "TESET"
+    }) {
+        TEACHER
+        TEACHER_NAME
+        PULPIT
+    }
+    setSubject(subject: {
+        SUBJECT: "TTT",
+        SUBJECT_NAME: "TEST TEST TEST",
+        PULPIT: "TESET"
+    }) {
+        SUBJECT
+        SUBJECT_NAME
+        PULPIT
+    }
+}
+
+mutation delSomething {
+    delFaculty (faculty: "ererjwekrwe")
+}
+
+query getSomethingBySomething {
+    getTeachersByFaculty(faculty: "ИДиП") {
+        TEACHER
+        TEACHER_NAME
+    },
+    getSubjectsByFaculty(faculty: "ИДиП") {
+        SUBJECT
+        SUBJECT_NAME
+        PULPIT
+    }
+}
+
+query getSomething {
+        getFaculties {
+            FACULTY
+            FACULTY_NAME
+        }
+    getPulpits {
+        PULPIT
+        PULPIT_NAME
+        FACULTY
+    }
+    getTeachers {
+        TEACHER
+        TEACHER_NAME
+        PULPIT
+    }
+    getSubjects {
+        SUBJECT
+        SUBJECT_NAME
+        PULPIT
+    }
+}
+
+query getSomethingSpecial {
+    getFaculties(faculty: "ИДиП") {
+        FACULTY
+        FACULTY_NAME
+    }
+    getPulpits(pulpit: "ИСиТ") {
+        PULPIT
+        PULPIT_NAME
+        FACULTY
+    }
+    getTeachers(teacher: "СМЛВ") {
+        TEACHER
+        TEACHER_NAME
+        PULPIT
+    }
+    getSubjects(subject: "БД") {
+        SUBJECT
+        SUBJECT_NAME
+        PULPIT
+    }
+}

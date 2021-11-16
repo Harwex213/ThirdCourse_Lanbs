@@ -1,12 +1,12 @@
-const express = require("express");
 const table = require("../dto/tables").pulpits;
 const crudController = require("./crudController");
+const router = require("../router/router")();
 
-const getPulpits = (request, response, next) => {
-    next({ table });
+const getPulpits = async (request, response) => {
+    await crudController.getModels({ table }, request, response);
 }
 
-const postPulpit = async (request, response, next) => {
+const postPulpit = async (request, response) => {
     const body = request.body;
     const id = {
         name: "pulpit",
@@ -17,10 +17,10 @@ const postPulpit = async (request, response, next) => {
         pulpit_name: body.pulpit_name,
         faculty: body.faculty
     };
-    next({ table, id, values });
+    await crudController.postModel({ table, id, values }, request, response);
 };
 
-const putPulpit = async (request, response, next) => {
+const putPulpit = async (request, response) => {
     const body = request.body;
     const id = {
         name: "pulpit",
@@ -30,22 +30,20 @@ const putPulpit = async (request, response, next) => {
         pulpit_name: body.pulpit_name,
         faculty: body.faculty
     };
-    next({ table, id, values });
+    await crudController.putModel({ table, id, values }, request, response);
 };
 
-const deletePulpit = async (request, response, next) => {
+const deletePulpit = async (request, response) => {
     const id = {
         name: "pulpit",
         value: request.params.pulpitId.toString()
     };
-    next({ table, id });
+    await crudController.deleteModel({ table, id }, request, response);
 };
 
-const router = express.Router();
-
-router.get("/", getPulpits, crudController.getModels);
-router.post("/", postPulpit, crudController.postModel);
-router.put("/", putPulpit, crudController.putModel)
-router.delete("/:pulpitId", deletePulpit, crudController.deleteModel);
+router.get("/", getPulpits);
+router.post("/", postPulpit);
+router.put("/", putPulpit)
+router.delete("/:pulpitId", deletePulpit);
 
 module.exports = router;

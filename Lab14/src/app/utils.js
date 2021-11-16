@@ -25,12 +25,13 @@ const parseBody = (request) => new Promise((resolve => {
 }))
 
 const handleError = (error, request, response) => {
-    response.status = error.status;
-    response.writeHead(400, {
-        "Content-Type" : "text/plain; charset=utf-8"
+    response.writeHead(error.status, {
+        "Content-Type" : "application/json"
     })
     response.end(JSON.stringify({
-        message: error.message
+        error: {
+            message: error.message
+        }
     }));
 }
 

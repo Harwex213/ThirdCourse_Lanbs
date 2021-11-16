@@ -1,12 +1,12 @@
-const express = require("express");
 const table = require("../dto/tables").auditoriumTypes;
 const crudController = require("./crudController");
+const router = require("../router/router")();
 
-const getAuditoriumTypes = (request, response, next) => {
-    next({ table });
+const getAuditoriumTypes = async (request, response) => {
+    await crudController.getModels({ table }, request, response);
 }
 
-const postAuditoriumType = async (request, response, next) => {
+const postAuditoriumType = async (request, response) => {
     const body = request.body;
     const id = {
         name: "auditorium_type",
@@ -16,10 +16,10 @@ const postAuditoriumType = async (request, response, next) => {
         auditorium_type: body.auditorium_type,
         auditorium_typename: body.auditorium_typename,
     };
-    next({ table, id, values });
+    await crudController.postModel({ table, id, values }, request, response);
 };
 
-const putAuditoriumType = async (request, response, next) => {
+const putAuditoriumType = async (request, response) => {
     const body = request.body;
     const id = {
         name: "auditorium_type",
@@ -28,22 +28,20 @@ const putAuditoriumType = async (request, response, next) => {
     const values = {
         auditorium_typename: body.auditorium_typename,
     };
-    next({ table, id, values });
+    await crudController.putModel({ table, id, values }, request, response);
 };
 
-const deleteAuditoriumType = async (request, response, next) => {
+const deleteAuditoriumType = async (request, response) => {
     const id = {
         name: "auditorium_type",
         value: request.params.auditoriumTypeId.toString()
     };
-    next({ table, id });
+    await crudController.deleteModel({ table, id }, request, response);
 };
 
-const router = express.Router();
-
-router.get("/", getAuditoriumTypes, crudController.getModels);
-router.post("/", postAuditoriumType, crudController.postModel);
-router.put("/", putAuditoriumType, crudController.putModel)
-router.delete("/:auditoriumTypeId", deleteAuditoriumType, crudController.deleteModel);
+router.get("/", getAuditoriumTypes);
+router.post("/", postAuditoriumType);
+router.put("/", putAuditoriumType)
+router.delete("/:auditoriumTypeId", deleteAuditoriumType);
 
 module.exports = router;
