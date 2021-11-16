@@ -1,5 +1,6 @@
 const http = require("http");
-const app = require("./app");
+const isUseGraphQl = require("config").get("useGraphQl");
+const app = require(`./${isUseGraphQl ? "appGraphQl" : "app"}`);
 
 http.createServer(app).listen(4000, "localhost", () => {
     console.log("Server started");
