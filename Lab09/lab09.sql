@@ -1,0 +1,178 @@
+-- task 1
+CREATE SEQUENCE S1
+START WITH 1000
+INCREMENT BY 10
+NOCYCLE
+NOORDER
+NOCACHE;
+
+drop sequence S1;
+
+SELECT S1.nextval FROM dual;
+
+SELECT S1.CURRVAL FROM DUAL;
+
+-- task 2
+CREATE SEQUENCE S2
+START WITH 10
+INCREMENT BY 10
+MAXVALUE 100
+NOCYCLE
+NOORDER
+NOCACHE;
+
+SELECT S2.nextval FROM dual;
+
+SELECT S2.CURRVAL FROM DUAL;
+
+-- task 3
+CREATE SEQUENCE S3
+START WITH 10
+INCREMENT BY -10
+MAXVALUE 100
+MINVALUE -100
+NOCYCLE
+NOORDER;
+
+SELECT S3.nextval FROM dual;
+
+SELECT S3.CURRVAL FROM DUAL;
+
+-- task 4
+CREATE SEQUENCE S4
+START WITH 1
+INCREMENT BY 1
+MAXVALUE 10
+CYCLE
+NOORDER
+CACHE 5;
+
+SELECT S4.nextval FROM dual;
+
+SELECT S4.CURRVAL FROM DUAL;
+
+-- task 5
+SELECT * FROM user_objects WHERE object_type='SEQUENCE';
+
+-- task 6 - insert in table via suquences
+CREATE TABLE T1
+(
+    N1 NUMBER (20),
+    N2 NUMBER (20),
+    N3 NUMBER (20),
+    N4 NUMBER (20)
+);
+alter table T1 cache storage (buffer_pool keep);
+
+INSERT INTO T1(N1)
+    VALUES(S1.NEXTVAL);
+
+INSERT INTO T1(N1,N2,N3,N4)
+    VALUES(S1.CURRVAL,S2.CURRVAL,S3.CURRVAL,S4.CURRVAL);
+
+SELECT * from T1;
+
+-- tsk 7 - cluster & 3 tables
+CREATE CLUSTER ABC (X NUMBER(10), V VARCHAR2(12))
+HASHKEYS 200;
+
+CREATE TABLE A
+(
+    XA NUMBER (10),
+    VA VARCHAR2(12),
+    AA NUMBER (20)
+)
+CLUSTER  ABC (XA,VA);
+
+CREATE TABLE B
+(
+    XB NUMBER (10),
+    VB VARCHAR2(12),
+    BB NUMBER (20)
+)
+CLUSTER  ABC (XB,VB);
+
+CREATE TABLE C
+(
+    XC NUMBER (10),
+    VC VARCHAR2(12),
+    CC NUMBER (20)
+)
+CLUSTER  ABC (XC,VC);    
+
+-- task 8 - find clasters created later
+SELECT * FROM dba_objects WHERE owner='U_KOA_CORE' AND OBJECT_NAME in ('A', 'B', 'C', 'ABC');
+
+SELECT * FROM user_objects where OBJECT_NAME in ('A', 'B', 'C', 'ABC');
+
+-- task 9 private & public synonim
+create synonym SYN1 for U_KOA_CORE.A;
+create public synonym SYN1_PUBLIC for U_KOA_CORE.A;
+
+select * from SYN1;
+
+insert into SYN1 values (1, 'bbb', 32);
+
+select * from SYN1_PUBLIC;
+
+insert into SYN1_PUBLIC values (1, 'ccc', 219);
+
+-- task 10 - view
+CREATE TABLE A1
+(
+    XA NUMBER(10) PRIMARY KEY,
+    VA VARCHAR2(12)
+);
+
+CREATE TABLE B1
+(
+    XB NUMBER(10) PRIMARY KEY,
+    VB VARCHAR2(12),
+    XA NUMBER(10),
+    CONSTRAINT FK_B1_A1 FOREIGN KEY (XA) REFERENCES A1(XA)
+);
+
+INSERT INTO A1(XA,VA) VALUES(1,'aaa');
+INSERT INTO A1(XA,VA) VALUES(2,'aaa');
+INSERT INTO A1(XA,VA) VALUES(3,'aaa');
+
+INSERT INTO B1(XB,VB,XA) VALUES(1,'bbb',1);
+INSERT INTO B1(XB,VB,XA) VALUES(2,'bbb',2);
+INSERT INTO B1(XB,VB,XA) VALUES(3,'bbb',3);
+
+CREATE VIEW "V1"
+    AS SELECT a.XA, a.VA, b.VB
+    FROM A1 a 
+    INNER JOIN B1 b ON a.XA = b.XA;
+
+select * from V1
+
+-- task 11 - materialized view
+CREATE MATERIALIZED VIEW MV1
+BUILD IMMEDIATE
+REFRESH COMPLETE NEXT SYSDATE + NUMTODSINTERVAL(2,'MINUTE')
+AS 
+    SELECT a.XA, a.VA, b.VB
+    FROM A1 a
+    INNER JOIN B1 b ON a.XA = b.XA;
+
+SELECT * FROM A1;
+SELECT * FROM B1;
+SELECT * FROM MV1;
+
+INSERT INTO A1(XA,VA) VALUES(5,'aaa');
+INSERT INTO B1(XB,VB,XA) VALUES(5,'bbb',5);
+
+
+
+
+
+
+
+
+
+
+
+
+
+
