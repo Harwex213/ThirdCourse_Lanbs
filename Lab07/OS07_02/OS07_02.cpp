@@ -3,7 +3,6 @@
 
 using namespace std;
 
-
 CRITICAL_SECTION cs;
 
 void CriticalLoop(const char* threadName, DWORD tid)
@@ -19,6 +18,13 @@ void CriticalLoop(const char* threadName, DWORD tid)
 		Sleep(100);
 
 		if (i == 60)
+		{
+			LeaveCriticalSection(&cs);
+			Sleep(100);
+			EnterCriticalSection(&cs);
+		}
+
+		if (i == 61)
 		{
 			LeaveCriticalSection(&cs);
 		}

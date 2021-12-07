@@ -30,6 +30,13 @@ void main()
 		if (i == 60)
 		{
 			ReleaseSemaphore(hs, 1, 0);
+			Sleep(100);
+			WaitForSingleObject(hs, INFINITE);
+		}
+
+		if (i == 61)
+		{
+			ReleaseSemaphore(hs, 1, 0);
 		}
 	}
 

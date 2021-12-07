@@ -41,6 +41,13 @@ void main()
 		if (i == 60)
 		{
 			ReleaseMutex(hm);
+			Sleep(100);
+			WaitForSingleObject(hm, INFINITE);
+		}
+
+		if (i == 61)
+		{
+			ReleaseMutex(hm);
 		}
 	}
 
