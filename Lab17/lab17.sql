@@ -1,6 +1,6 @@
-ALTER SESSION SET nls_date_format='dd-mm-yyyy hh24:mi:ss';
-
 ALTER SYSTEM SET JOB_QUEUE_PROCESSES = 5;
+
+alter database open;
 
 -- tables for tasks
 create table teacher_for_job
@@ -41,7 +41,7 @@ create table job_status
   datetime date default sysdate
 );
 
-select * from job_status;
+select * from job_status order by datetime desc;
 
 -- procedure
 create or replace procedure teacher_job is
@@ -80,7 +80,7 @@ select job, what, last_date, last_sec, next_date, next_sec, broken from dba_jobs
 delete user_jobs where job = 21;
 
 begin
-  dbms_job.run(22);
+  dbms_job.run(41);
 end;
 
 begin
@@ -88,7 +88,7 @@ begin
 end;
 
 begin
-  dbms_job.remove(21);
+  dbms_job.remove(41);
 end;
 
 begin
@@ -118,6 +118,7 @@ end;
 
 select * from  user_scheduler_programs;
 select * from user_scheduler_schedules;
+select * from user_scheduler_jobs;
 
 begin
 dbms_scheduler.create_job(
