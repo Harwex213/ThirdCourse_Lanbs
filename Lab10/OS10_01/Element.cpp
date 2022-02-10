@@ -28,10 +28,15 @@ namespace HT
 		setPayload(payload, payloadLength);
 	}
 
-	void Element::setKey(const void* key, int keyLength)
+	bool Element::setKey(const void* key, int keyLength)
 	{
+		if (isDeleted)
+			return false;
+
 		this->key = key;
 		this->keyLength = keyLength;
+		
+		return true;
 	}
 
 	char* Element::getKey() const
@@ -39,10 +44,15 @@ namespace HT
 		return (char*)(key == nullptr ? "" : key);
 	}
 
-	void Element::setPayload(const void* payload, int payloadLength)
+	bool Element::setPayload(const void* payload, int payloadLength)
 	{
+		if (isDeleted)
+			return false;
+
 		this->payload = payload;
 		this->payloadLength = payloadLength;
+
+		return true;
 	}
 
 	char* Element::getPayload() const

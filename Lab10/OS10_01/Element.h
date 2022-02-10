@@ -13,11 +13,12 @@ namespace HT
 		int payloadLength;
 		const void* key;
 		const void* payload;
+		bool isDeleted;
 
 		void initDefault();
-		void setKey(const void* key, int keyLength);
+		bool setKey(const void* key, int keyLength);
 		char* getKey() const;
-		void setPayload(const void* payload, int payloadLength);
+		bool setPayload(const void* payload, int payloadLength);
 		char* getPayload() const;
 	};
 }
