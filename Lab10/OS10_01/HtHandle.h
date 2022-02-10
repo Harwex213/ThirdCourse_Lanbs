@@ -1,5 +1,6 @@
 #pragma once
 #include <Windows.h>
+#include "Element.h"
 
 #define CHAR_MAX_LENGTH 512
 
@@ -17,6 +18,8 @@ namespace HT
 		int maxKeyLength;				// максимальная длина ключа
 		int maxPayloadLength;			// максимальная длина данных
 		char fileName[CHAR_MAX_LENGTH];			    // имя файла 
+		int elementSize;
+		int currentSize;
 
 		HANDLE hFile;					// File HANDLE != 0, если файл открыт
 		HANDLE hFileMapping;			// Mapping File HANDLE != 0, если mapping создан  
@@ -26,5 +29,6 @@ namespace HT
 		char lastErrorMessage[CHAR_MAX_LENGTH];		// сообщение об последней ошибке или 0x00
 
 		void initDefault();
+		Element* GetElement(int index);
 	};
 }
