@@ -45,13 +45,13 @@ namespace HT
 
 	BOOL Insert      // добавить элемент в хранилище
 	(
-		const HTHANDLE* hthandle,            // управление HT
+		HTHANDLE* hthandle,            // управление HT
 		const Element* element              // элемент
 	);	//  == TRUE успешное завершение 
 
 	BOOL Update     //  именить элемент в хранилище
 	(
-		const HTHANDLE* hthandle,            // управление HT
+		HTHANDLE* hthandle,            // управление HT
 		const Element* oldelement,          // старый элемент (ключ, размер ключа)
 		const void* newpayload,          // новые данные  
 		int             newpayloadlength     // размер новых данных
@@ -59,13 +59,13 @@ namespace HT
 
 	BOOL Delete      // удалить элемент в хранилище
 	(
-		const HTHANDLE* hthandle,            // управление HT (ключ)
+		HTHANDLE* hthandle,            // управление HT (ключ)
 		const Element* element              // элемент 
 	);	//  == TRUE успешное завершение 
 
 	Element* Get     //  читать элемент в хранилище
 	(
-		const HTHANDLE* hthandle,            // управление HT
+		HTHANDLE* hthandle,            // управление HT
 		const Element* element              // элемент 
 	); 	//  != NULL успешное завершение 
 
@@ -77,5 +77,10 @@ namespace HT
 	void Print                               // распечатать элемент 
 	(
 		const Element* element              // элемент 
+	);
+
+	void PrintAllElements
+	(
+		HTHANDLE* ht
 	);
 };

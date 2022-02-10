@@ -11,14 +11,11 @@ namespace HT
 		HTHANDLE();
 		HTHANDLE(int capacity, int cecSnapshotInterval, int maxKeyLength, int maxPayloadLength, const char fileName[CHAR_MAX_LENGTH]);
 
-		const char* defaultFileName = "./input/txt";
-
 		int capacity;					// емкость хранилища в количестве элементов 
 		int secSnapshotInterval;		// переодичность сохранения в сек. 
 		int maxKeyLength;				// максимальная длина ключа
 		int maxPayloadLength;			// максимальная длина данных
-		char fileName[CHAR_MAX_LENGTH];			    // имя файла 
-		int elementSize;
+		int elementMemorySize;
 		int currentSize;
 
 		HANDLE hFile;					// File HANDLE != 0, если файл открыт
@@ -27,8 +24,11 @@ namespace HT
 
 		time_t snapLastTime;			// дата последнего snap'a (time())  
 		char lastErrorMessage[CHAR_MAX_LENGTH];		// сообщение об последней ошибке или 0x00
+		char fileName[CHAR_MAX_LENGTH];			    // имя файла 
+		const char defaultFileName[12] = "./input/txt";
 
 		void initDefault();
-		Element* GetElement(int index);
+		Element* GetElementAddr(int index);
+		void CorrectElementPointers(LPVOID elementAddr);
 	};
 }

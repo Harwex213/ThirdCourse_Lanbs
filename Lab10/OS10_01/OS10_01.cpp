@@ -1,93 +1,301 @@
 ﻿#include <iostream>
+#include <string>
 #include <Windows.h>
 #include "Element.h"
 #include "HashTable.h"
 #include "Api.h"
 using namespace std;
 
-struct element
+HT::HTHANDLE* Create()
 {
-	const void* key;
-	const void* value;
-
-	element()
+	HT::HTHANDLE* htHandle = HT::Create(10, 3, 20, 50, "../input/test.ht");
+	if (htHandle)
 	{
-
+		cout << "htHandle created successfully\n";
+		return htHandle;
 	}
 
-	element(const char* pKey, const char* pValue, LPVOID elAddrBegin)
-	{
-		key = new((char*)elAddrBegin + sizeof(element))char[50];
-		value = new((char*)elAddrBegin + sizeof(element) + 50)char[50];
-		strcpy_s((char*)key, strlen(pKey) + 1, pKey);
-		strcpy_s((char*)value, strlen(pValue) + 1, pValue);
-	}
-};
+	throw "Error! htHandle wasn't created\n";
+}
 
-struct table
+HT::HTHANDLE* Open()
 {
-	int someNumber = 1919;
-	int someNumber2 = 218;
-};
+	HT::HTHANDLE* htHandle = HT::Open("../input/test.ht");
+	if (htHandle)
+	{
+		cout << "htHandle opened successfully\n";
+		return htHandle;
+	}
+
+	throw "Error! htHandle wasn't opened\n";
+}
+
+void Insert(HT::HTHANDLE* htHandle, const char* key, const char* value)
+{
+	if (HT::Insert(htHandle, new HT::Element(key, strlen(key) + 1, value, strlen(value) + 1)))
+	{
+		printf_s("Element(%s) was created successfully\n", key);
+		return;
+	}
+
+	string error = "Error! Element("; error += key; error += +") wasn't created";
+	throw error.c_str();
+}
+
+void Delete(HT::HTHANDLE* htHandle, const char* key)
+{
+	if (HT::Delete(htHandle, new HT::Element(key, strlen(key) + 1)))
+	{
+		printf_s("Element(%s) was deleted successfully\n", key);
+		return;
+	}
+
+	string error = "Error! Element("; error += key; error += +") wasn't deleted";
+	throw error.c_str();
+}
+
+HT::Element* Get(HT::HTHANDLE* htHandle, const char* key)
+{
+	HT::Element* element = HT::Get(htHandle, new HT::Element(key, strlen(key) + 1));
+	if (element)
+	{
+		printf_s("Element(%s) was found successfully\n", key);
+	}
+	else
+	{
+		printf_s("Element(%s) wasn't found\n", key);
+	}
+	return element;
+}
+
+void Close(HT::HTHANDLE* htHandle)
+{
+	if (HT::Close(htHandle))
+	{
+		cout << "htHandle closed successfully\n";
+		return;
+	}
+
+	throw "Error! htHandle wasn't closed\n";
+}
+
+void StartTest()
+{
+	printf_s("\n\n--- Test One Start ---\n\n");
+	HT::HTHANDLE* htHandle = Create();
+
+	Insert(htHandle, "key1337", "ewqiequsf");
+
+	HT::Element* element = Get(htHandle, "key1337");
+	HT::Print(element);
+
+	Delete(htHandle, "key1337");
+
+	element = Get(htHandle, "key1337");
+	HT::Print(element);
+
+	Close(htHandle);
+	printf_s("\n\n--- Test One End ---\n\n");
+}
+
+void Test02()
+{
+	printf_s("\n\n--- Test Three Start ---\n\n");
+	HT::HTHANDLE* htHandle = Open();
+
+	HT::Element* element;
+	string key = "key";
+	string payload = "payload";
+
+	cout << endl;
+
+	for (int i = 0; i < 9; i++)
+	{
+		key += std::to_string(i);
+		payload += std::to_string(i);
+
+		Insert(htHandle, key.c_str(), payload.c_str());
+
+		key.resize(3);
+		payload.resize(7);
+	}
+
+	cout << endl;
+
+	for (int i = 0; i < 9; i++)
+	{
+		key += std::to_string(i);
+		
+		element = Get(htHandle, key.c_str());
+		HT::Print(element);
+
+		key.resize(3);
+	}
+
+	cout << endl;
+
+	for (int i = 0; i < 5; i ++)
+	{
+		key += std::to_string(i);
+
+		Delete(htHandle, key.c_str());
+
+		key.resize(3);
+	}
+
+	cout << endl;
+
+	HT::PrintAllElements(htHandle);
+
+	cout << endl;
+
+	element = Get(htHandle, "key1337");
+	HT::Print(element);
+
+	cout << endl;
+
+	cout << "Current size: " << htHandle->currentSize << endl;
+	for (int i = 20; i < 29; i++)
+	{
+		key += std::to_string(i);
+		payload += std::to_string(i);
+
+		Insert(htHandle, key.c_str(), payload.c_str());
+
+		key.resize(3);
+		payload.resize(7);
+	}
+	cout << "Current size: " << htHandle->currentSize << endl;
+
+	cout << endl;
+
+	HT::PrintAllElements(htHandle);
+
+	cout << endl;
+
+	for (int i = 5; i < 9; i++)
+	{
+		key += std::to_string(i);
+
+		Delete(htHandle, key.c_str());
+
+		key.resize(3);
+	}
+
+	for (int i = 20; i < 29; i++)
+	{
+		key += std::to_string(i);
+
+		Delete(htHandle, key.c_str());
+
+		key.resize(3);
+	}
+
+	cout << endl;
+
+	HT::PrintAllElements(htHandle);
+
+	cout << endl;
+
+	for (int i = 0; i < 3; i++)
+	{
+		key += std::to_string(i);
+		payload += std::to_string(i);
+
+		Insert(htHandle, key.c_str(), payload.c_str());
+
+		key.resize(3);
+		payload.resize(7);
+	}
+
+	cout << endl;
+
+	HT::PrintAllElements(htHandle);
+
+	cout << endl;
+
+	for (int i = 0; i < 3; i++)
+	{
+		key += std::to_string(i);
+
+		Delete(htHandle, key.c_str());
+
+		key.resize(3);
+	}
+
+	cout << endl;
+
+	Close(htHandle);
+
+	printf_s("\n\n--- Test Three End ---\n\n");
+}
+
+
+void Test03()
+{
+	printf_s("\n\n--- Test Two Start ---\n\n");
+	HT::HTHANDLE* htHandle = Open();
+	string key = "key";
+	string payload = "payload";
+
+	cout << endl;
+
+	HT::PrintAllElements(htHandle);
+
+	cout << endl;
+
+	for (int i = 0; i < 3; i++)
+	{
+		key += std::to_string(i);
+		payload += std::to_string(i);
+
+		Insert(htHandle, key.c_str(), payload.c_str());
+
+		key.resize(3);
+		payload.resize(7);
+	}
+
+	cout << endl;
+
+	HT::PrintAllElements(htHandle);
+
+	cout << endl;
+
+	for (int i = 0; i < 3; i++)
+	{
+		key += std::to_string(i);
+
+		Delete(htHandle, key.c_str());
+
+		key.resize(3);
+	}
+
+	cout << endl;
+
+	HT::PrintAllElements(htHandle);
+
+	cout << endl;
+
+	Close(htHandle);
+	printf_s("\n\n--- Test Two End ---\n\n");
+}
+
 
 int main()
 {
-	//HT::Element* element = new HT::Element("superKey", 9, "ahhhhhhhhhh", 2);
-	//cout << element->getKey() << endl;
-
-	//int megaTableSize = sizeof(table) + 10 * (sizeof(element) + 5 + 7);
-
-	HANDLE hFile = CreateFileA(
-		(LPCSTR) "../input/test.txt",
-		GENERIC_READ | GENERIC_WRITE,
-		0,
-		NULL,
-		OPEN_ALWAYS,
-		0,
-		NULL);
-	if (hFile == INVALID_HANDLE_VALUE)
+	try
 	{
-		cout << "Ti loh\n";
+		StartTest();
+		//Test02();
+		//Test03();
+
+		printf_s("\n---Complete---\n");
+	}
+	catch (const char* error)
+	{
+		printf_s(error);
 		return 1;
 	}
-
-	DWORD fileSize = GetFileSize(hFile, NULL);
-	HANDLE hMapFile = CreateFileMappingA(hFile, NULL, PAGE_READWRITE, 0, 1024, 0);
-	if (hMapFile == NULL)
-	{
-		cout << "Ti mapping loh\n";
-		return 2;
-	}
-
-	LPVOID addr = MapViewOfFile(hMapFile, FILE_MAP_ALL_ACCESS, 0, 0, 0);
-	if (addr == NULL)
-	{
-		cout << "Ti mapView loh\n";
-		return 3;
-	}
-
-	//HT::HTHANDLE* htHandle = HT::Create();
-
-	//int capacity = 10;
-	table* superTable = new(addr) table();
-	//LPVOID elementsBeginning = (char*)addr + sizeof(table);
-	//DWORD elementSize = sizeof(element) + 100;
-	//element* element1 = new(elementsBeginning)element("key", "value", elementsBeginning);
-
-	//table* superTable = (table*)addr;
-	//LPVOID elementsBeginning = (char*)addr + sizeof(table);
-	//DWORD elementSize = sizeof(element) + 100;
-	//element* element1 = (element*)elementsBeginning;
-	//element1->key = (char*)elementsBeginning + sizeof(element);
-	//element1->value = (char*)elementsBeginning + sizeof(element) + 50;
-
-	//element* element2 = new((char*)elementsBeginning + elementSize)element("key2", "value2", (char*)elementsBeginning + elementSize);
-
-	cout << "complete" << endl;
-
-	HT::Element element;
-	element.getKey();
-
 
 	return 0;
 }

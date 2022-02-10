@@ -16,18 +16,18 @@ namespace HT
 		this->secSnapshotInterval = secSnapshotInterval;
 		this->maxKeyLength = maxKeyLength;
 		this->maxPayloadLength = maxPayloadLength;
-		elementSize = CalcElementMaxSizeMemory(maxKeyLength, maxPayloadLength);
+		elementMemorySize = CalcElementMaxSizeMemory(maxKeyLength, maxPayloadLength);
 		strcpy_s(this->fileName, strlen(fileName) + 1, fileName);
 	}
 
 	void HTHANDLE::initDefault()
 	{
-		capacity = 0;
+		capacity = 5;
 		secSnapshotInterval = 3;
-		maxKeyLength = 10;
-		maxPayloadLength = 50;
+		maxKeyLength = 5;
+		maxPayloadLength = 10;
 		strcpy_s(fileName, strlen(defaultFileName) + 1, defaultFileName);
-		elementSize = CalcElementMaxSizeMemory(maxKeyLength, maxPayloadLength);
+		elementMemorySize = CalcElementMaxSizeMemory(maxKeyLength, maxPayloadLength);
 
 		hFile = NULL;
 		hFileMapping = NULL;
@@ -37,13 +37,22 @@ namespace HT
 		lastErrorMessage[0] = '\0';
 	}
 
-	Element* HTHANDLE::GetElement(int index)
+	Element* HTHANDLE::GetElementAddr(int index)
 	{
 		if (addr == NULL)
 		{
 			// TODO: fill error
 			return NULL;
 		}
-		return (Element*)((char*)addr + sizeof(HTHANDLE) + elementSize * index);
+		return (Element*)((char*)addr + sizeof(HTHANDLE) + elementMemorySize * index);
+	}
+
+	void HTHANDLE::CorrectElementPointers(LPVOID elementAddr)
+	{
+		Element* element = (Element *) elementAddr;
+		LPVOID keyAddr = (char*)elementAddr + sizeof(Element);
+		LPVOID payloadAddr = (char*)keyAddr + maxKeyLength;
+		element->setKeyPointer(keyAddr, element->keyLength);
+		element->setPayloadPointer(payloadAddr, element->payloadLength);
 	}
 }
