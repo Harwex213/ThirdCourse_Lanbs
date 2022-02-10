@@ -1,5 +1,5 @@
-#include "Element.h"
 #include <iostream>
+#include "Element.h"
 
 namespace HT
 {
@@ -11,29 +11,35 @@ namespace HT
 	Element::Element(const void* key, int keyLength)
 	{
 		initDefault();
-		setKey(key, keyLength);
+		setKeyPointer(key, keyLength);
 	}
 
 	Element::Element(const void* key, int keyLength, const void* payload, int payloadLength)
 	{
 		initDefault();
-		setKey(key, keyLength);
-		setPayload(payload, payloadLength);
+		setKeyPointer(key, keyLength);
+		setPayloadPointer(payload, payloadLength);
 	}
 
 	Element::Element(Element* oldElement, const void* payload, int payloadLength)
 	{
 		initDefault();
-		setKey(oldElement->key, oldElement->keyLength);
-		setPayload(payload, payloadLength);
+		setKeyPointer(oldElement->key, oldElement->keyLength);
+		setPayloadPointer(payload, payloadLength);
+	}
+
+	void Element::setKeyPointer(const void* key, int keyLength)
+	{
+		this->key = key;
+		this->keyLength = keyLength;
 	}
 
 	bool Element::setKey(const void* key, int keyLength)
 	{
-		if (isDeleted)
+		if (this->key == nullptr)
 			return false;
 
-		this->key = key;
+		strcpy_s((char*)this->key, keyLength, (char*)key);
 		this->keyLength = keyLength;
 		
 		return true;
@@ -44,12 +50,18 @@ namespace HT
 		return (char*)(key == nullptr ? "" : key);
 	}
 
+	void Element::setPayloadPointer(const void* payload, int payloadLength)
+	{
+		this->payload = payload;
+		this->payloadLength = payloadLength;
+	}
+
 	bool Element::setPayload(const void* payload, int payloadLength)
 	{
-		if (isDeleted)
+		if (this->payload == nullptr)
 			return false;
 
-		this->payload = payload;
+		strcpy_s((char*)this->payload, payloadLength, (char*)payload);
 		this->payloadLength = payloadLength;
 
 		return true;
@@ -66,5 +78,6 @@ namespace HT
 		payloadLength = 0;
 		key = nullptr;
 		payload = nullptr;
+		isDeleted = false;
 	}
 }

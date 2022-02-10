@@ -14,4 +14,12 @@ namespace HT
 	{
 		return sizeof(Element) + elMaxKeyLength + elMaxPayloadLength;
 	}
+
+	int TruncateStrByMax(char* truncatedStr, const char* str, int strLength, int maxStrLength)
+	{
+		int newStrLength = strLength > maxStrLength ? maxStrLength : strLength;
+		strcpy_s(truncatedStr, newStrLength, str);
+
+		return newStrLength;
+	}
 }

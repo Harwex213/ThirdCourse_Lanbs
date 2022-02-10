@@ -5,89 +5,116 @@
 #include "Api.h"
 using namespace std;
 
-struct element
+void TestOne()
 {
-	const void* key;
-	const void* value;
-
-	element()
+	HT::HTHANDLE* htHandle = HT::Create(15, 3, 20, 50, "../input/test.ht");
+	if (htHandle)
 	{
-
+		cout << "htHandle created successfully\n";
+	}
+	else
+	{
+		cout << "htHandle created with errors\n";
+		return;
 	}
 
-	element(const char* pKey, const char* pValue, LPVOID elAddrBegin)
+	if (HT::Insert(htHandle, new HT::Element("key1337", 8, "payload", 8)))
 	{
-		key = new((char*)elAddrBegin + sizeof(element))char[50];
-		value = new((char*)elAddrBegin + sizeof(element) + 50)char[50];
-		strcpy_s((char*)key, strlen(pKey) + 1, pKey);
-		strcpy_s((char*)value, strlen(pValue) + 1, pValue);
+		cout << "Element created successfully\n";
 	}
-};
+	else
+	{
+		cout << "Element created with errors\n";
+		return;
+	}
 
-struct table
+	HT::Element* element = HT::Get(htHandle, new HT::Element("key1337", 8));
+	if (element)
+	{
+		cout << "Element was got successfully\n";
+	}
+	else
+	{
+		cout << "Element was got with errors\n";
+		return;
+	}
+
+	HT::Print(element);
+
+	if (HT::Close(htHandle))
+	{
+		cout << "htHandle closed successfully\n";
+	}
+	else
+	{
+		cout << "htHandle closed with errors\n";
+		return;
+	}
+}
+
+void TestTwo()
 {
-	int someNumber = 1919;
-	int someNumber2 = 218;
-};
+	HT::HTHANDLE* htHandle = HT::Open("../input/test.ht");
+	if (htHandle)
+	{
+		cout << "htHandle opened successfully\n";
+	}
+	else
+	{
+		cout << "htHandle opened with errors\n";
+		return;
+	}
+
+	HT::Element* element = HT::Get(htHandle, new HT::Element("key1337", 8));
+	if (element)
+	{
+		cout << "Element was got successfully\n";
+	}
+	else
+	{
+		cout << "Element was got with errors\n";
+		return;
+	}
+	HT::Print(element);
+
+	if (HT::Insert(htHandle, new HT::Element("key1338", 8, "payload12", 10)))
+	{
+		cout << "Element created successfully\n";
+	}
+	else
+	{
+		cout << "Element created with errors\n";
+		return;
+	}
+
+	element = HT::Get(htHandle, new HT::Element("key1338", 8));
+	if (element)
+	{
+		cout << "Element was got successfully\n";
+	}
+	else
+	{
+		cout << "Element was got with errors\n";
+		return;
+	}
+	HT::Print(element);
+
+	if (HT::Close(htHandle))
+	{
+		cout << "htHandle closed successfully\n";
+	}
+	else
+	{
+		cout << "htHandle closed with errors\n";
+		return;
+	}
+}
 
 int main()
 {
-	//HT::Element* element = new HT::Element("superKey", 9, "ahhhhhhhhhh", 2);
-	//cout << element->getKey() << endl;
-
-	//int megaTableSize = sizeof(table) + 10 * (sizeof(element) + 5 + 7);
-
-	HANDLE hFile = CreateFileA(
-		(LPCSTR) "../input/test.txt",
-		GENERIC_READ | GENERIC_WRITE,
-		0,
-		NULL,
-		OPEN_ALWAYS,
-		0,
-		NULL);
-	if (hFile == INVALID_HANDLE_VALUE)
-	{
-		cout << "Ti loh\n";
-		return 1;
-	}
-
-	DWORD fileSize = GetFileSize(hFile, NULL);
-	HANDLE hMapFile = CreateFileMappingA(hFile, NULL, PAGE_READWRITE, 0, 1024, 0);
-	if (hMapFile == NULL)
-	{
-		cout << "Ti mapping loh\n";
-		return 2;
-	}
-
-	LPVOID addr = MapViewOfFile(hMapFile, FILE_MAP_ALL_ACCESS, 0, 0, 0);
-	if (addr == NULL)
-	{
-		cout << "Ti mapView loh\n";
-		return 3;
-	}
-
-	//HT::HTHANDLE* htHandle = HT::Create();
-
-	//int capacity = 10;
-	table* superTable = new(addr) table();
-	//LPVOID elementsBeginning = (char*)addr + sizeof(table);
-	//DWORD elementSize = sizeof(element) + 100;
-	//element* element1 = new(elementsBeginning)element("key", "value", elementsBeginning);
-
-	//table* superTable = (table*)addr;
-	//LPVOID elementsBeginning = (char*)addr + sizeof(table);
-	//DWORD elementSize = sizeof(element) + 100;
-	//element* element1 = (element*)elementsBeginning;
-	//element1->key = (char*)elementsBeginning + sizeof(element);
-	//element1->value = (char*)elementsBeginning + sizeof(element) + 50;
-
-	//element* element2 = new((char*)elementsBeginning + elementSize)element("key2", "value2", (char*)elementsBeginning + elementSize);
+	TestOne();
+	TestTwo();
 
 	cout << "complete" << endl;
-
-	HT::Element element;
-	element.getKey();
-
-
 	return 0;
 }

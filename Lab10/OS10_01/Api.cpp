@@ -3,6 +3,7 @@
 #include "Api.h"
 #include "Helper.h"
 #include "Element.h"
+#include "HashTable.h"
 
 namespace HT
 {
@@ -42,6 +43,8 @@ namespace HT
 		htHandle->hFile = htHandleTemp->hFile;
 		htHandle->hFileMapping = htHandleTemp->hFileMapping;
 		htHandle->addr = htHandleTemp->addr;
+
+		LPVOID elementAddr;
 
 		delete htHandleTemp;
 		return htHandle;
@@ -100,47 +103,119 @@ namespace HT
 			return false;
 		}
 
+		HANDLE hFileMapping = htHandle->hFileMapping;
+		HANDLE hFile = htHandle->hFile;
 		if (!UnmapViewOfFile(htHandle->addr))
 		{
 			// TODO: fill error;
 			return false;
 		}
 
-		if (!CloseHandle(htHandle->hFileMapping))
+		if (!CloseHandle(hFileMapping))
 		{
 			// TODO: fill error;
 			return false;
 		}
 
-		if (!CloseHandle(htHandle->hFile))
+		if (!CloseHandle(hFile))
 		{
 			// TODO: fill error;
 			return false;
 		}
-	}
 
-	BOOL Insert(const HTHANDLE* hthandle, const Element* element)
-	{
-		// TODO: implement Update
 		return true;
 	}
 
-	BOOL Update(const HTHANDLE* hthandle, const Element* oldelement, const void* newpayload, int newpayloadlength)
+	BOOL Insert(HTHANDLE* htHandle, const Element* element)
 	{
-		// TODO: implement Update
+		char* key = new char[htHandle->maxKeyLength];
+		int keyLength = TruncateStrByMax(key, element->getKey(), element->keyLength, htHandle->maxKeyLength);
+		char* payload = new char[htHandle->maxPayloadLength];
+		int payloadLength = TruncateStrByMax(payload, element->getPayload(), element->payloadLength, htHandle->maxPayloadLength);
+
+		LPVOID elementAddr = FindUnallocatedElementAddr(htHandle, key);
+		if (elementAddr == NULL)
+		{
+			delete[] key;
+			delete[] payload;
+
+			// TODO: fill error;
+			return false;
+		}
+
+		Element* elementToInsert = new(elementAddr) Element();
+		LPVOID keyAddr = (char*)elementAddr + sizeof(Element);
+		LPVOID payloadAddr = (char*)keyAddr + htHandle->maxKeyLength;
+
+		elementToInsert->key = new(keyAddr) char[htHandle->maxKeyLength];
+		elementToInsert->setKey(key, keyLength);
+		elementToInsert->payload = new(payloadAddr) char[htHandle->maxPayloadLength];
+		elementToInsert->setPayload(payload, payloadLength);
+
+		htHandle->currentSize++;
+
+		delete[] key;
+		delete[] payload;
 		return true;
 	}
 
-	BOOL Delete(const HTHANDLE* hthandle, const Element* element)
+	BOOL Update(HTHANDLE* htHandle, const Element* oldElement, const void* newPayload, int newPayloadlength)
 	{
-		// TODO: implement Update
+		char* key = new char[htHandle->maxKeyLength];
+		int keyLength = TruncateStrByMax(key, oldElement->getKey(), oldElement->keyLength, htHandle->maxKeyLength);
+		char* payload = new char[htHandle->maxPayloadLength];
+		int payloadLength = TruncateStrByMax(payload, (const char*)newPayload, newPayloadlength, htHandle->maxPayloadLength);
+
+		Element* elementToUpdate = FindElementAddr(htHandle, key);
+		if (elementToUpdate == NULL || elementToUpdate->isDeleted)
+		{
+			delete[] key;
+			delete[] payload;
+
+			// TODO: fill error;
+			return false;
+		}
+
+		elementToUpdate->setPayload(payload, payloadLength);
+
+		delete[] key;
+		delete[] payload;
 		return true;
 	}
 
-	Element* Get(const HTHANDLE* hthandle, const Element* element)
+	BOOL Delete(HTHANDLE* htHandle, const Element* element)
 	{
-		// TODO: implement Update
-		return new Element();
+		char* key = new char[htHandle->maxKeyLength];
+		int keyLength = TruncateStrByMax(key, element->getKey(), element->keyLength, htHandle->maxKeyLength);
+		Element* elementToDelete = FindElementAddr(htHandle, key);
+		if (elementToDelete == NULL)
+		{
+			delete[] key;
+
+			// TODO: fill error;
+			return false;
+		}
+
+		elementToDelete->isDeleted = true;
+
+		htHandle->currentSize--;
+
+		delete[] key;
+		return true;
+	}
+
+	Element* Get(HTHANDLE* htHandle, const Element* element)
+	{
+		char* key = new char[htHandle->maxKeyLength];
+		int keyLength = TruncateStrByMax(key, element->getKey(), element->keyLength, htHandle->maxKeyLength);
+		Element* elementToGet = FindElementAddr(htHandle, key);
+		if (elementToGet == NULL)
+		{
+			// TODO: fill error;
+		}
+
+		delete[] key;
+		return elementToGet;
 	}
 
 	char* GetLastError(HTHANDLE* htHandle)
@@ -150,6 +225,6 @@ namespace HT
 
 	void Print(const Element* element)
 	{
-		printf_s("%s: %s", element->getKey(), element->getPayload());
+		printf_s("%s: %s\n", element->getKey(), element->getPayload());
 	}
 }

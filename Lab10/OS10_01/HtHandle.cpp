@@ -37,7 +37,7 @@ namespace HT
 		lastErrorMessage[0] = '\0';
 	}
 
-	Element* HTHANDLE::GetElement(int index)
+	Element* HTHANDLE::GetElementAddr(int index)
 	{
 		if (addr == NULL)
 		{
@@ -45,5 +45,14 @@ namespace HT
 			return NULL;
 		}
 		return (Element*)((char*)addr + sizeof(HTHANDLE) + elementSize * index);
+	}
+
+	void HTHANDLE::CorrectElementPointers(LPVOID elementAddr)
+	{
+		Element* element = (Element *) elementAddr;
+		LPVOID keyAddr = (char*)elementAddr + sizeof(Element);
+		LPVOID payloadAddr = (char*)keyAddr + maxKeyLength;
+		element->setKeyPointer(keyAddr, element->keyLength);
+		element->setPayloadPointer(payloadAddr, element->payloadLength);
 	}
 }

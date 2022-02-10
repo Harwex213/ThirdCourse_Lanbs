@@ -11,7 +11,7 @@ namespace HT
 		HTHANDLE();
 		HTHANDLE(int capacity, int cecSnapshotInterval, int maxKeyLength, int maxPayloadLength, const char fileName[CHAR_MAX_LENGTH]);
 
-		const char* defaultFileName = "./input/txt";
+		const char defaultFileName[12] = "./input/txt";
 
 		int capacity;					// емкость хранилища в количестве элементов 
 		int secSnapshotInterval;		// переодичность сохранения в сек. 
@@ -29,6 +29,7 @@ namespace HT
 		char lastErrorMessage[CHAR_MAX_LENGTH];		// сообщение об последней ошибке или 0x00
 
 		void initDefault();
-		Element* GetElement(int index);
+		Element* GetElementAddr(int index);
+		void CorrectElementPointers(LPVOID elementAddr);
 	};
 }
