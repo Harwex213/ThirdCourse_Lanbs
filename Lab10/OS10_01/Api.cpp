@@ -46,6 +46,8 @@ namespace HT
 		htHandle->hFileMapping = htHandleTemp->hFileMapping;
 		htHandle->addr = htHandleTemp->addr;
 
+		LPVOID elementAddr;
+
 		delete htHandleTemp;
 		return htHandle;
 	}

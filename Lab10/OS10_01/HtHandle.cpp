@@ -55,4 +55,13 @@ namespace HT
 		element->setKeyPointer(keyAddr, element->keyLength);
 		element->setPayloadPointer(payloadAddr, element->payloadLength);
 	}
+
+	void HTHANDLE::CorrectElementPointers(LPVOID elementAddr)
+	{
+		Element* element = (Element *) elementAddr;
+		LPVOID keyAddr = (char*)elementAddr + sizeof(Element);
+		LPVOID payloadAddr = (char*)keyAddr + maxKeyLength;
+		element->setKeyPointer(keyAddr, element->keyLength);
+		element->setPayloadPointer(payloadAddr, element->payloadLength);
+	}
 }

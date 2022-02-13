@@ -269,6 +269,7 @@ void Test03()
 
 		key.resize(3);
 	}
+	HT::Print(element);
 
 	cout << endl;
 
