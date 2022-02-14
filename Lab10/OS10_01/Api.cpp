@@ -42,15 +42,13 @@ namespace HT
 		hFileMapping = CreateFileMappingA(hFile, NULL, PAGE_READWRITE, 0, memoryToAlloc, fileName);
 		if (hFileMapping == NULL)
 		{
-			// TODO: fill error;
-			return "error";
+			return CREATE_FILE_MAPING_ERROR;
 		}
 
 		addr = MapViewOfFile(hFileMapping, FILE_MAP_ALL_ACCESS, 0, 0, 0);
 		if (addr == NULL)
 		{
-			// TODO: fill error;
-			return "error";
+			return CREATE_MAP_VIEW_ERROR;
 		}
 
 		if (hFile == INVALID_HANDLE_VALUE)
@@ -69,7 +67,7 @@ namespace HT
 		const char* error = TakeMapView(hFile, hFileMapping, addr, fileName, memoryToAlloc);
 		if (error != NULL)
 		{
-			// TODO: fill error;
+			strcpy_s(lastErrorMessage, strlen(error) + 1, error);
 			return NULL;
 		}
 
@@ -81,6 +79,7 @@ namespace HT
 		htHandle->addr = addr;
 		htHandle->tableMemorySize = memoryToAlloc;
 
+		InitParsedFileName(fileName);
 		htHandle->InitMutex();
 		htHandle->SetIntervalSnapOn();
 
@@ -99,7 +98,7 @@ namespace HT
 		const char* error = TakeMapView(hFile, hFileMapping, addr, fileName);
 		if (error != NULL)
 		{
-			// TODO: fill error;
+			strcpy_s(lastErrorMessage, strlen(error) + 1, error);
 			return NULL;
 		}
 
@@ -109,7 +108,7 @@ namespace HT
 		htHandle->addr = addr;
 
 		htHandle->SetFileName(fileName);
-		htHandle->InitParsedFileName(fileName);
+		InitParsedFileName(fileName);
 		htHandle->InitMutex();
 		htHandle->SetIntervalSnapOn();
 
@@ -135,8 +134,7 @@ namespace HT
 
 			if (!FlushViewOfFile(htHandle->addr, htHandle->tableMemorySize))
 			{
-				// TODO: fill error;
-				throw "error";
+				throw FLUSH_VIEW_ERROR;
 			}
 
 			std::string snapFilename = htHandle->GenerateSnapFilename();
@@ -150,20 +148,17 @@ namespace HT
 				NULL);
 			if (hSnapFile == INVALID_HANDLE_VALUE)
 			{
-				// TODO: fill error;
-				throw "error";
+				throw CREATE_SNAPFILE_ERROR;
 			}
 
 			if (!WriteFile(hSnapFile, htHandle->addr, htHandle->tableMemorySize, NULL, NULL))
 			{
-				// TODO: fill error;
-				throw "error";
+				throw WRITE_SNAPFILE_ERROR;
 			}
 
 			if (!CloseHandle(hSnapFile))
 			{
-				// TODO: fill error;
-				throw "error";
+				throw CLOSE_SNAPFILE_ERROR;
 			};
 
 			time(&htHandle->snapLastTime);
@@ -171,7 +166,7 @@ namespace HT
 		}
 		catch (const char* error)
 		{
-			// TODO: fill error;
+			htHandle->SetLastError(error);
 			result = false;
 		}
 
@@ -185,7 +180,6 @@ namespace HT
 		HANDLE hFile = htHandle->hFile;
 
 		htHandle->SetIntervalSnapOff();
-		htHandle->ClearParsedFileName();
 		if (!Snap(htHandle))
 		{
 			return false;
@@ -193,19 +187,19 @@ namespace HT
 
 		if (!UnmapViewOfFile(htHandle->addr))
 		{
-			// TODO: fill error;
+			htHandle->SetLastError(UNMAP_VIEW_ERROR);
 			return false;
 		}
 
 		if (!CloseHandle(hFileMapping))
 		{
-			// TODO: fill error;
+			htHandle->SetLastError(CLOSE_FILE_MAPPING_ERROR);
 			return false;
 		}
 
-		if (!CloseHandle(hFile))
+		if (hFile != NULL && !CloseHandle(hFile))
 		{
-			// TODO: fill error;
+			htHandle->SetLastError(CLOSE_FILE_ERROR);
 			return false;
 		}
 
@@ -223,7 +217,7 @@ namespace HT
 		LPVOID elementAddr = FindUnallocatedElementAddr(htHandle, key.c_str());
 		if (elementAddr == NULL)
 		{
-			// TODO: fill error;
+			htHandle->SetLastError(INSERT_ERROR);
 			ReleaseMutex(htHandle->hMutex);
 			return false;
 		}
@@ -255,7 +249,7 @@ namespace HT
 		Element* elementToUpdate = FindElementAddr(htHandle, key.c_str());
 		if (elementToUpdate == NULL)
 		{
-			// TODO: fill error;
+			htHandle->SetLastError(UPDATE_ERROR);
 			ReleaseMutex(htHandle->hMutex);
 			return false;
 		}
@@ -276,7 +270,7 @@ namespace HT
 		Element* elementToDelete = FindElementAddr(htHandle, key.c_str());
 		if (elementToDelete == NULL)
 		{
-			// TODO: fill error;
+			htHandle->SetLastError(DELETE_ERROR);
 			ReleaseMutex(htHandle->hMutex);
 			return false;
 		}
@@ -299,7 +293,7 @@ namespace HT
 		ReleaseMutex(htHandle->hMutex);
 		if (elementToGet == NULL)
 		{
-			// TODO: fill error;
+			htHandle->SetLastError(GET_ERROR);
 		}
 
 		return elementToGet;
@@ -307,6 +301,10 @@ namespace HT
 
 	char* GetLastError(HTHANDLE* htHandle)
 	{
+		if (htHandle == NULL)
+		{
+			return lastErrorMessage;
+		}
 		return htHandle->lastErrorMessage;
 	}
 

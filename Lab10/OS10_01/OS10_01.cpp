@@ -98,143 +98,10 @@ void StartTest()
 	printf_s("\n\n--- Test One End on Thread %d ---\n\n", GetCurrentThreadId());
 }
 
-void Test02()
-{
-	printf_s("\n\n--- Test Three Start ---\n\n");
-	HT::HTHANDLE* htHandle = Open();
-
-	HT::Element* element;
-	string key = "key";
-	string payload = "payload";
-
-	cout << endl;
-
-	for (int i = 0; i < 9; i++)
-	{
-		key += std::to_string(i);
-		payload += std::to_string(i);
-
-		Insert(htHandle, key.c_str(), payload.c_str());
-
-		key.resize(3);
-		payload.resize(7);
-	}
-
-	cout << endl;
-
-	for (int i = 0; i < 9; i++)
-	{
-		key += std::to_string(i);
-		
-		element = Get(htHandle, key.c_str());
-		HT::Print(element);
-
-		key.resize(3);
-	}
-
-	cout << endl;
-
-	for (int i = 0; i < 5; i ++)
-	{
-		key += std::to_string(i);
-
-		Delete(htHandle, key.c_str());
-
-		key.resize(3);
-	}
-
-	cout << endl;
-
-	HT::PrintAllElements(htHandle);
-
-	cout << endl;
-
-	element = Get(htHandle, "key1337");
-	HT::Print(element);
-
-	cout << endl;
-
-	cout << "Current size: " << htHandle->currentSize << endl;
-	for (int i = 20; i < 29; i++)
-	{
-		key += std::to_string(i);
-		payload += std::to_string(i);
-
-		Insert(htHandle, key.c_str(), payload.c_str());
-
-		key.resize(3);
-		payload.resize(7);
-	}
-	cout << "Current size: " << htHandle->currentSize << endl;
-
-	cout << endl;
-
-	HT::PrintAllElements(htHandle);
-
-	cout << endl;
-
-	for (int i = 5; i < 9; i++)
-	{
-		key += std::to_string(i);
-
-		Delete(htHandle, key.c_str());
-
-		key.resize(3);
-	}
-
-	for (int i = 20; i < 29; i++)
-	{
-		key += std::to_string(i);
-
-		Delete(htHandle, key.c_str());
-
-		key.resize(3);
-	}
-
-	cout << endl;
-
-	HT::PrintAllElements(htHandle);
-
-	cout << endl;
-
-	for (int i = 0; i < 3; i++)
-	{
-		key += std::to_string(i);
-		payload += std::to_string(i);
-
-		Insert(htHandle, key.c_str(), payload.c_str());
-
-		key.resize(3);
-		payload.resize(7);
-	}
-
-	cout << endl;
-
-	HT::PrintAllElements(htHandle);
-
-	cout << endl;
-
-	for (int i = 0; i < 3; i++)
-	{
-		key += std::to_string(i);
-
-		Delete(htHandle, key.c_str());
-
-		key.resize(3);
-	}
-
-	cout << endl;
-
-	CloseHandle(htHandle);
-
-	printf_s("\n\n--- Test Three End ---\n\n");
-}
-
-
-void Test03()
+void Test03(HT::HTHANDLE*& htHandle)
 {
 	printf_s("\n\n--- Test Two Start on Thread %d ---\n\n", GetCurrentThreadId());
-	HT::HTHANDLE* htHandle = Open();
+	htHandle = Open();
 	string key = "key";
 	string payload = "payload";
 
@@ -299,49 +166,13 @@ void Test03()
 	printf_s("\n\n--- Test Two End, Thread %d ---\n\n", GetCurrentThreadId());
 }
 
-void testCase()
-{
-	try
-	{
-		printf_s("\n--- TEST CASE STARTED ON THREAD %d---\n", GetCurrentThreadId());
-
-		//StartTest();
-		//Test02();
-		Test03();
-
-		printf_s("\n--- TEST CASE COMPLETED ON THREAD %d---\n", GetCurrentThreadId());
-	}
-	catch (const char* error)
-	{
-		printf_s("THREAD %d: %s", GetCurrentThreadId(), error);
-	}
-}
-
-void testCase2()
-{
-	try
-	{
-		printf_s("\n--- TEST CASE STARTED ON THREAD %d---\n", GetCurrentThreadId());
-
-		//StartTest();
-		//Test02();
-		Test03();
-
-		printf_s("\n--- TEST CASE COMPLETED ON THREAD %d---\n", GetCurrentThreadId());
-	}
-	catch (const char* error)
-	{
-		printf_s("THREAD %d: %s", GetCurrentThreadId(), error);
-	}
-}
-
-
 int main()
 {
+	HT::HTHANDLE* htHandle = NULL;
 	try
 	{
 		//StartTest();
-		//Test03();
+		Test03(htHandle);
 
 		//thread first(testCase);
 		//thread second(testCase2);
@@ -353,7 +184,7 @@ int main()
 	}
 	catch (const char* error)
 	{
-		printf_s(error);
+		printf_s("Error: %s", HT::GetLastError(htHandle));
 		return 1;
 	}
 

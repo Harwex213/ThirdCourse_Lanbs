@@ -4,10 +4,19 @@
 
 namespace HT
 {
-	HTHANDLE::ParsedFileName::ParsedFileName(const char fileName[CHAR_MAX_LENGTH])
+	ParsedFileName::ParsedFileName(const char fileName[CHAR_MAX_LENGTH])
 	{
 		this->fileName = GetFileName(fileName);
 		this->filePath = GetFilePath(fileName);
+	}
+
+	void InitParsedFileName(const char fileName[CHAR_MAX_LENGTH])
+	{
+		if (parsedFileName)
+		{
+			delete parsedFileName;
+		}
+		parsedFileName = new ParsedFileName(fileName);
 	}
 
 	HTHANDLE::HTHANDLE()
@@ -25,7 +34,6 @@ namespace HT
 		this->maxPayloadLength = maxPayloadLength;
 		elementMemorySize = CalcElementMaxSizeMemory(maxKeyLength, maxPayloadLength);
 		SetFileName(fileName);
-		InitParsedFileName(fileName);
 	}
 
 	void HTHANDLE::initDefault()
@@ -50,7 +58,6 @@ namespace HT
 		elementMemorySize = CalcElementMaxSizeMemory(maxKeyLength, maxPayloadLength);
 		tableMemorySize = CalcHashTableMaxSizeMemory(capacity, maxKeyLength, maxPayloadLength);
 		SetFileName(defaultFileName);
-		InitParsedFileName(defaultFileName);
 		lastErrorMessage[0] = '\0';
 	}
 
@@ -73,19 +80,9 @@ namespace HT
 		element->setPayloadPointer(payloadAddr, element->payloadLength);
 	}
 
-	void HTHANDLE::InitParsedFileName(const char fileName[CHAR_MAX_LENGTH])
+	void HTHANDLE::SetLastError(const char error[CHAR_MAX_LENGTH])
 	{
-		ClearParsedFileName();
-		parsedFileName = new ParsedFileName(fileName);
-	}
-
-	void HTHANDLE::ClearParsedFileName()
-	{
-		if (parsedFileName)
-		{
-			delete parsedFileName;
-			parsedFileName = NULL;
-		}
+		strcpy_s(this->lastErrorMessage, strlen(error) + 1, error);
 	}
 
 	void HTHANDLE::SetFileName(const char fileName[CHAR_MAX_LENGTH])
@@ -95,23 +92,16 @@ namespace HT
 
 	std::string HTHANDLE::GenerateSnapFilename()
 	{
-		std::string filePath;
-		std::string fileName;
 		if (parsedFileName == NULL)
 		{
-			fileName = GetFileName(this->fileName);
-			filePath = GetFilePath(this->fileName);
-		}
-		else
-		{
-			fileName = parsedFileName->fileName;
-			filePath = parsedFileName->filePath;
+			InitParsedFileName(this->fileName);
 		}
 
-		std::string snapFilename = filePath + "/";
+		std::string snapFilename = parsedFileName->filePath + "/";
 		snapFilename += SNAPSHOT_DIRECTORY_NAME;
-		snapFilename += "/" + fileName + "-";
-		snapFilename += std::to_string(currentSnap++);
+		snapFilename += "/" + parsedFileName->fileName;
+		snapFilename += "-" + std::to_string(currentSnap++);
+		snapFilename += "." + TimeToLocalString(time(NULL));
 		snapFilename += ".ht";
 
 		return snapFilename;
