@@ -32,6 +32,8 @@ namespace HT
 		DWORD elementMemorySize;
 		DWORD tableMemorySize;
 
+		bool isTableChanged;
+
 		int currentSize;
 		DWORD currentSnap;
 		time_t snapLastTime;
@@ -39,6 +41,7 @@ namespace HT
 
 		HANDLE hFile;
 		HANDLE hFileMapping;
+		HANDLE hMutex;
 		LPVOID addr;
 
 		char lastErrorMessage[CHAR_MAX_LENGTH];
@@ -55,8 +58,9 @@ namespace HT
 		void ClearParsedFileName();
 
 		std::string GenerateSnapFilename();
-		void OnSnap();
-		void StartSnapInterval();
-		void FinishSnapInterval();
+		void SetIntervalSnapOn();
+		void SetIntervalSnapOff();
+
+		void InitMutex();
 	};
 }

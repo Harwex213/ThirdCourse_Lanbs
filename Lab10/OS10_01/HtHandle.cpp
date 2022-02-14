@@ -32,11 +32,14 @@ namespace HT
 	{
 		hFile = NULL;
 		hFileMapping = NULL;
+		hMutex = NULL;
 		addr = NULL;
 
 		snapLastTime = NULL;
 		parsedFileName = NULL;
 		isIntervalSnapOn = NULL;
+
+		isTableChanged = false;
 
 		capacity = 1;
 		secSnapshotInterval = 3;
@@ -63,7 +66,7 @@ namespace HT
 
 	void HTHANDLE::CorrectElementPointers(LPVOID elementAddr)
 	{
-		Element* element = (Element *) elementAddr;
+		Element* element = (Element*)elementAddr;
 		LPVOID keyAddr = (char*)elementAddr + sizeof(Element);
 		LPVOID payloadAddr = (char*)keyAddr + maxKeyLength;
 		element->setKeyPointer(keyAddr, element->keyLength);
@@ -75,7 +78,7 @@ namespace HT
 		ClearParsedFileName();
 		parsedFileName = new ParsedFileName(fileName);
 	}
-	
+
 	void HTHANDLE::ClearParsedFileName()
 	{
 		if (parsedFileName)
@@ -92,27 +95,48 @@ namespace HT
 
 	std::string HTHANDLE::GenerateSnapFilename()
 	{
-		std::string snapFilename = parsedFileName->filePath + "/";
+		std::string filePath;
+		std::string fileName;
+		if (parsedFileName == NULL)
+		{
+			fileName = GetFileName(this->fileName);
+			filePath = GetFilePath(this->fileName);
+		}
+		else
+		{
+			fileName = parsedFileName->fileName;
+			filePath = parsedFileName->filePath;
+		}
+
+		std::string snapFilename = filePath + "/";
 		snapFilename += SNAPSHOT_DIRECTORY_NAME;
-		snapFilename += "/" + parsedFileName->fileName + "-";
+		snapFilename += "/" + fileName + "-";
 		snapFilename += std::to_string(currentSnap++);
 		snapFilename += ".ht";
 
 		return snapFilename;
 	}
 
-	void HTHANDLE::OnSnap()
-	{
-		time(&snapLastTime);
-	}
-
-	void HTHANDLE::StartSnapInterval()
+	void HTHANDLE::SetIntervalSnapOn()
 	{
 		isIntervalSnapOn = new std::atomic<bool>(true);
 	}
 
-	void HTHANDLE::FinishSnapInterval()
+	void HTHANDLE::SetIntervalSnapOff()
 	{
 		isIntervalSnapOn->store(false, std::memory_order_seq_cst);
 	}
+
+	void HTHANDLE::InitMutex()
+	{
+		if (hFile)
+		{
+			hMutex = CreateMutexA(NULL, FALSE, fileName);
+		}
+		else
+		{
+			hMutex = OpenMutexA(SYNCHRONIZE, FALSE, fileName);
+		}
+	}
+
 }

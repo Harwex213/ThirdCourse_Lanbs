@@ -12,7 +12,7 @@ HT::HTHANDLE* Create()
 	HT::HTHANDLE* htHandle = HT::Create(10, 3, 20, 50, "../input/test.ht");
 	if (htHandle)
 	{
-		cout << "htHandle created successfully\n";
+		printf_s("THREAD %d: htHandle created successfully\n", GetCurrentThreadId());
 		return htHandle;
 	}
 
@@ -24,7 +24,7 @@ HT::HTHANDLE* Open()
 	HT::HTHANDLE* htHandle = HT::Open("../input/test.ht");
 	if (htHandle)
 	{
-		cout << "htHandle opened successfully\n";
+		printf_s("THREAD %d: htHandle opened successfully\n", GetCurrentThreadId());
 		return htHandle;
 	}
 
@@ -35,19 +35,18 @@ void Insert(HT::HTHANDLE* htHandle, const char* key, const char* value)
 {
 	if (HT::Insert(htHandle, new HT::Element(key, strlen(key) + 1, value, strlen(value) + 1)))
 	{
-		printf_s("Element(%s) was created successfully\n", key);
+		printf_s("THREAD %d: Element(%s) was created successfully\n", GetCurrentThreadId(), key);
 		return;
 	}
 
-	string error = "Error! Element("; error += key; error += +") wasn't created";
-	throw error.c_str();
+	printf_s("THREAD %d: Element(%s) wasn't created\n", GetCurrentThreadId(), key);
 }
 
 void Delete(HT::HTHANDLE* htHandle, const char* key)
 {
 	if (HT::Delete(htHandle, new HT::Element(key, strlen(key) + 1)))
 	{
-		printf_s("Element(%s) was deleted successfully\n", key);
+		printf_s("THREAD %d: Element(%s) was deleted successfully\n", GetCurrentThreadId(), key);
 		return;
 	}
 
@@ -60,11 +59,11 @@ HT::Element* Get(HT::HTHANDLE* htHandle, const char* key)
 	HT::Element* element = HT::Get(htHandle, new HT::Element(key, strlen(key) + 1));
 	if (element)
 	{
-		printf_s("Element(%s) was found successfully\n", key);
+		printf_s("THREAD %d: Element(%s) was found successfully\n", GetCurrentThreadId(), key);
 	}
 	else
 	{
-		printf_s("Element(%s) wasn't found\n", key);
+		printf_s("THREAD %d: Element(%s) wasn't found\n", GetCurrentThreadId(), key);
 	}
 	return element;
 }
@@ -73,7 +72,7 @@ void CloseHandle(HT::HTHANDLE* htHandle)
 {
 	if (HT::Close(htHandle))
 	{
-		cout << "htHandle closed successfully\n";
+		printf_s("THREAD %d: htHandle closed successfully\n", GetCurrentThreadId());
 		return;
 	}
 
@@ -82,7 +81,7 @@ void CloseHandle(HT::HTHANDLE* htHandle)
 
 void StartTest()
 {
-	printf_s("\n\n--- Test One Start ---\n\n");
+	printf_s("\n\n--- Test One Start on Thread %d ---\n\n", GetCurrentThreadId());
 	HT::HTHANDLE* htHandle = Create();
 
 	Insert(htHandle, "key1337", "ewqiequsf");
@@ -96,7 +95,7 @@ void StartTest()
 	HT::Print(element);
 
 	CloseHandle(htHandle);
-	printf_s("\n\n--- Test One End ---\n\n");
+	printf_s("\n\n--- Test One End on Thread %d ---\n\n", GetCurrentThreadId());
 }
 
 void Test02()
@@ -234,7 +233,7 @@ void Test02()
 
 void Test03()
 {
-	printf_s("\n\n--- Test Two Start ---\n\n");
+	printf_s("\n\n--- Test Two Start on Thread %d ---\n\n", GetCurrentThreadId());
 	HT::HTHANDLE* htHandle = Open();
 	string key = "key";
 	string payload = "payload";
@@ -258,25 +257,97 @@ void Test03()
 
 	cout << endl;
 
-	Sleep(7000);
+	HT::PrintAllElements(htHandle);
+
+	cout << endl;
+
+	for (int i = 0; i < 2; i++)
+	{
+		key += std::to_string(i);
+		payload += std::to_string(i);
+
+		Delete(htHandle, key.c_str());
+
+		key.resize(3);
+		payload.resize(7);
+	}
+
+	cout << endl;
+
+	HT::PrintAllElements(htHandle);
+
+	cout << endl;
+
+	for (int i = 0; i < 3; i++)
+	{
+		key += std::to_string(i);
+		payload += std::to_string(i);
+
+		Insert(htHandle, key.c_str(), payload.c_str());
+
+		key.resize(3);
+		payload.resize(7);
+	}
+
+	cout << endl;
 
 	HT::PrintAllElements(htHandle);
 
 	cout << endl;
 
 	CloseHandle(htHandle);
-	printf_s("\n\n--- Test Two End ---\n\n");
+	printf_s("\n\n--- Test Two End, Thread %d ---\n\n", GetCurrentThreadId());
 }
+
+void testCase()
+{
+	try
+	{
+		printf_s("\n--- TEST CASE STARTED ON THREAD %d---\n", GetCurrentThreadId());
+
+		//StartTest();
+		//Test02();
+		Test03();
+
+		printf_s("\n--- TEST CASE COMPLETED ON THREAD %d---\n", GetCurrentThreadId());
+	}
+	catch (const char* error)
+	{
+		printf_s("THREAD %d: %s", GetCurrentThreadId(), error);
+	}
+}
+
+void testCase2()
+{
+	try
+	{
+		printf_s("\n--- TEST CASE STARTED ON THREAD %d---\n", GetCurrentThreadId());
+
+		//StartTest();
+		//Test02();
+		Test03();
+
+		printf_s("\n--- TEST CASE COMPLETED ON THREAD %d---\n", GetCurrentThreadId());
+	}
+	catch (const char* error)
+	{
+		printf_s("THREAD %d: %s", GetCurrentThreadId(), error);
+	}
+}
+
 
 int main()
 {
 	try
 	{
-		StartTest();
-		//Test02();
-		Test03();
+		//StartTest();
+		//Test03();
 
-		Sleep(15000);
+		//thread first(testCase);
+		//thread second(testCase2);
+
+		//first.join();
+		//second.join();
 
 		printf_s("\n---Complete---\n");
 	}
