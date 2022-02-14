@@ -1,4 +1,5 @@
 ﻿#include <iostream>
+#include <thread>
 #include <string>
 #include <Windows.h>
 #include "Element.h"
@@ -68,7 +69,7 @@ HT::Element* Get(HT::HTHANDLE* htHandle, const char* key)
 	return element;
 }
 
-void Close(HT::HTHANDLE* htHandle)
+void CloseHandle(HT::HTHANDLE* htHandle)
 {
 	if (HT::Close(htHandle))
 	{
@@ -94,7 +95,7 @@ void StartTest()
 	element = Get(htHandle, "key1337");
 	HT::Print(element);
 
-	Close(htHandle);
+	CloseHandle(htHandle);
 	printf_s("\n\n--- Test One End ---\n\n");
 }
 
@@ -225,7 +226,7 @@ void Test02()
 
 	cout << endl;
 
-	Close(htHandle);
+	CloseHandle(htHandle);
 
 	printf_s("\n\n--- Test Three End ---\n\n");
 }
@@ -257,30 +258,15 @@ void Test03()
 
 	cout << endl;
 
-	HT::PrintAllElements(htHandle);
-
-	cout << endl;
-
-	for (int i = 0; i < 3; i++)
-	{
-		key += std::to_string(i);
-
-		Delete(htHandle, key.c_str());
-
-		key.resize(3);
-	}
-	HT::Print(element);
-
-	cout << endl;
+	Sleep(7000);
 
 	HT::PrintAllElements(htHandle);
 
 	cout << endl;
 
-	Close(htHandle);
+	CloseHandle(htHandle);
 	printf_s("\n\n--- Test Two End ---\n\n");
 }
-
 
 int main()
 {
@@ -288,7 +274,9 @@ int main()
 	{
 		StartTest();
 		//Test02();
-		//Test03();
+		Test03();
+
+		Sleep(15000);
 
 		printf_s("\n---Complete---\n");
 	}

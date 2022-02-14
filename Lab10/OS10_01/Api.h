@@ -35,12 +35,12 @@ namespace HT
 
 	BOOL Snap         // выполнить Snapshot
 	(
-		const HTHANDLE* hthandle           // управление HT (File, FileMapping)
+		HTHANDLE* hthandle           // управление HT (File, FileMapping)
 	);
 
 	BOOL Close        // Snap и закрыть HT  и  очистить HTHANDLE
 	(
-		const HTHANDLE* hthandle           // управление HT (File, FileMapping)
+		HTHANDLE* hthandle           // управление HT (File, FileMapping)
 	);	//  == TRUE успешное завершение   
 
 	BOOL Insert      // добавить элемент в хранилище
