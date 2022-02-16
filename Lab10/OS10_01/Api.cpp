@@ -1,97 +1,52 @@
 #include <iostream>
 #include <Windows.h>
+#include <thread>
 #include "Api.h"
 #include "Helper.h"
 #include "Element.h"
 #include "HashTable.h"
-#include <thread>
 
 namespace HT
 {
-	void StartIntervalSnap(HTHANDLE* htHandle, std::atomic<bool>* isIntervalSnapOn)
-	{
-		if (isIntervalSnapOn->load(std::memory_order_seq_cst))
-		{
-			do
-			{
-				std::this_thread::sleep_for(std::chrono::seconds(htHandle->secSnapshotInterval));
-			} while (isIntervalSnapOn->load(std::memory_order_seq_cst) && Snap(htHandle));
-		}
-
-		delete isIntervalSnapOn;
-	}
-
-	void CreateDirectoryForSnaps(const char fileName[CHAR_MAX_LENGTH])
-	{
-		std::string directoryToCreate = GetFilePath(fileName) + "/";
-		directoryToCreate += SNAPSHOT_DIRECTORY_NAME;
-		CreateDirectoryA(directoryToCreate.c_str(), NULL);
-	}
-
-	const char* TakeMapView(HANDLE& hFile, HANDLE& hFileMapping, LPVOID& addr, const char fileName[CHAR_MAX_LENGTH], DWORD memoryToAlloc = 0)
-	{
-		hFile = CreateFileA(
-			fileName,
-			GENERIC_READ | GENERIC_WRITE,
-			0,
-			NULL,
-			OPEN_ALWAYS,
-			0,
-			NULL);
-
-		hFileMapping = CreateFileMappingA(hFile, NULL, PAGE_READWRITE, 0, memoryToAlloc, fileName);
-		if (hFileMapping == NULL)
-		{
-			return CREATE_FILE_MAPING_ERROR;
-		}
-
-		addr = MapViewOfFile(hFileMapping, FILE_MAP_ALL_ACCESS, 0, 0, 0);
-		if (addr == NULL)
-		{
-			return CREATE_MAP_VIEW_ERROR;
-		}
-
-		if (hFile == INVALID_HANDLE_VALUE)
-		{
-			hFile = NULL;
-		}
-		return NULL;
-	}
-
 	HTHANDLE* Create(int capacity, int secSnapshotInterval, int maxKeyLength, int maxPayloadLength, const char fileName[CHAR_MAX_LENGTH])
 	{
-		HANDLE hFile = NULL;
-		HANDLE hFileMapping = NULL;
-		LPVOID addr = NULL;
-		DWORD memoryToAlloc = CalcHashTableMaxSizeMemory(capacity, maxKeyLength, maxPayloadLength);
-		const char* error = TakeMapView(hFile, hFileMapping, addr, fileName, memoryToAlloc);
-		if (error != NULL)
+		HTHANDLE* htHandle = new HTHANDLE(capacity, secSnapshotInterval, maxKeyLength, maxPayloadLength, fileName);
+
+		try
 		{
-			strcpy_s(lastErrorMessage, strlen(error) + 1, error);
-			return NULL;
+			WaitForSingleObject(htHandle->hMutex, INFINITE);
+
+			htHandle->CreateHtFile();
+			DWORD memoryToAlloc = CalcHashTableMaxSizeMemory(capacity, maxKeyLength, maxPayloadLength);
+			htHandle->CreateHtFileMapping(memoryToAlloc);
+			htHandle->CreateViewOfHtFile(memoryToAlloc);
+			htHandle->CreateSharedMemory();
+			htHandle->LaunchIntervalSnap();
+		}
+		catch (const std::exception&)
+		{
+			delete htHandle;
+			htHandle = NULL;
 		}
 
-		ZeroMemory(addr, memoryToAlloc);
-
-		HTHANDLE* htHandle = new(addr) HTHANDLE(capacity, secSnapshotInterval, maxKeyLength, maxPayloadLength, fileName);
-		htHandle->hFile = hFile;
-		htHandle->hFileMapping = hFileMapping;
-		htHandle->addr = addr;
-		htHandle->tableMemorySize = memoryToAlloc;
-
-		InitParsedFileName(fileName);
-		htHandle->InitMutex();
-		htHandle->SetIntervalSnapOn();
-
-		std::thread startIntervalSnap(StartIntervalSnap, htHandle, htHandle->isIntervalSnapOn);
-		startIntervalSnap.detach();
-		CreateDirectoryForSnaps(fileName);
+		ReleaseMutex(htHandle->hMutex);
 
 		return htHandle;
 	}
 
 	HTHANDLE* Open(const char fileName[CHAR_MAX_LENGTH])
 	{
+		HTHANDLE* htHandle = new HTHANDLE();
+
+		try
+		{
+
+		}
+		catch (const std::exception&)
+		{
+
+		}
+
 		HANDLE hFile = NULL;
 		HANDLE hFileMapping = NULL;
 		LPVOID addr = NULL;
@@ -103,18 +58,25 @@ namespace HT
 		}
 
 		HTHANDLE* htHandle = (HTHANDLE*)addr;
-		htHandle->hFile = hFile;
-		htHandle->hFileMapping = hFileMapping;
-		htHandle->addr = addr;
+		isProcessFileOwner = hFile != NULL;
+		if (isProcessFileOwner)
+		{
+			htHandle->hFile = hFile;
+			htHandle->hFileMapping = hFileMapping;
+			htHandle->addr = addr;
+		}
 
 		htHandle->SetFileName(fileName);
 		InitParsedFileName(fileName);
 		htHandle->InitMutex();
 		htHandle->SetIntervalSnapOn();
 
-		std::thread startIntervalSnap(StartIntervalSnap, htHandle, htHandle->isIntervalSnapOn);
-		startIntervalSnap.detach();
 		CreateDirectoryForSnaps(fileName);
+		if (hFile)
+		{
+			std::thread startIntervalSnap(StartIntervalSnap, htHandle, htHandle->isIntervalSnapOn);
+			startIntervalSnap.detach();
+		}
 
 		return htHandle;
 	}
@@ -124,17 +86,9 @@ namespace HT
 		bool result = true;
 		try
 		{
-			WaitForSingleObject(htHandle->hMutex, INFINITE);
-
-			if (!htHandle->isTableChanged)
+			if (!isProcessFileOwner)
 			{
-				ReleaseMutex(htHandle->hMutex);
-				return true;
-			}
-
-			if (!FlushViewOfFile(htHandle->addr, htHandle->tableMemorySize))
-			{
-				throw FLUSH_VIEW_ERROR;
+				throw NOT_FILE_OWNER_ERROR;
 			}
 
 			std::string snapFilename = htHandle->GenerateSnapFilename();
@@ -170,7 +124,6 @@ namespace HT
 			result = false;
 		}
 
-		ReleaseMutex(htHandle->hMutex);
 		return result;
 	}
 
@@ -185,7 +138,13 @@ namespace HT
 			return false;
 		}
 
-		if (!UnmapViewOfFile(htHandle->addr))
+		if (!FlushViewOfFile(htHandle->addr, htHandle->tableMemorySize))
+		{
+			htHandle->SetLastError(FLUSH_VIEW_ERROR);
+			return false;
+		}
+
+		if (!UnmapViewOfFile((LPVOID)htHandle->sharedMemory))
 		{
 			htHandle->SetLastError(UNMAP_VIEW_ERROR);
 			return false;
@@ -299,7 +258,7 @@ namespace HT
 		return elementToGet;
 	}
 
-	char* GetLastError(HTHANDLE* htHandle)
+	char* GetHTLastError(HTHANDLE* htHandle)
 	{
 		if (htHandle == NULL)
 		{

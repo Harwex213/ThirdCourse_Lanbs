@@ -1,105 +1,68 @@
+#include <iostream>
+#include <thread>
 #include <ctime>
 #include "HtHandle.h"
 #include "Helper.h"
+#include "Api.h"
 
 namespace HT
 {
+	SharedMemory::SharedMemory(int capacity, int secSnapshotInterval, int maxKeyLength, int maxPayloadLength)
+	{
+		this->currentSize = 0;
+		this->isChangedFromLastSnap = false;
+
+		this->capacity = capacity;
+		this->maxKeyLength = maxKeyLength;
+		this->maxPayloadLength = maxPayloadLength;
+		this->secSnapshotInterval = secSnapshotInterval;
+		this->tableMemorySize = CalcHashTableMaxSizeMemory(capacity, maxKeyLength, maxPayloadLength);
+		this->elementMemorySize = CalcElementMaxSizeMemory(maxKeyLength, maxPayloadLength);
+	}
+
+	ParsedFileName::ParsedFileName() { }
+
 	ParsedFileName::ParsedFileName(const char fileName[CHAR_MAX_LENGTH])
 	{
 		this->fileName = GetFileName(fileName);
 		this->filePath = GetFilePath(fileName);
 	}
 
-	void InitParsedFileName(const char fileName[CHAR_MAX_LENGTH])
-	{
-		if (parsedFileName)
-		{
-			delete parsedFileName;
-		}
-		parsedFileName = new ParsedFileName(fileName);
-	}
-
 	HTHANDLE::HTHANDLE()
 	{
-		initDefault();
+		InitDefault();
 	}
 
 	HTHANDLE::HTHANDLE(int capacity, int secSnapshotInterval, int maxKeyLength, int maxPayloadLength, const char fileName[CHAR_MAX_LENGTH])
 	{
-		initDefault();
+		InitDefault();
 
 		this->capacity = capacity;
 		this->secSnapshotInterval = secSnapshotInterval;
 		this->maxKeyLength = maxKeyLength;
 		this->maxPayloadLength = maxPayloadLength;
-		elementMemorySize = CalcElementMaxSizeMemory(maxKeyLength, maxPayloadLength);
 		SetFileName(fileName);
 	}
 
-	void HTHANDLE::initDefault()
-	{
-		hFile = NULL;
-		hFileMapping = NULL;
-		hMutex = NULL;
-		addr = NULL;
-
-		snapLastTime = NULL;
-		parsedFileName = NULL;
-		isIntervalSnapOn = NULL;
-
-		isTableChanged = false;
-
-		capacity = 1;
-		secSnapshotInterval = 3;
-		maxKeyLength = 5;
-		maxPayloadLength = 10;
-		currentSize = 0;
-		currentSnap = 0;
-		elementMemorySize = CalcElementMaxSizeMemory(maxKeyLength, maxPayloadLength);
-		tableMemorySize = CalcHashTableMaxSizeMemory(capacity, maxKeyLength, maxPayloadLength);
-		SetFileName(defaultFileName);
-		lastErrorMessage[0] = '\0';
-	}
-
-	Element* HTHANDLE::GetElementAddr(int index)
-	{
-		if (addr == NULL)
-		{
-			// TODO: fill error
-			return NULL;
-		}
-		return (Element*)((char*)addr + sizeof(HTHANDLE) + elementMemorySize * index);
-	}
-
-	void HTHANDLE::CorrectElementPointers(LPVOID elementAddr)
-	{
-		Element* element = (Element*)elementAddr;
-		LPVOID keyAddr = (char*)elementAddr + sizeof(Element);
-		LPVOID payloadAddr = (char*)keyAddr + maxKeyLength;
-		element->setKeyPointer(keyAddr, element->keyLength);
-		element->setPayloadPointer(payloadAddr, element->payloadLength);
-	}
+#pragma region Public Methods
 
 	void HTHANDLE::SetLastError(const char error[CHAR_MAX_LENGTH])
 	{
 		strcpy_s(this->lastErrorMessage, strlen(error) + 1, error);
 	}
 
-	void HTHANDLE::SetFileName(const char fileName[CHAR_MAX_LENGTH])
+	Element* HTHANDLE::GetElement(int index)
 	{
-		strcpy_s(this->fileName, strlen(fileName) + 1, fileName);
+		Element* element = GetElementAddr(index);
+		CorrectElementPointers(element);
+		return element;
 	}
 
 	std::string HTHANDLE::GenerateSnapFilename()
 	{
-		if (parsedFileName == NULL)
-		{
-			InitParsedFileName(this->fileName);
-		}
-
-		std::string snapFilename = parsedFileName->filePath + "/";
+		std::string snapFilename = parsedFileName.filePath + "/";
 		snapFilename += SNAPSHOT_DIRECTORY_NAME;
-		snapFilename += "/" + parsedFileName->fileName;
+		snapFilename += "/" + parsedFileName.fileName;
 		snapFilename += "-" + std::to_string(currentSnap++);
 		snapFilename += "." + TimeToLocalString(time(NULL));
 		snapFilename += ".ht";
@@ -107,26 +70,146 @@ namespace HT
 		return snapFilename;
 	}
 
-	void HTHANDLE::SetIntervalSnapOn()
+	void HTHANDLE::FinishIntervalSnap()
 	{
-		isIntervalSnapOn = new std::atomic<bool>(true);
+		isIntervalSnapOn.store(false, std::memory_order_seq_cst);
 	}
 
-	void HTHANDLE::SetIntervalSnapOff()
+	void HTHANDLE::CorrectHashTableInfo()
 	{
-		isIntervalSnapOn->store(false, std::memory_order_seq_cst);
+		capacity = sharedMemory->capacity;
+		maxKeyLength = sharedMemory->maxKeyLength;
+		maxPayloadLength = sharedMemory->maxPayloadLength;
 	}
 
-	void HTHANDLE::InitMutex()
+	void HTHANDLE::LaunchIntervalSnap()
 	{
-		if (hFile)
+		CreateDirectoryForSnaps();
+
+		std::thread startIntervalSnap(StartIntervalSnap, this);
+		startIntervalSnap.detach();
+	}
+
+	void HTHANDLE::CreateHtFile()
+	{
+		hFile = CreateFileA(
+			fileName,
+			GENERIC_READ | GENERIC_WRITE,
+			0,
+			NULL,
+			CREATE_ALWAYS,
+			0,
+			NULL);
+		if (hFile == INVALID_HANDLE_VALUE)
 		{
-			hMutex = CreateMutexA(NULL, FALSE, fileName);
-		}
-		else
-		{
-			hMutex = OpenMutexA(SYNCHRONIZE, FALSE, fileName);
+			SetLastError(CREATE_FILE_ERROR);
+			throw std::exception();
 		}
 	}
 
+	void HTHANDLE::CreateHtFileMapping(DWORD memoryToAlloc)
+	{
+		hFileMapping = CreateFileMappingA(hFile, NULL, PAGE_READWRITE, 0, memoryToAlloc, fileName);
+		if (hFileMapping == NULL)
+		{
+			SetLastError(CREATE_FILE_MAPING_ERROR);
+			throw std::exception();
+		}
+	}
+
+	void HTHANDLE::CreateViewOfHtFile(DWORD memoryToAlloc)
+	{
+		addrStart = MapViewOfFile(hFileMapping, FILE_MAP_ALL_ACCESS, 0, 0, 0);
+		if (addrStart == NULL)
+		{
+			SetLastError(CREATE_MAP_VIEW_ERROR);
+			throw std::exception();
+		}
+
+		ZeroMemory(addrStart, memoryToAlloc);
+	}
+
+	void HTHANDLE::CreateSharedMemory()
+	{
+		sharedMemory = new(addrStart) SharedMemory(capacity, secSnapshotInterval, maxKeyLength, maxPayloadLength);
+	}
+
+#pragma endregion
+
+
+#pragma region Private Methods
+
+	void HTHANDLE::InitDefault()
+	{
+		capacity = 1;
+		secSnapshotInterval = 3;
+		maxKeyLength = 5;
+		maxPayloadLength = 10;
+
+		*lastErrorMessage = NULL;
+		SetFileName(DEFAULT_FILE_NAME);
+		intervalSnapMutexName = fileName; 
+		intervalSnapMutexName += "-mutex";
+
+		isIntervalSnapOn = true;
+		isTableChangedFromLastSnap = false;
+		currentSnap = 0;
+		snapLastTime = NULL;
+
+		hMutex = CreateMutexA(NULL, FALSE, fileName);
+		hIntervalSnapMutex = CreateMutexA(NULL, FALSE, intervalSnapMutexName.c_str());
+		hFile = NULL;
+		hFileMapping = NULL;
+		addrStart = NULL;
+		sharedMemory = NULL;
+		addrElementsStart = NULL;
+	}
+
+	void HTHANDLE::SetFileName(const char fileName[CHAR_MAX_LENGTH])
+	{
+		strcpy_s(this->fileName, strlen(fileName) + 1, fileName);
+		parsedFileName = ParsedFileName(fileName);
+	}
+
+	Element* HTHANDLE::GetElementAddr(int index)
+	{
+		return (Element*)((char*)addrElementsStart + sharedMemory->elementMemorySize * index);
+	}
+
+	void HTHANDLE::CorrectElementPointers(Element* element)
+	{
+		LPVOID keyAddr = (char*)element + sizeof(Element);
+		LPVOID payloadAddr = (char*)keyAddr + sharedMemory->maxKeyLength;
+		element->setKeyPointer(keyAddr, element->keyLength);
+		element->setPayloadPointer(payloadAddr, element->payloadLength);
+	}
+
+	void HTHANDLE::CreateDirectoryForSnaps()
+	{
+		std::string directoryToCreate = parsedFileName.filePath + "/";
+		directoryToCreate += SNAPSHOT_DIRECTORY_NAME;
+		if (!CreateDirectoryA(directoryToCreate.c_str(), NULL) && GetLastError() != ERROR_ALREADY_EXISTS)
+		{
+			SetLastError(CREATE_SNAPS_DIRECTORY_ERROR);
+			throw std::exception();
+		}
+	}
+
+#pragma endregion
+
+	void StartIntervalSnap(HTHANDLE* htHandle)
+	{
+		WaitForSingleObject(htHandle->hIntervalSnapMutex, INFINITE);
+
+		if (htHandle->isIntervalSnapOn.load(std::memory_order_seq_cst))
+		{
+			do
+			{
+				std::this_thread::sleep_for(std::chrono::seconds(htHandle->secSnapshotInterval));
+			} while (htHandle->isIntervalSnapOn.load(std::memory_order_seq_cst) && Snap(htHandle));
+		}
+
+		ReleaseMutex(htHandle->hIntervalSnapMutex);
+		delete htHandle;
+	}
 }

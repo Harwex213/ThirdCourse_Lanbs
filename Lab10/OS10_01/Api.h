@@ -25,7 +25,7 @@ namespace HT
 		int   secSnapshotInterval,		   // переодичность сохранения в сек.
 		int   maxKeyLength,                // максимальный размер ключа
 		int   maxPayloadLength,            // максимальный размер данных
-		const char fileName[CHAR_MAX_LENGTH]           // имя файла 
+		const char fileName[CHAR_MAX_LENGTH]           // имя файла
 	); 	// != NULL успешное завершение  
 
 	HTHANDLE* Open     //  открыть HT             
@@ -69,7 +69,7 @@ namespace HT
 		const Element* element              // элемент 
 	); 	//  != NULL успешное завершение 
 
-	char* GetLastError  // получить сообщение о последней ошибке
+	char* GetHTLastError  // получить сообщение о последней ошибке
 	(
 		HTHANDLE* ht                         // управление HT
 	);

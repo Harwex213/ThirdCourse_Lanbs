@@ -9,7 +9,7 @@ namespace HT
 	DWORD CalcHashTableMaxSizeMemory(int htCapacity, int elMaxKeyLength, int elMaxPayloadLength)
 	{
 		DWORD elementSize = CalcElementMaxSizeMemory(elMaxKeyLength, elMaxPayloadLength);
-		return sizeof(HTHANDLE) + htCapacity * (elementSize);
+		return sizeof(SharedMemory) + htCapacity * (elementSize);
 	}
 
 	DWORD CalcElementMaxSizeMemory(int elMaxKeyLength, int elMaxPayloadLength)
@@ -27,7 +27,7 @@ namespace HT
 		return newStrLength;
 	}
 
-	std::string GetFileName(const char* filename)
+	std::string GetFileName(const char filename[CHAR_MAX_LENGTH])
 	{
 		std::string str(filename);
 		std::size_t found = str.find_last_of("/\\");
@@ -37,7 +37,7 @@ namespace HT
 		return str;
 	}
 
-	std::string GetFilePath(const char* filename)
+	std::string GetFilePath(const char filename[CHAR_MAX_LENGTH])
 	{
 		std::string str(filename);
 		std::size_t found = str.find_last_of("/\\");
