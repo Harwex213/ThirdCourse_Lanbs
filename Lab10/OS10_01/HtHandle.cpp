@@ -75,13 +75,6 @@ namespace HT
 		isIntervalSnapOn.store(false, std::memory_order_seq_cst);
 	}
 
-	void HTHANDLE::CorrectHashTableInfo()
-	{
-		capacity = sharedMemory->capacity;
-		maxKeyLength = sharedMemory->maxKeyLength;
-		maxPayloadLength = sharedMemory->maxPayloadLength;
-	}
-
 	void HTHANDLE::LaunchIntervalSnap()
 	{
 		CreateDirectoryForSnaps();
@@ -107,6 +100,22 @@ namespace HT
 		}
 	}
 
+	void HTHANDLE::OpenHtFile()
+	{
+		hFile = CreateFileA(
+			fileName,
+			GENERIC_READ | GENERIC_WRITE,
+			0,
+			NULL,
+			OPEN_ALWAYS,
+			0,
+			NULL);
+		if (hFile == INVALID_HANDLE_VALUE)
+		{
+			hFile = NULL;
+		}
+	}
+
 	void HTHANDLE::CreateHtFileMapping(DWORD memoryToAlloc)
 	{
 		hFileMapping = CreateFileMappingA(hFile, NULL, PAGE_READWRITE, 0, memoryToAlloc, fileName);
@@ -117,21 +126,55 @@ namespace HT
 		}
 	}
 
+	void HTHANDLE::OpenHtFileMapping()
+	{
+		bool isFileNotOpened = hFile == NULL;
+		DWORD memoryToAlloc = 0;
+		if (isFileNotOpened)
+		{
+			memoryToAlloc = ReceiveHtMemorySizeFromSharedMemory();
+		}
+
+		hFileMapping = CreateFileMappingA(isFileNotOpened ? INVALID_HANDLE_VALUE : hFile, NULL, PAGE_READWRITE, 0, memoryToAlloc, fileName);
+		if (hFileMapping == NULL)
+		{
+			SetLastError(OPEN_FILE_MAPPING_ERROR);
+			throw std::exception();
+		}
+	}
+
+
 	void HTHANDLE::CreateViewOfHtFile(DWORD memoryToAlloc)
 	{
 		addrStart = MapViewOfFile(hFileMapping, FILE_MAP_ALL_ACCESS, 0, 0, 0);
 		if (addrStart == NULL)
 		{
-			SetLastError(CREATE_MAP_VIEW_ERROR);
+			SetLastError(CREATE_FILE_VIEW_ERROR);
 			throw std::exception();
 		}
 
 		ZeroMemory(addrStart, memoryToAlloc);
 	}
 
+	void HT::HTHANDLE::OpenViewOfHtFile()
+	{
+		addrStart = MapViewOfFile(hFileMapping, FILE_MAP_ALL_ACCESS, 0, 0, 0);
+		if (addrStart == NULL)
+		{
+			SetLastError(OPEN_FILE_VIEW_ERROR);
+			throw std::exception();
+		}
+	}
+
 	void HTHANDLE::CreateSharedMemory()
 	{
 		sharedMemory = new(addrStart) SharedMemory(capacity, secSnapshotInterval, maxKeyLength, maxPayloadLength);
+	}
+
+	void HT::HTHANDLE::OpenSharedMemory()
+	{
+		sharedMemory = (SharedMemory*)addrStart;
+		CorrectHashTableInfo();
 	}
 
 #pragma endregion
@@ -195,9 +238,50 @@ namespace HT
 		}
 	}
 
+	void HTHANDLE::CorrectHashTableInfo()
+	{
+		capacity = sharedMemory->capacity;
+		maxKeyLength = sharedMemory->maxKeyLength;
+		maxPayloadLength = sharedMemory->maxPayloadLength;
+	}
+
+	DWORD HT::HTHANDLE::ReceiveHtMemorySizeFromSharedMemory()
+	{
+		HANDLE hFileMapping = CreateFileMappingA(hFile, NULL, PAGE_READWRITE, 0, sizeof(SharedMemory), fileName);
+		if (hFileMapping == NULL)
+		{
+			SetLastError(OPEN_FILE_MAPPING_ERROR);
+			throw std::exception();
+		}
+
+		HANDLE addr = MapViewOfFile(hFileMapping, FILE_MAP_ALL_ACCESS, 0, 0, 0);
+		if (addr == NULL)
+		{
+			SetLastError(OPEN_FILE_VIEW_ERROR);
+			throw std::exception();
+		}
+
+		DWORD memorySize = ((SharedMemory*)addr)->tableMemorySize;
+
+		if (!UnmapViewOfFile(addr))
+		{
+			SetLastError(CLOSE_FILE_VIEW_ERROR);
+			throw std::exception();
+		}
+
+		if (!CloseHandle(hFileMapping))
+		{
+			SetLastError(CLOSE_FILE_MAPPING_ERROR);
+			throw std::exception();
+		}
+
+		return memorySize;
+	}
+
 #pragma endregion
 
-	void StartIntervalSnap(HTHANDLE* htHandle)
+
+	void HT::StartIntervalSnap(HTHANDLE* htHandle)
 	{
 		WaitForSingleObject(htHandle->hIntervalSnapMutex, INFINITE);
 

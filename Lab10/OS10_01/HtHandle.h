@@ -10,8 +10,15 @@
 
 #define CREATE_FILE_ERROR "Cannot create hash-table file for mapping. It can be due to wrong filename of another process already create HT"
 #define CREATE_FILE_MAPING_ERROR "Cannot create File Mapping. Check your filename"
-#define CREATE_MAP_VIEW_ERROR "Cannot map view of file. Check your filename"
+#define CREATE_FILE_VIEW_ERROR "Cannot create view of file. Check your filename"
 #define CREATE_SNAPS_DIRECTORY_ERROR "Cannot create directory for snaps. Check your filename"
+
+#define OPEN_FILE_MAPPING_ERROR "Cannot open file mapping"
+#define OPEN_FILE_VIEW_ERROR "Cannot open view of file"
+
+#define CLOSE_FILE_ERROR "Cannot close hash-table file"
+#define CLOSE_FILE_MAPPING_ERROR "Cannot close file mapping"
+#define CLOSE_FILE_VIEW_ERROR "Cannot close view of file"
 
 #define NOT_FILE_OWNER_ERROR "Cannot create snapshot file due to process doesn't own the file"
 #define CREATE_SNAPFILE_ERROR "Cannot create snapshot file"
@@ -86,12 +93,15 @@ namespace HT
 		Element* GetElement(int index);
 		std::string GenerateSnapFilename();
 		void FinishIntervalSnap();
-		void CorrectHashTableInfo();
 		void LaunchIntervalSnap();
 		void CreateHtFile();
+		void OpenHtFile();
 		void CreateHtFileMapping(DWORD memoryToAlloc);
+		void OpenHtFileMapping();
 		void CreateViewOfHtFile(DWORD memoryToAlloc);
+		void OpenViewOfHtFile();
 		void CreateSharedMemory();
+		void OpenSharedMemory();
 
 	private:
 		void InitDefault();
@@ -99,6 +109,8 @@ namespace HT
 		Element* GetElementAddr(int index);
 		void CorrectElementPointers(Element* elementAddr);
 		void CreateDirectoryForSnaps();
+		void CorrectHashTableInfo();
+		DWORD ReceiveHtMemorySizeFromSharedMemory();
 	};
 
 	void StartIntervalSnap(HTHANDLE* htHandle);

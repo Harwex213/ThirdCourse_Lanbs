@@ -40,43 +40,21 @@ namespace HT
 
 		try
 		{
+			WaitForSingleObject(htHandle->hMutex, INFINITE);
 
+			htHandle->OpenHtFile();
+			htHandle->OpenHtFileMapping();
+			htHandle->OpenViewOfHtFile();
+			htHandle->OpenSharedMemory();
+			htHandle->LaunchIntervalSnap();
 		}
 		catch (const std::exception&)
 		{
-
+			delete htHandle;
+			htHandle = NULL;
 		}
 
-		HANDLE hFile = NULL;
-		HANDLE hFileMapping = NULL;
-		LPVOID addr = NULL;
-		const char* error = TakeMapView(hFile, hFileMapping, addr, fileName);
-		if (error != NULL)
-		{
-			strcpy_s(lastErrorMessage, strlen(error) + 1, error);
-			return NULL;
-		}
-
-		HTHANDLE* htHandle = (HTHANDLE*)addr;
-		isProcessFileOwner = hFile != NULL;
-		if (isProcessFileOwner)
-		{
-			htHandle->hFile = hFile;
-			htHandle->hFileMapping = hFileMapping;
-			htHandle->addr = addr;
-		}
-
-		htHandle->SetFileName(fileName);
-		InitParsedFileName(fileName);
-		htHandle->InitMutex();
-		htHandle->SetIntervalSnapOn();
-
-		CreateDirectoryForSnaps(fileName);
-		if (hFile)
-		{
-			std::thread startIntervalSnap(StartIntervalSnap, htHandle, htHandle->isIntervalSnapOn);
-			startIntervalSnap.detach();
-		}
+		ReleaseMutex(htHandle->hMutex);
 
 		return htHandle;
 	}
