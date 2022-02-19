@@ -1,0 +1,73 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Entropy</title>
+</head>
+<body>
+<script src='https://cdn.plot.ly/plotly-2.9.0.min.js'></script>
+<h1>Entropy</h1>
+<form onsubmit="onFormSubmit(); return false;" style="display: flex; flex-direction: column;">
+    <select style="margin: 15px 0" name="alphabet" id="alphabet">
+        <option value="german">German</option>
+        <option value="serbian">Serbian</option>
+        <option value="binary">Binary</option>
+    </select>
+    <textarea style="margin: 15px 0" name="text" id="text"></textarea>
+    <button style="margin: 15px 0" type="submit">Submit</button>
+</form>
+<div id="entropy"></div>
+<div id='myDiv'><!-- Plotly chart will be drawn inside this DIV --></div>
+<div id="info-count">
+
+</div>
+<script>
+    const plotly = Plotly;
+    const onFormSubmit = async () => {
+        const body = {
+            alphabet: document.querySelector("#alphabet").value,
+            text: document.querySelector("#text").value,
+        }
+        console.log(body);
+
+        const response = await fetch("http://localhost:3000/api/entropy", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify(body)
+        });
+        const data = await response.json();
+        console.log(data);
+
+        const x = body.alphabet === "binary" ? ["zero", "one"] : data.charsAlphabet;
+        for (let i = 0; i < x.length; i++) {
+            x[i] = x[i] + ", " + data.charsPercentage[i];
+        }
+        const y = data.charsPercentage.map(percent => {
+            if (percent === 0) {
+                return 0.0000001;
+            }
+            return percent;
+        });
+
+        console.log(x);
+        console.log(y);
+        plotly.newPlot("myDiv", [{
+            x,
+            y,
+            histfunc: "sum",
+            type: "histogram",
+        }])
+        document.querySelector("#entropy").innerHTML = data.entropy;
+        document.querySelector("#info-count").innerHTML = "";
+        data.charsCount.forEach((data) => {
+            document.querySelector("#info-count").innerHTML += `${data[0]}: ${data[1]} <br>`
+        })
+    }
+</script>
+</body>
+</html>

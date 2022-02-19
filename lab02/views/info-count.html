@@ -1,0 +1,56 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Information Count</title>
+</head>
+<body>
+<h1>Information Count</h1>
+<form onsubmit="onFormSubmit(); return false;" style="display: flex; flex-direction: column;">
+    <textarea style="margin: 15px 0" name="text" id="text"></textarea>
+    <button style="margin: 15px 0" type="submit">Submit</button>
+</form>
+<div style="display: flex; flex-direction: column">
+    <div id="textLength">Длина текста: </div>
+    <div id="binaryTextLength">Бинарная длина текста: </div>
+    <div id="serbianInfoQuantity">Количество информации: </div>
+    <div id="binaryInfoCount">Бинарное количество информации: </div>
+    <div id="binaryInfoCountReal01">Бинарное количество информации при вероятности ошибки 0.1: </div>
+    <div id="binaryInfoCountReal05">Бинарное количество информации при вероятности ошибки 0.5: </div>
+    <div id="binaryInfoCountReal10">Бинарное количество информации при вероятности ошибки 1.0: </div>
+</div>
+<script>
+    const onFormSubmit = async () => {
+        const body = {
+            text: document.querySelector("#text").value,
+        }
+        console.log(body);
+
+        const response = await fetch("http://localhost:3000/api/info-count", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify(body)
+        });
+        const data = await response.json();
+        console.log(data);
+
+        document.querySelector("#textLength").innerHTML = "Длина текста: " +  data.textLength;
+        document.querySelector("#binaryTextLength").innerHTML = "Бинарная длина текста: " + data.binaryTextLength;
+        document.querySelector("#serbianInfoQuantity").innerHTML = "Количество информации: " + data.serbianInfoQuantity;
+        document.querySelector("#binaryInfoCount").innerHTML = "Бинарное количество информации: " +
+            data.binaryInfoQuantity;
+        document.querySelector("#binaryInfoCountReal01").innerHTML = "Бинарное количество информации" +
+            " при вероятности ошибки 0.1: " + data.binaryInfoQuantityReal01;
+        document.querySelector("#binaryInfoCountReal05").innerHTML = "Бинарное количество информации" +
+            " при вероятности ошибки 0.5: " + data.binaryInfoQuantityReal05;
+        document.querySelector("#binaryInfoCountReal10").innerHTML = "Бинарное количество информации" +
+            " при вероятности ошибки 1.0: " + data.binaryInfoQuantityReal10;
+    }
+</script>
+</body>
+</html>
