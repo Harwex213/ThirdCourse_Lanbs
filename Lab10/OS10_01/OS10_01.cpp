@@ -105,13 +105,7 @@ void Test03(HT::HTHANDLE*& htHandle)
 	string key = "key";
 	string payload = "payload";
 
-	cout << endl;
-
-	HT::PrintAllElements(htHandle);
-
-	cout << endl;
-
-	for (int i = 0; i < 3; i++)
+	for (int i = 1; i < 3; i++)
 	{
 		key += std::to_string(i);
 		payload += std::to_string(i);
@@ -121,49 +115,39 @@ void Test03(HT::HTHANDLE*& htHandle)
 		key.resize(3);
 		payload.resize(7);
 	}
-
-	cout << endl;
-
-	HT::PrintAllElements(htHandle);
-
-	cout << endl;
-
-	for (int i = 0; i < 2; i++)
-	{
-		key += std::to_string(i);
-		payload += std::to_string(i);
-
-		Delete(htHandle, key.c_str());
-
-		key.resize(3);
-		payload.resize(7);
-	}
-
-	cout << endl;
-
-	HT::PrintAllElements(htHandle);
-
-	cout << endl;
-
-	for (int i = 0; i < 3; i++)
-	{
-		key += std::to_string(i);
-		payload += std::to_string(i);
-
-		Insert(htHandle, key.c_str(), payload.c_str());
-
-		key.resize(3);
-		payload.resize(7);
-	}
-
-	cout << endl;
-
-	HT::PrintAllElements(htHandle);
-
-	cout << endl;
 
 	CloseHandle(htHandle);
 	printf_s("\n\n--- Test Two End, Thread %d ---\n\n", GetCurrentThreadId());
+}
+
+void testCase()
+{
+	HT::HTHANDLE* htHandle = NULL;
+	try
+	{
+		Test03(htHandle);
+
+		printf_s("\n---Complete---\n");
+	}
+	catch (const char* error)
+	{
+		printf_s("THREAD %d. Error: %s", GetCurrentThreadId(), HT::GetHTLastError(htHandle));
+	}
+}
+
+void testCase2()
+{
+	HT::HTHANDLE* htHandle = NULL;
+	try
+	{
+		Test03(htHandle);
+
+		printf_s("\n---Complete---\n");
+	}
+	catch (const char* error)
+	{
+		printf_s("Error: %s", HT::GetHTLastError(htHandle));
+	}
 }
 
 int main()
@@ -171,20 +155,20 @@ int main()
 	HT::HTHANDLE* htHandle = NULL;
 	try
 	{
-		//StartTest();
-		Test03(htHandle);
+		StartTest();
+		//Test03(htHandle);
 
-		//thread first(testCase);
-		//thread second(testCase2);
+		thread first(testCase);
+		thread second(testCase2);
 
-		//first.join();
-		//second.join();
+		first.join();
+		second.join();
 
 		printf_s("\n---Complete---\n");
 	}
 	catch (const char* error)
 	{
-		printf_s("Error: %s", HT::GetLastError(htHandle));
+		printf_s("Error: %s", HT::GetHTLastError(htHandle));
 		return 1;
 	}
 

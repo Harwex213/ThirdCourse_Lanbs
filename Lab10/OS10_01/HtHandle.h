@@ -16,19 +16,14 @@
 #define OPEN_FILE_MAPPING_ERROR "Cannot open file mapping"
 #define OPEN_FILE_VIEW_ERROR "Cannot open view of file"
 
+#define FLUSH_VIEW_ERROR "Cannot flush view of file. Check your file"
 #define CLOSE_FILE_ERROR "Cannot close hash-table file"
 #define CLOSE_FILE_MAPPING_ERROR "Cannot close file mapping"
 #define CLOSE_FILE_VIEW_ERROR "Cannot close view of file"
 
-#define NOT_FILE_OWNER_ERROR "Cannot create snapshot file due to process doesn't own the file"
 #define CREATE_SNAPFILE_ERROR "Cannot create snapshot file"
 #define WRITE_SNAPFILE_ERROR "Cannot write to snapshot file"
 #define CLOSE_SNAPFILE_ERROR "Cannot close snapshot file"
-
-#define FLUSH_VIEW_ERROR "Cannot flush view of file. Check your file"
-#define UNMAP_VIEW_ERROR "Cannot unmap view of file"
-#define CLOSE_FILE_MAPPING_ERROR "Cannot destroy file mapping"
-#define CLOSE_FILE_ERROR "Cannot close file"
 
 #define INSERT_ERROR "Cannot insert element. Table is full or such element already exist"
 #define UPDATE_ERROR "Cannot find element for update"
@@ -64,6 +59,7 @@ namespace HT
 	struct HTHANDLE
 	{
 		HTHANDLE();
+		HTHANDLE(const char fileName[CHAR_MAX_LENGTH]);
 		HTHANDLE(int capacity, int secSnapshotInterval, int maxKeyLength, int maxPayloadLength, const char fileName[CHAR_MAX_LENGTH]);
 
 		int capacity;
@@ -72,7 +68,6 @@ namespace HT
 		int secSnapshotInterval;
 
 		HANDLE hMutex;
-		HANDLE hIntervalSnapMutex;
 		HANDLE hFile;
 		HANDLE hFileMapping;
 		LPVOID addrStart;
@@ -82,12 +77,12 @@ namespace HT
 		char lastErrorMessage[CHAR_MAX_LENGTH];
 		char fileName[CHAR_MAX_LENGTH];
 		ParsedFileName parsedFileName;
-		std::string intervalSnapMutexName;
 
-		std::atomic<bool> isIntervalSnapOn;
+		std::atomic<bool>* isIntervalSnapOn;
 		bool isTableChangedFromLastSnap;
 		DWORD currentSnap;
 		time_t snapLastTime;
+		std::string snapsDirectory;
 
 		void SetLastError(const char error[CHAR_MAX_LENGTH]);
 		Element* GetElement(int index);
@@ -96,10 +91,14 @@ namespace HT
 		void LaunchIntervalSnap();
 		void CreateHtFile();
 		void OpenHtFile();
+		void CloseHtFile();
 		void CreateHtFileMapping(DWORD memoryToAlloc);
 		void OpenHtFileMapping();
+		void CloseHtFileMapping();
 		void CreateViewOfHtFile(DWORD memoryToAlloc);
 		void OpenViewOfHtFile();
+		void CloseViewOfHtFile();
+		void FlushHashTableData();
 		void CreateSharedMemory();
 		void OpenSharedMemory();
 
@@ -113,5 +112,5 @@ namespace HT
 		DWORD ReceiveHtMemorySizeFromSharedMemory();
 	};
 
-	void StartIntervalSnap(HTHANDLE* htHandle);
+	void StartIntervalSnap(HTHANDLE* htHandle, std::atomic<bool>* isIntervalSnapOn);
 }

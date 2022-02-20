@@ -28,7 +28,7 @@ namespace HT
 	Element* FindElementAddr(HTHANDLE* htHandle, const char* key)
 	{
 		Element* elementAddr;
-		if (htHandle->currentSize == 0)
+		if (htHandle->sharedMemory->currentSize == 0)
 		{
 			return NULL;
 		}
@@ -37,13 +37,11 @@ namespace HT
 		int startIndex = index;
 		do
 		{
-			elementAddr = htHandle->GetElementAddr(index);
+			elementAddr = htHandle->GetElement(index);
 			if (*(int*)elementAddr == NULL)
 			{
 				return NULL;
 			}
-
-			htHandle->CorrectElementPointers(elementAddr);
 			if (!elementAddr->isDeleted && strcmp(elementAddr->getKey(), key) == 0)
 			{
 				return elementAddr;
@@ -59,7 +57,7 @@ namespace HT
 	Element* FindUnallocatedElementAddr(HTHANDLE* htHandle, const char* key)
 	{
 		Element* elementAddr;
-		if (htHandle->currentSize == htHandle->capacity)
+		if (htHandle->sharedMemory->currentSize == htHandle->capacity)
 		{
 			return NULL;
 		}
@@ -67,8 +65,7 @@ namespace HT
 		int index = GetIndexViaHash(key, htHandle->capacity);
 		do
 		{
-			elementAddr = htHandle->GetElementAddr(index);
-			htHandle->CorrectElementPointers(elementAddr);
+			elementAddr = htHandle->GetElement(index);
 			NextIndex(index, htHandle->capacity);
 		} while (*(int*)elementAddr != NULL && !elementAddr->isDeleted && strcmp(elementAddr->getKey(), key) != 0);
 

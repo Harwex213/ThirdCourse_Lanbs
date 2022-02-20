@@ -1,6 +1,7 @@
 #include "Helper.h"
 #include "HtHandle.h"
 #include "Element.h"
+#include <random>
 #include <string>
 #include <ctime>
 
@@ -17,14 +18,14 @@ namespace HT
 		return sizeof(Element) + elMaxKeyLength + elMaxPayloadLength;
 	}
 
-	int TruncateStrByMax(std::string& truncatedStr, const char* str, int strLength, int maxStrLength)
+	std::string TruncateStrByMax(int& strLength, const char* str, int maxStrLength)
 	{
-		truncatedStr = str;
-		int newStrLength = strLength > maxStrLength ? maxStrLength : strLength;
-		truncatedStr.resize(newStrLength);
+		strLength = strLength > maxStrLength ? maxStrLength : strLength;
+		std::string truncatedStr = str;
+		truncatedStr.resize(strLength);
 		truncatedStr.shrink_to_fit();
 
-		return newStrLength;
+		return truncatedStr;
 	}
 
 	std::string GetFileName(const char filename[CHAR_MAX_LENGTH])
@@ -53,5 +54,17 @@ namespace HT
 			std::to_string(tmLocal->tm_min) + "-" + std::to_string(tmLocal->tm_sec);
 		delete tmLocal;
 		return output;
+	}
+
+	std::string GenerateRandomString(int length)
+	{
+		std::string str("0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz");
+
+		std::random_device rd;
+		std::mt19937 generator(rd());
+
+		std::shuffle(str.begin(), str.end(), generator);
+
+		return str.substr(0, length);     
 	}
 }

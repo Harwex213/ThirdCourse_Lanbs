@@ -36,7 +36,7 @@ namespace HT
 
 	HTHANDLE* Open(const char fileName[CHAR_MAX_LENGTH])
 	{
-		HTHANDLE* htHandle = new HTHANDLE();
+		HTHANDLE* htHandle = new HTHANDLE(fileName);
 
 		try
 		{
@@ -64,9 +64,12 @@ namespace HT
 		bool result = true;
 		try
 		{
-			if (!isProcessFileOwner)
+			WaitForSingleObject(htHandle->hMutex, INFINITE);
+
+			if (!htHandle->sharedMemory->isChangedFromLastSnap)
 			{
-				throw NOT_FILE_OWNER_ERROR;
+				ReleaseMutex(htHandle->hMutex);
+				return true;
 			}
 
 			std::string snapFilename = htHandle->GenerateSnapFilename();
@@ -80,63 +83,51 @@ namespace HT
 				NULL);
 			if (hSnapFile == INVALID_HANDLE_VALUE)
 			{
-				throw CREATE_SNAPFILE_ERROR;
+				htHandle->SetLastError(CREATE_SNAPFILE_ERROR);
+				throw std::exception();
 			}
-
-			if (!WriteFile(hSnapFile, htHandle->addr, htHandle->tableMemorySize, NULL, NULL))
+			
+			if (!WriteFile(hSnapFile, htHandle->addrStart, htHandle->sharedMemory->tableMemorySize, NULL, NULL))
 			{
-				throw WRITE_SNAPFILE_ERROR;
+				htHandle->SetLastError(WRITE_SNAPFILE_ERROR);
+				throw std::exception();
 			}
 
 			if (!CloseHandle(hSnapFile))
 			{
-				throw CLOSE_SNAPFILE_ERROR;
+				htHandle->SetLastError(CLOSE_SNAPFILE_ERROR);
+				throw std::exception();
 			};
 
 			time(&htHandle->snapLastTime);
-			htHandle->isTableChanged = false;
+			htHandle->sharedMemory->isChangedFromLastSnap = false;
 		}
-		catch (const char* error)
+		catch (std::exception&)
 		{
-			htHandle->SetLastError(error);
 			result = false;
 		}
+
+		ReleaseMutex(htHandle->hMutex);
 
 		return result;
 	}
 
 	BOOL Close(HTHANDLE* htHandle)
 	{
-		HANDLE hFileMapping = htHandle->hFileMapping;
-		HANDLE hFile = htHandle->hFile;
-
-		htHandle->SetIntervalSnapOff();
-		if (!Snap(htHandle))
+		try
 		{
-			return false;
+			if (!Snap(htHandle))
+			{
+				return false;
+			}
+
+			htHandle->FlushHashTableData();
+			htHandle->CloseViewOfHtFile();
+			htHandle->CloseHtFileMapping();
+			htHandle->CloseHtFile();
 		}
-
-		if (!FlushViewOfFile(htHandle->addr, htHandle->tableMemorySize))
+		catch (const std::exception&)
 		{
-			htHandle->SetLastError(FLUSH_VIEW_ERROR);
-			return false;
-		}
-
-		if (!UnmapViewOfFile((LPVOID)htHandle->sharedMemory))
-		{
-			htHandle->SetLastError(UNMAP_VIEW_ERROR);
-			return false;
-		}
-
-		if (!CloseHandle(hFileMapping))
-		{
-			htHandle->SetLastError(CLOSE_FILE_MAPPING_ERROR);
-			return false;
-		}
-
-		if (hFile != NULL && !CloseHandle(hFile))
-		{
-			htHandle->SetLastError(CLOSE_FILE_ERROR);
 			return false;
 		}
 
@@ -145,10 +136,10 @@ namespace HT
 
 	BOOL Insert(HTHANDLE* htHandle, const Element* element)
 	{
-		std::string key;
-		int keyLength = TruncateStrByMax(key, element->getKey(), element->keyLength, htHandle->maxKeyLength);
-		std::string payload;
-		int payloadLength = TruncateStrByMax(payload, element->getPayload(), element->payloadLength, htHandle->maxPayloadLength);
+		int keyLength = element->keyLength;
+		int payloadLength = element->payloadLength;
+		std::string key = TruncateStrByMax(keyLength, element->getKey(), htHandle->maxKeyLength);
+		std::string payload = TruncateStrByMax(payloadLength, element->getPayload(), htHandle->maxPayloadLength);
 
 		WaitForSingleObject(htHandle->hMutex, INFINITE);
 		LPVOID elementAddr = FindUnallocatedElementAddr(htHandle, key.c_str());
@@ -164,12 +155,12 @@ namespace HT
 		LPVOID payloadAddr = (char*)keyAddr + htHandle->maxKeyLength;
 
 		elementToInsert->setKeyPointer(keyAddr, keyLength);
-		elementToInsert->setKey(key.c_str(), keyLength);
 		elementToInsert->setPayloadPointer(payloadAddr, payloadLength);
+		elementToInsert->setKey(key.c_str(), keyLength);
 		elementToInsert->setPayload(payload.c_str(), payloadLength);
 
-		htHandle->currentSize++;
-		htHandle->isTableChanged = true;
+		htHandle->sharedMemory->currentSize++;
+		htHandle->sharedMemory->isChangedFromLastSnap = true;
 
 		ReleaseMutex(htHandle->hMutex);
 		return true;
@@ -177,10 +168,10 @@ namespace HT
 
 	BOOL Update(HTHANDLE* htHandle, const Element* oldElement, const void* newPayload, int newPayloadlength)
 	{
-		std::string key;
-		int keyLength = TruncateStrByMax(key, oldElement->getKey(), oldElement->keyLength, htHandle->maxKeyLength);
-		std::string payload;
-		int payloadLength = TruncateStrByMax(payload, (const char*)newPayload, newPayloadlength, htHandle->maxPayloadLength);
+		int keyLength = oldElement->keyLength;
+		int payloadLength = newPayloadlength;
+		std::string key = TruncateStrByMax(keyLength, oldElement->getKey(), htHandle->maxKeyLength);
+		std::string payload = TruncateStrByMax(payloadLength, (const char*)newPayload, htHandle->maxPayloadLength);
 
 		WaitForSingleObject(htHandle->hMutex, INFINITE);
 		Element* elementToUpdate = FindElementAddr(htHandle, key.c_str());
@@ -193,15 +184,15 @@ namespace HT
 
 		elementToUpdate->setPayload(payload.c_str(), payloadLength);
 
-		htHandle->isTableChanged = true;
+		htHandle->sharedMemory->isChangedFromLastSnap = true;
 		ReleaseMutex(htHandle->hMutex);
 		return true;
 	}
 
 	BOOL Delete(HTHANDLE* htHandle, const Element* element)
 	{
-		std::string key;
-		int keyLength = TruncateStrByMax(key, element->getKey(), element->keyLength, htHandle->maxKeyLength);
+		int keyLength = element->keyLength;
+		std::string key = TruncateStrByMax(keyLength, element->getKey(), htHandle->maxKeyLength);
 
 		WaitForSingleObject(htHandle->hMutex, INFINITE);
 		Element* elementToDelete = FindElementAddr(htHandle, key.c_str());
@@ -214,16 +205,16 @@ namespace HT
 
 		elementToDelete->isDeleted = true;
 
-		htHandle->currentSize--;
-		htHandle->isTableChanged = true;
+		htHandle->sharedMemory->currentSize--;
+		htHandle->sharedMemory->isChangedFromLastSnap = true;
 		ReleaseMutex(htHandle->hMutex);
 		return true;
 	}
 
 	Element* Get(HTHANDLE* htHandle, const Element* element)
 	{
-		std::string key;
-		int keyLength = TruncateStrByMax(key, element->getKey(), element->keyLength, htHandle->maxKeyLength);
+		int keyLength = element->keyLength;
+		std::string key = TruncateStrByMax(keyLength, element->getKey(), htHandle->maxKeyLength);
 
 		WaitForSingleObject(htHandle->hMutex, INFINITE);
 		Element* elementToGet = FindElementAddr(htHandle, key.c_str());
@@ -238,10 +229,6 @@ namespace HT
 
 	char* GetHTLastError(HTHANDLE* htHandle)
 	{
-		if (htHandle == NULL)
-		{
-			return lastErrorMessage;
-		}
 		return htHandle->lastErrorMessage;
 	}
 
@@ -259,13 +246,12 @@ namespace HT
 	{
 		for (int i = 0; i < htHandle->capacity; i++)
 		{
-			Element* elementAddr = htHandle->GetElementAddr(i);
+			Element* elementAddr = htHandle->GetElement(i);
 			if (*(int*)elementAddr == NULL || elementAddr->isDeleted)
 			{
 				Print(NULL);
 				continue;
 			}
-			htHandle->CorrectElementPointers(elementAddr);
 			Print(elementAddr);
 		}
 	}

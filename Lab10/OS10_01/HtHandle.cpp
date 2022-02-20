@@ -33,6 +33,13 @@ namespace HT
 		InitDefault();
 	}
 
+	HTHANDLE::HTHANDLE(const char fileName[CHAR_MAX_LENGTH])
+	{
+		InitDefault();
+
+		SetFileName(fileName);
+	}
+
 	HTHANDLE::HTHANDLE(int capacity, int secSnapshotInterval, int maxKeyLength, int maxPayloadLength, const char fileName[CHAR_MAX_LENGTH])
 	{
 		InitDefault();
@@ -60,10 +67,9 @@ namespace HT
 
 	std::string HTHANDLE::GenerateSnapFilename()
 	{
-		std::string snapFilename = parsedFileName.filePath + "/";
-		snapFilename += SNAPSHOT_DIRECTORY_NAME;
+		std::string snapFilename = parsedFileName.filePath + "/" + snapsDirectory;
 		snapFilename += "/" + parsedFileName.fileName;
-		snapFilename += "-" + std::to_string(currentSnap++);
+		snapFilename += "-" + GenerateRandomString(12);
 		snapFilename += "." + TimeToLocalString(time(NULL));
 		snapFilename += ".ht";
 
@@ -72,14 +78,14 @@ namespace HT
 
 	void HTHANDLE::FinishIntervalSnap()
 	{
-		isIntervalSnapOn.store(false, std::memory_order_seq_cst);
+		isIntervalSnapOn->store(false, std::memory_order_seq_cst);
 	}
 
 	void HTHANDLE::LaunchIntervalSnap()
 	{
 		CreateDirectoryForSnaps();
 
-		std::thread startIntervalSnap(StartIntervalSnap, this);
+		std::thread startIntervalSnap(StartIntervalSnap, this, isIntervalSnapOn);
 		startIntervalSnap.detach();
 	}
 
@@ -116,6 +122,15 @@ namespace HT
 		}
 	}
 
+	void HTHANDLE::CloseHtFile()
+	{
+		if (hFile != NULL && !CloseHandle(hFile))
+		{
+			SetLastError(CLOSE_FILE_ERROR);
+			throw std::exception();
+		}
+	}
+
 	void HTHANDLE::CreateHtFileMapping(DWORD memoryToAlloc)
 	{
 		hFileMapping = CreateFileMappingA(hFile, NULL, PAGE_READWRITE, 0, memoryToAlloc, fileName);
@@ -143,6 +158,14 @@ namespace HT
 		}
 	}
 
+	void HT::HTHANDLE::CloseHtFileMapping()
+	{
+		if (!CloseHandle(hFileMapping))
+		{
+			SetLastError(CLOSE_FILE_MAPPING_ERROR);
+			throw std::exception();
+		}
+	}
 
 	void HTHANDLE::CreateViewOfHtFile(DWORD memoryToAlloc)
 	{
@@ -166,14 +189,34 @@ namespace HT
 		}
 	}
 
+	void HT::HTHANDLE::CloseViewOfHtFile()
+	{
+		if (!UnmapViewOfFile(addrStart))
+		{
+			SetLastError(CLOSE_FILE_VIEW_ERROR);
+			throw std::exception();
+		}
+	}
+
+	void HT::HTHANDLE::FlushHashTableData()
+	{
+		if (!FlushViewOfFile(addrStart, sharedMemory->tableMemorySize))
+		{
+			SetLastError(FLUSH_VIEW_ERROR);
+			throw std::exception();
+		}
+	}
+
 	void HTHANDLE::CreateSharedMemory()
 	{
 		sharedMemory = new(addrStart) SharedMemory(capacity, secSnapshotInterval, maxKeyLength, maxPayloadLength);
+		addrElementsStart = (char*)addrStart + sizeof(SharedMemory);
 	}
 
 	void HT::HTHANDLE::OpenSharedMemory()
 	{
 		sharedMemory = (SharedMemory*)addrStart;
+		addrElementsStart = (char*)addrStart + sizeof(SharedMemory);
 		CorrectHashTableInfo();
 	}
 
@@ -191,16 +234,13 @@ namespace HT
 
 		*lastErrorMessage = NULL;
 		SetFileName(DEFAULT_FILE_NAME);
-		intervalSnapMutexName = fileName; 
-		intervalSnapMutexName += "-mutex";
 
-		isIntervalSnapOn = true;
+		isIntervalSnapOn = new std::atomic<bool>(true);
 		isTableChangedFromLastSnap = false;
 		currentSnap = 0;
 		snapLastTime = NULL;
 
 		hMutex = CreateMutexA(NULL, FALSE, fileName);
-		hIntervalSnapMutex = CreateMutexA(NULL, FALSE, intervalSnapMutexName.c_str());
 		hFile = NULL;
 		hFileMapping = NULL;
 		addrStart = NULL;
@@ -236,6 +276,15 @@ namespace HT
 			SetLastError(CREATE_SNAPS_DIRECTORY_ERROR);
 			throw std::exception();
 		}
+
+		directoryToCreate += "/" + GenerateRandomString(8);
+		if (!CreateDirectoryA(directoryToCreate.c_str(), NULL) && GetLastError() != ERROR_ALREADY_EXISTS)
+		{
+			SetLastError(CREATE_SNAPS_DIRECTORY_ERROR);
+			throw std::exception();
+		}
+
+		snapsDirectory = directoryToCreate;
 	}
 
 	void HTHANDLE::CorrectHashTableInfo()
@@ -281,19 +330,16 @@ namespace HT
 #pragma endregion
 
 
-	void HT::StartIntervalSnap(HTHANDLE* htHandle)
+	void HT::StartIntervalSnap(HTHANDLE* htHandle, std::atomic<bool>* isIntervalSnapOn)
 	{
-		WaitForSingleObject(htHandle->hIntervalSnapMutex, INFINITE);
-
-		if (htHandle->isIntervalSnapOn.load(std::memory_order_seq_cst))
+		if (isIntervalSnapOn->load(std::memory_order_seq_cst))
 		{
 			do
 			{
 				std::this_thread::sleep_for(std::chrono::seconds(htHandle->secSnapshotInterval));
-			} while (htHandle->isIntervalSnapOn.load(std::memory_order_seq_cst) && Snap(htHandle));
+			} while (isIntervalSnapOn->load(std::memory_order_seq_cst) && Snap(htHandle));
 		}
 
-		ReleaseMutex(htHandle->hIntervalSnapMutex);
-		delete htHandle;
+		delete isIntervalSnapOn;
 	}
 }
