@@ -1,0 +1,22 @@
+<div class="layout__records records">
+    {{#each records}}
+        {{>record}}
+    {{/each}}
+</div>
+<div class="layout__form">
+    <form action="http://localhost:3000/add" method="post" enctype="application/x-www-form-urlencoded">
+        <div class="mb-3">
+            <label for="fullName" class="form-label">Full name</label>
+            <input type="text" class="form-control" name="fullName" id="fullName">
+        </div>
+        <div class="mb-3">
+            <label for="phoneNumber" class="form-label">Phone number</label>
+            <input type="text" class="form-control" name="phoneNumber" id="phoneNumber">
+        </div>
+
+        <div class="layout__actions">
+            <button type="submit" class="layout__btn btn btn-outline-primary">Добавить</button>
+            <button type="button" class="layout__btn btn btn-outline-primary" {{#abandon}}{{/abandon}}>Отказаться</button>
+        </div>
+    </form>
+</div>
