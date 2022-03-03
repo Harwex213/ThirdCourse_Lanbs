@@ -1,0 +1,1 @@
+npx sequelize-auto -o "./models" -d DbAuth  -u sa -x Passw0rd1 -h localhost -p 1433 -e mssql
