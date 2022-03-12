@@ -1,6 +1,4 @@
-#include <iostream>
-#include <thread>
-#include <ctime>
+#include "pch.h"
 #include "HtHandle.h"
 #include "Helper.h"
 #include "Api.h"
@@ -296,7 +294,7 @@ namespace HT
 
 	DWORD HT::HTHANDLE::ReceiveHtMemorySizeFromSharedMemory()
 	{
-		HANDLE hFileMapping = CreateFileMappingA(hFile, NULL, PAGE_READWRITE, 0, sizeof(SharedMemory), fileName);
+		HANDLE hFileMapping = CreateFileMappingA(INVALID_HANDLE_VALUE, NULL, PAGE_READWRITE, 0, sizeof(SharedMemory), fileName);
 		if (hFileMapping == NULL)
 		{
 			SetLastError(OPEN_FILE_MAPPING_ERROR);

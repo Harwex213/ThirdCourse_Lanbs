@@ -1,4 +1,4 @@
-#include <iostream>
+#include "pch.h"
 #include "HashTable.h"
 #include "Element.h"
 

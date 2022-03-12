@@ -1,6 +1,4 @@
-#include <iostream>
-#include <Windows.h>
-#include <thread>
+#include "pch.h"
 #include "Api.h"
 #include "Helper.h"
 #include "Element.h"
@@ -61,6 +59,12 @@ namespace HT
 
 	BOOL Snap(HTHANDLE* htHandle)
 	{
+		if (htHandle == NULL)
+		{
+			htHandle->SetLastError(ARGUMENT_NULL_ERROR);
+			return false;
+		}
+
 		bool result = true;
 		try
 		{
@@ -114,8 +118,16 @@ namespace HT
 
 	BOOL Close(HTHANDLE* htHandle)
 	{
+		if (htHandle == NULL)
+		{
+			htHandle->SetLastError(ARGUMENT_NULL_ERROR);
+			return false;
+		}
+
 		try
 		{
+			htHandle->FinishIntervalSnap();
+
 			if (!Snap(htHandle))
 			{
 				return false;
@@ -131,11 +143,18 @@ namespace HT
 			return false;
 		}
 
+		delete htHandle;
 		return true;
 	}
 
 	BOOL Insert(HTHANDLE* htHandle, const Element* element)
 	{
+		if (htHandle == NULL || element == NULL)
+		{
+			htHandle->SetLastError(ARGUMENT_NULL_ERROR);
+			return false;
+		}
+
 		int keyLength = element->keyLength;
 		int payloadLength = element->payloadLength;
 		std::string key = TruncateStrByMax(keyLength, element->getKey(), htHandle->maxKeyLength);
@@ -168,6 +187,12 @@ namespace HT
 
 	BOOL Update(HTHANDLE* htHandle, const Element* oldElement, const void* newPayload, int newPayloadlength)
 	{
+		if (htHandle == NULL || oldElement == NULL || newPayload == NULL || newPayloadlength == NULL)
+		{
+			htHandle->SetLastError(ARGUMENT_NULL_ERROR);
+			return false;
+		}
+
 		int keyLength = oldElement->keyLength;
 		int payloadLength = newPayloadlength;
 		std::string key = TruncateStrByMax(keyLength, oldElement->getKey(), htHandle->maxKeyLength);
@@ -191,6 +216,12 @@ namespace HT
 
 	BOOL Delete(HTHANDLE* htHandle, const Element* element)
 	{
+		if (htHandle == NULL || element == NULL)
+		{
+			htHandle->SetLastError(ARGUMENT_NULL_ERROR);
+			return false;
+		}
+
 		int keyLength = element->keyLength;
 		std::string key = TruncateStrByMax(keyLength, element->getKey(), htHandle->maxKeyLength);
 
@@ -213,6 +244,12 @@ namespace HT
 
 	Element* Get(HTHANDLE* htHandle, const Element* element)
 	{
+		if (htHandle == NULL || element == NULL)
+		{
+			htHandle->SetLastError(ARGUMENT_NULL_ERROR);
+			return NULL;
+		}
+
 		int keyLength = element->keyLength;
 		std::string key = TruncateStrByMax(keyLength, element->getKey(), htHandle->maxKeyLength);
 
@@ -244,6 +281,12 @@ namespace HT
 
 	void PrintAllElements(HTHANDLE* htHandle)
 	{
+		if (htHandle == NULL)
+		{
+			htHandle->SetLastError(ARGUMENT_NULL_ERROR);
+			return;
+		}
+
 		for (int i = 0; i < htHandle->capacity; i++)
 		{
 			Element* elementAddr = htHandle->GetElement(i);

@@ -105,7 +105,7 @@ void Test03(HT::HTHANDLE*& htHandle)
 	string key = "key";
 	string payload = "payload";
 
-	for (int i = 1; i < 3; i++)
+	for (int i = 0; i < 3; i++)
 	{
 		key += std::to_string(i);
 		payload += std::to_string(i);
@@ -115,6 +115,32 @@ void Test03(HT::HTHANDLE*& htHandle)
 		key.resize(3);
 		payload.resize(7);
 	}
+
+	CloseHandle(htHandle);
+	printf_s("\n\n--- Test Two End, Thread %d ---\n\n", GetCurrentThreadId());
+}
+
+void Test04(HT::HTHANDLE*& htHandle)
+{
+	printf_s("\n\n--- Test Two Start on Thread %d ---\n\n", GetCurrentThreadId());
+	htHandle = Open();
+	string key = "key";
+	string payload = "payload";
+
+	for (int i = 4; i < 10; i++)
+	{
+		key += std::to_string(i);
+		payload += std::to_string(i);
+
+		Insert(htHandle, key.c_str(), payload.c_str());
+
+		key.resize(3);
+		payload.resize(7);
+	}
+
+	Sleep(3000);
+
+	HT::PrintAllElements(htHandle);
 
 	CloseHandle(htHandle);
 	printf_s("\n\n--- Test Two End, Thread %d ---\n\n", GetCurrentThreadId());
@@ -140,7 +166,7 @@ void testCase2()
 	HT::HTHANDLE* htHandle = NULL;
 	try
 	{
-		Test03(htHandle);
+		Test04(htHandle);
 
 		printf_s("\n---Complete---\n");
 	}
@@ -156,7 +182,6 @@ int main()
 	try
 	{
 		StartTest();
-		//Test03(htHandle);
 
 		thread first(testCase);
 		thread second(testCase2);

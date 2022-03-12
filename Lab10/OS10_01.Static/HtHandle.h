@@ -8,6 +8,8 @@
 
 #define DEFAULT_FILE_NAME "./table.ht"
 
+#define ARGUMENT_NULL_ERROR "Passed argument pointer was null"
+
 #define CREATE_FILE_ERROR "Cannot create hash-table file for mapping. It can be due to wrong filename of another process already create HT"
 #define CREATE_FILE_MAPING_ERROR "Cannot create File Mapping. Check your filename"
 #define CREATE_FILE_VIEW_ERROR "Cannot create view of file. Check your filename"
