@@ -1,0 +1,150 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="Исходные файлы">
+      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
+      <Extensions>cpp;c;cc;cxx;c++;cppm;ixx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
+    </Filter>
+    <Filter Include="Файлы заголовков">
+      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
+      <Extensions>h;hh;hpp;hxx;h++;hm;inl;inc;ipp;xsd</Extensions>
+    </Filter>
+    <Filter Include="Файлы ресурсов">
+      <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
+      <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
+    </Filter>
+    <Filter Include="Исходные файлы\Config">
+      <UniqueIdentifier>{64ae4b9f-1b4e-4b6b-9488-643b3e560da5}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Файлы заголовков\Config">
+      <UniqueIdentifier>{3cca8580-9ec6-48dd-a5bd-12c1e23ec878}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Файлы заголовков\HT">
+      <UniqueIdentifier>{37209f72-ebdb-46e4-be72-3fe224177065}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Исходные файлы\HT">
+      <UniqueIdentifier>{1cd5eee8-501c-4661-b6e5-c9a375b06ba1}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Файлы заголовков\Core">
+      <UniqueIdentifier>{366c29f5-35e4-4c1f-bbb4-d8e6be6c2bd1}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Исходные файлы\Core">
+      <UniqueIdentifier>{746f7d88-0cc7-4d09-a4b4-659100e90932}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Файлы заголовков\Core\Controllers">
+      <UniqueIdentifier>{54f5b917-b74e-4426-be90-e61f87d3ed84}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Исходные файлы\Core\Controllers">
+      <UniqueIdentifier>{4163cdef-608b-4264-b9c0-4f9f47f0fa8d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Исходные файлы\Helper">
+      <UniqueIdentifier>{96d19da5-d584-4e10-9a9d-8cae461aafc5}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Файлы заголовков\Helper">
+      <UniqueIdentifier>{9323aa6f-86eb-4305-a09f-13374bba6809}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Файлы заголовков\Core\Models">
+      <UniqueIdentifier>{0a3171eb-3653-4ec3-a203-fb84563b5d4d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Исходные файлы\Core\Models">
+      <UniqueIdentifier>{092be971-ef5a-4b6a-9722-355f7ca954f4}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="pch.h">
+      <Filter>Файлы заголовков\Config</Filter>
+    </ClInclude>
+    <ClInclude Include="framework.h">
+      <Filter>Файлы заголовков\Config</Filter>
+    </ClInclude>
+    <ClInclude Include="Api.h">
+      <Filter>Файлы заголовков\HT</Filter>
+    </ClInclude>
+    <ClInclude Include="FileViewService.h">
+      <Filter>Файлы заголовков\Core\Controllers</Filter>
+    </ClInclude>
+    <ClInclude Include="FileMappingService.h">
+      <Filter>Файлы заголовков\Core\Controllers</Filter>
+    </ClInclude>
+    <ClInclude Include="FileService.h">
+      <Filter>Файлы заголовков\Core\Controllers</Filter>
+    </ClInclude>
+    <ClInclude Include="StorageService.h">
+      <Filter>Файлы заголовков\Core\Controllers</Filter>
+    </ClInclude>
+    <ClInclude Include="HashTableService.h">
+      <Filter>Файлы заголовков\Core\Controllers</Filter>
+    </ClInclude>
+    <ClInclude Include="IntervalSnapService.h">
+      <Filter>Файлы заголовков\Core\Controllers</Filter>
+    </ClInclude>
+    <ClInclude Include="Helper.h">
+      <Filter>Файлы заголовков\Helper</Filter>
+    </ClInclude>
+    <ClInclude Include="Element.h">
+      <Filter>Файлы заголовков\Core\Models</Filter>
+    </ClInclude>
+    <ClInclude Include="SharedMemory.h">
+      <Filter>Файлы заголовков\Core\Models</Filter>
+    </ClInclude>
+    <ClInclude Include="HtHandle.h">
+      <Filter>Файлы заголовков\Core\Models</Filter>
+    </ClInclude>
+    <ClInclude Include="StorageConfig.h">
+      <Filter>Файлы заголовков\Core\Models</Filter>
+    </ClInclude>
+    <ClInclude Include="Error.h">
+      <Filter>Файлы заголовков\Core</Filter>
+    </ClInclude>
+    <ClInclude Include="SnapService.h">
+      <Filter>Файлы заголовков\Core\Controllers</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="dllmain.cpp">
+      <Filter>Исходные файлы</Filter>
+    </ClCompile>
+    <ClCompile Include="pch.cpp">
+      <Filter>Исходные файлы\Config</Filter>
+    </ClCompile>
+    <ClCompile Include="FileService.cpp">
+      <Filter>Исходные файлы\Core\Controllers</Filter>
+    </ClCompile>
+    <ClCompile Include="FileMappingService.cpp">
+      <Filter>Исходные файлы\Core\Controllers</Filter>
+    </ClCompile>
+    <ClCompile Include="FileViewService.cpp">
+      <Filter>Исходные файлы\Core\Controllers</Filter>
+    </ClCompile>
+    <ClCompile Include="HashTableService.cpp">
+      <Filter>Исходные файлы\Core\Controllers</Filter>
+    </ClCompile>
+    <ClCompile Include="IntervalSnapService.cpp">
+      <Filter>Исходные файлы\Core\Controllers</Filter>
+    </ClCompile>
+    <ClCompile Include="StorageService.cpp">
+      <Filter>Исходные файлы\Core\Controllers</Filter>
+    </ClCompile>
+    <ClCompile Include="Helper.cpp">
+      <Filter>Исходные файлы\Helper</Filter>
+    </ClCompile>
+    <ClCompile Include="Element.cpp">
+      <Filter>Исходные файлы\Core\Models</Filter>
+    </ClCompile>
+    <ClCompile Include="HtHandle.cpp">
+      <Filter>Исходные файлы\Core\Models</Filter>
+    </ClCompile>
+    <ClCompile Include="SharedMemory.cpp">
+      <Filter>Исходные файлы\Core\Models</Filter>
+    </ClCompile>
+    <ClCompile Include="StorageConfig.cpp">
+      <Filter>Исходные файлы\Core\Models</Filter>
+    </ClCompile>
+    <ClCompile Include="SnapService.cpp">
+      <Filter>Исходные файлы\Core\Controllers</Filter>
+    </ClCompile>
+    <ClCompile Include="Api.cpp">
+      <Filter>Исходные файлы\HT</Filter>
+    </ClCompile>
+  </ItemGroup>
+</Project>
