@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <title></title>
+</head>
+<body>
+    <h2>Task5</h2>
+    <form>
+        <label for="x">x</label>
+        <input type="number" name="x" id="x" />
+        
+        <label for="y">y</label>
+        <input type="number" name="y" id="y" />
+        
+        <input type="submit" onclick="xmlSend(); return false;" value="Submit" />
+    </form>
+    <div id="result"></div>
+<script>
+    let xmlSend = () =>
+    {
+        let searchParams = new URLSearchParams();
+        searchParams.append("x", document.getElementById("x").value);
+        searchParams.append("y", document.getElementById("y").value);
+        
+        let xhr = new XMLHttpRequest();
+        xhr.open("POST", "task5", true);
+        xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+        xhr.onreadystatechange = () =>
+        {
+            document.getElementById("result").innerHTML = "Multiply result: ";
+            document.getElementById("result").innerHTML += xhr.responseText;
+        };
+        xhr.send(searchParams.toString());
+    };
+
+</script>
+</body>
+</html>
