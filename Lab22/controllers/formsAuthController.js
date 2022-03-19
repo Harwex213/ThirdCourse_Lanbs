@@ -16,8 +16,16 @@ const getResource = (request, response) => {
         response.send(`Hello, ${request.user.username}. Your role - ${request.user.role}`);
         return;
     }
-    
-    response.redirect("/auth/login");
+
+    const isRedirect = request.query.isRedirect;
+    if (isRedirect) {
+        response.redirect("/auth/login");
+    }
+    else {
+        const error = new Error("user not authenticated");
+        error.status = 401;
+        throw error;
+    }
 }
 
 const router = express.Router();

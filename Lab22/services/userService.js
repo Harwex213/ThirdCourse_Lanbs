@@ -19,7 +19,17 @@ const checkUserPassword = async (username, password) => {
     return null;
 }
 
+const createUser = async ({ username, password, email }) => {
+    return await sequelize.model("users").create({
+        username,
+        password,
+        email,
+        role: "user"
+    })
+}
+
 module.exports = {
     getUserByUsername,
-    checkUserPassword
+    checkUserPassword,
+    createUser
 }

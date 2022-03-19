@@ -1,5 +1,5 @@
 const express = require("express");
-const { checkUserPassword, getUserByUsername } = require("../services/userService");
+const { checkUserPassword, getUserByUsername, createUser } = require("../services/userService");
 const { createAccessToken, createRefreshToken, verifyAndDecodeRefreshToken } = require("../services/authService");
 const path = require("path");
 const { createClient } = require("redis");
@@ -20,6 +20,39 @@ const postLogin = async (request, response) => {
         response.redirect("/auth/login");
         return;
     }
+
+    const payload = {
+        id: user.id,
+        username: user.username,
+        role: user.role
+    };
+    const accessToken = createAccessToken(payload)
+    const refreshToken = createRefreshToken(payload);
+
+    response.cookie("accessToken", accessToken, {
+        httpOnly: true,
+        sameSite: "strict"
+    });
+    response.cookie("refreshToken", refreshToken, {
+        httpOnly: true,
+        sameSite: "strict",
+        path: "/auth/refresh-token"
+    });
+    response.redirect("/auth/resource");
+}
+
+const getRegister = (request, response) => {
+    response.sendFile(path.resolve("views/registrationForm.html"));
+}
+
+const postRegister = async (request, response) => {
+    const possibleUser = await getUserByUsername(request.body.username);
+    if (possibleUser) {
+        response.send(`Cannot create user, because such username (${possibleUser.username}) already taken`);
+        return;
+    }
+
+    const user = await createUser(request.body);
 
     const payload = {
         id: user.id,
@@ -113,6 +146,8 @@ const router = express.Router();
 
 router.get("/login", getLogin);
 router.post("/login", postLogin);
+router.get("/register", getRegister);
+router.post("/register", postRegister);
 router.get("/refresh-token", checkRefreshToken)
 router.get("/logout", getLogout)
 router.get("/resource", getResource);

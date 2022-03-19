@@ -11,8 +11,8 @@
 <body>
 <section>
     <div class="container">
-        <h1 style="margin: 15px 0;">Login</h1>
-        <form style="display: flex; flex-direction: column;" action="/auth/login" method="POST">
+        <h1 style="margin: 15px 0;">Registration</h1>
+        <form style="display: flex; flex-direction: column;" action="/auth/register" method="POST">
             <div class="mb-3">
                 <label class="form-label" for="username">Enter Username</label>
                 <input class="form-control" type="text"
@@ -24,6 +24,12 @@
                 <input class="form-control" type="password"
                        minlength="4"
                        name="password" id="password" required/>
+            </div>
+            <div class="mb-3">
+                <label class="form-label" for="email">Enter Email (not required)</label>
+                <input class="form-control" type="email"
+                       pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2, 4}$"
+                       name="email" id="email"/>
             </div>
 
             <button class="btn btn-primary" style="margin-top: 15px;" type="submit">Login</button>
