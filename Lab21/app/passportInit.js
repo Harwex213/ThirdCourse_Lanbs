@@ -2,7 +2,7 @@ const passport = require("passport");
 const { BasicStrategy, DigestStrategy } = require("passport-http");
 const users = require("../data-access/users.json");
 
-exports.getUser = (username) => users.find(u => u.username === username);
+const getUser = (username) => users.find(u => u.username === username);
 
 const initBasic = () =>
     passport.use(new BasicStrategy((username, password, done) => {
@@ -47,7 +47,7 @@ passport.serializeUser((user, done) => {
 });
 
 passport.deserializeUser((user, done) => {
-    console.log("Serializing user");
+    console.log("Deserializing user");
     done(null, user);
 });
 
