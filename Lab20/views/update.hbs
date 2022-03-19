@@ -4,17 +4,19 @@
     {{/each}}
 </div>
 <div class="layout__form">
-    <form action="http://localhost:3000/update" method="post" enctype="application/x-www-form-urlencoded">
+    <form action="/update" method="post" enctype="application/x-www-form-urlencoded">
         {{#with record}}
             <input style="display: none" type="text" class="form-control" name="id" id="id" value="{{id}}">
 
             <div class="mb-3">
                 <label for="fullName" class="form-label">Full name</label>
-                <input type="text" class="form-control" name="fullName" id="fullName" value="{{fullName}}">
+                <input type="text" required pattern="^[A-Z]{1}[a-z]{2,24}\s{1}[A-Z]{1}[a-z]{2,24}$"
+                       class="form-control" name="fullName" id="fullName" value="{{fullName}}">
             </div>
             <div class="mb-3">
                 <label for="phoneNumber" class="form-label">Phone number</label>
-                <input type="text" class="form-control" name="phoneNumber" id="phoneNumber" value="{{phoneNumber}}">
+                <input type="text" required pattern="^\+375[29|33|44][0-9]{3}[0-9]{3}[0-9]{2}$"
+                       class="form-control" name="phoneNumber" id="phoneNumber" value="{{phoneNumber}}">
             </div>
         {{/with}}
 

@@ -36,6 +36,6 @@ app.use((error, request, response, next) => {
     });
 });
 
-app.listen(3000, "localhost", () => {
+app.listen(process.env.PORT || 80, () => {
     console.log("server successfully started");
 })
