@@ -1,0 +1,77 @@
+@import url('https://fonts.googleapis.com/css2?family=Roboto+Slab:wght@300;700&display=swap');
+@import url("https://cdn.jsdelivr.net/npm/bootstrap-icons@1.3.0/font/bootstrap-icons.css");
+
+.my-container {
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    font-family: 'Roboto Slab', serif;
+}
+
+@media (min-width: 1200px) {
+    .container {
+        max-width: 960px;
+    }
+}
+
+.my-container__header {
+    margin-top: 15px;
+    align-self: center;
+    font-weight: 700;
+}
+
+.my-container__layout {
+    width: 100%;
+    height: 100%;
+    max-height: calc(100% - 100px);
+}
+
+.layout {
+    display: flex;
+    flex-direction: column;
+}
+
+.layout__records {
+    height: 100%;
+    margin: 20px 0;
+    overflow-y: scroll;
+}
+
+.layout__actions {
+    display: flex;
+    flex-direction: row;
+}
+
+.layout__btn {
+    width: 100%;
+    margin-right: 10px;
+}
+
+.layout__btn:last-child {
+    margin-right: 0;
+}
+
+.records {
+    font-size: 18px;
+}
+
+.records__record-action {
+    text-align: center;
+}
+
+.records__record_disabled {
+    pointer-events: none;
+    /* for "disabled" effect */
+    opacity: 0.5;
+    background: #CCC;
+}
+
+.records__full-name {
+    width: 50%;
+    text-align: center;
+}
+
+.records__phone-number {
+    width: 50%;
+    text-align: center;
+}

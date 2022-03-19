@@ -1,0 +1,22 @@
+﻿@using Lab02.DTOs.Dict
+@using Lab02.Helpers
+@using Lab02.Models
+@model UpdateDto
+@{
+    ViewBag.Title = "Update Phone";
+    IEnumerable<Operator> operators = ViewBag.Operators;
+    var returnBackActionUrl =  Url.Action("Index", "Dict");
+}
+<div class="layout__form">
+    @using (Html.BeginForm("Update", "Dict", FormMethod.Post))
+    {            
+        <input style="display: none" type="text" name="Id" id="Id" value="@Model.Id">
+        @Html.RenderRecordControls(new SelectList(operators))
+
+        <div class="layout__actions">
+            <button type="submit" class="layout__btn btn btn-outline-primary">Добавить</button>
+            <button type="button" class="layout__btn btn btn-outline-primary" 
+                    onclick="window.location.href = '@returnBackActionUrl'">Отказаться</button>
+        </div>
+    }
+</div>

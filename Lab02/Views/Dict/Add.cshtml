@@ -1,0 +1,47 @@
+﻿@using Lab02.DTOs.Dict
+@using Lab02.Helpers
+@using Lab02.Models
+@model AddDto
+@{
+    ViewBag.Title = "Add Phone";
+    IEnumerable<Operator> operators = ViewBag.Operators;
+    var returnBackActionUrl =  Url.Action("Index", "Dict");
+}
+<div class="layout__form">
+    @using (Html.BeginForm("Add", "Dict", FormMethod.Post))
+    {
+        @Html.RenderRecordControls(new SelectList(operators))
+
+        <div class="layout__actions">
+            <button type="submit" class="layout__btn btn btn-outline-primary">Добавить</button>
+            <button type="button" class="layout__btn btn btn-outline-primary" 
+                    onclick="window.location.href = '@returnBackActionUrl'">Отказаться</button>
+        </div>
+    }
+</div>
+
+        @* <div class="mb-3"> *@
+        @*     <label for="@Html.DisplayNameFor(dto => dto.Name)" class="form-label"> *@
+        @*         @Html.DisplayNameFor(dto => dto.Name) *@
+        @*     </label> *@
+        @*     <p class="text text-danger">@Html.ValidationMessageFor(dto => dto.Name)</p> *@
+        @*     @Html.EditorFor(dto => dto.Name,  *@
+        @*         new { htmlAttributes = new { @class="form-control" }}) *@
+        @* </div> *@
+        @* <div class="mb-3"> *@
+        @*     <label for="@Html.DisplayNameFor(dto => dto.Code)" class="form-label"> *@
+        @*         @Html.DisplayNameFor(dto => dto.Code) *@
+        @*     </label> *@
+        @*     <p class="text text-danger">@Html.ValidationMessageFor(dto => dto.Code)</p> *@
+        @*     @Html.DropDownListFor(dto => dto.Code, new SelectList(operators),  *@
+        @*         new { @class="form-select" }) *@
+        @* </div> *@
+        @* <div class="mb-3"> *@
+        @*     <label for="@Html.DisplayNameFor(dto => dto.Number)" class="form-label"> *@
+        @*         @Html.DisplayNameFor(dto => dto.Number) *@
+        @*     </label> *@
+        @*     <p class="text text-danger">@Html.ValidationMessageFor(dto => dto.Number)</p> *@
+        @*     @Html.EditorFor(dto => dto.Number,  *@
+        @*         new { htmlAttributes = new { @class="form-control" }}) *@
+        @* </div> *@
+

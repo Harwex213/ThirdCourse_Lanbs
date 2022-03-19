@@ -1,0 +1,19 @@
+﻿@{
+    ViewBag.Title = "Delete Phone";
+    var returnBackActionUrl =  Url.Action("Index", "Dict");
+}
+<div class="layout__form">
+    <div class="mb-3">
+        <h3>Вы уверены что хотите удалить запись @Model.Id: @Request.QueryString["owner"], @Request.QueryString["number"]?</h3>
+    </div>
+    @using (Html.BeginForm("Delete", "Dict", FormMethod.Post))
+    {
+        <input style="display: none" type="text" name="Id" id="Id" value="@Model.Id">
+
+        <div class="layout__actions">
+            <button type="submit" class="layout__btn btn btn-outline-primary">Удалить</button>
+            <button type="button" class="layout__btn btn btn-outline-primary"
+                    onclick="window.location.href = '@returnBackActionUrl'">Отказаться</button>
+        </div>
+    }
+</div>

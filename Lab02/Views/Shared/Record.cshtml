@@ -1,0 +1,32 @@
+﻿@using Lab02.Models
+@model Record
+@{
+    var updateActionUrl =  Url.Action("Update", "Dict", new
+    {
+        id = Model.Id,
+        Name = Model.OwnerName,
+        Code = Model.Operator.Code,
+        Number = Model.Number
+    });
+    var deleteActionUrl =  Url.Action("Delete", "Dict", new
+    {
+        id = Model.Id,
+        owner = Model.OwnerName,
+        number = Model.ToString()
+    });
+}
+<tr class="records__record">
+    <th scope="row">@Model.Id</th>
+    <td>@Model.OwnerName</td>
+    <td>@Model.ToString()</td>
+    <td class="records__record-action">
+        <a href="@updateActionUrl" class="text-decoration-none">
+            <i class="bi bi-pencil-square" style="font-size: 18px; cursor: pointer"></i>
+        </a>
+    </td>  
+    <td class="records__record-action">
+        <a href="@deleteActionUrl" class="text-decoration-none">
+            <i class="bi bi-trash" style="font-size: 18px; cursor: pointer"></i>
+        </a>
+    </td>   
+</tr>
