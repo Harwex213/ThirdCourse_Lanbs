@@ -7,6 +7,7 @@ typedef char* (*GetHTLastError)(Core::HTHANDLE*);
 
 int main(int argc, char* argv[])
 {
+	HMODULE hModule = NULL;
 	try
 	{
 		if (argc != 6) {
@@ -18,7 +19,7 @@ int main(int argc, char* argv[])
 			params[i] = strtol(argv[i + 2], NULL, 10);
 		}
 
-		HMODULE hModule = LoadLibraryA("OS11_HTAPI.dll");
+		hModule = LoadLibraryA("OS11_HTAPI.dll");
 		if (hModule == NULL) {
 			throw std::exception("Error load library");
 		}
@@ -44,5 +45,11 @@ int main(int argc, char* argv[])
 	catch (const std::exception& error)
 	{
 		printf_s("%s\n", error.what());
+		if (hModule != NULL && FreeLibrary(hModule) != FALSE)
+		{
+			printf_s("Successfully unloaded library\n");
+		}
 	}
+
+	system("pause");
 }

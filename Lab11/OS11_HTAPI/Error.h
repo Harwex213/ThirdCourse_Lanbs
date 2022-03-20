@@ -7,6 +7,7 @@
 #define CLOSE_FILE_ERROR "Cannot close storage file"
 
 #define CREATE_FILE_MAPING_ERROR "Cannot create file mapping of storage"
+#define OPEN_FILE_MAPPING_ERROR "Cannot open file mapping of storage. Maybe START not started"
 #define CLOSE_FILE_MAPPING_ERROR "Cannot close file mapping of storage"
 
 #define MAP_FILE_VIEW_ERROR "Cannot map view of file storage"

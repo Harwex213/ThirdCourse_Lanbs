@@ -8,7 +8,7 @@ namespace Helper
 		std::string truncatedStr = str;
 		strLength = strLength > threshold ? threshold : strLength;
 
-		truncatedStr.resize(strLength);
+		truncatedStr.resize(strLength - 1);
 		truncatedStr.shrink_to_fit();
 		return truncatedStr;
 	}

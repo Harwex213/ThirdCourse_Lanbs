@@ -149,7 +149,7 @@ namespace Core
 			this->hFileMapping = fileMappingService.openFileMapping(this->fileName);
 			if (this->hFileMapping == INVALID_FILE_MAPPING_HANDLE)
 			{
-				throw std::exception(CREATE_FILE_MAPING_ERROR);
+				throw std::exception(OPEN_FILE_MAPPING_ERROR);
 			}
 
 			LPVOID addr = fileViewService.mapFileView(this->hFileMapping);
@@ -471,7 +471,7 @@ namespace Core
 	void startNotifyingAliveEvent(HTHANDLE* htHandle)
 	{
 		HANDLE hEvent = htHandle->getAliveEventHandle();
-		printf_s("started event\n");
+		printf_s("start Notifying AliveEvent\n");
 		while (htHandle->getState() != HTHANDLE::IDLE)
 		{
 			ResetEvent(hEvent);
@@ -479,7 +479,7 @@ namespace Core
 			SetEvent(hEvent);
 		}
 
-		printf_s("finished event\n");
+		printf_s("finished Notifying AliveEvent\n");
 		ResetEvent(hEvent);
 	}
 
@@ -506,7 +506,7 @@ namespace Core
 		DWORD result = 0;
 		do
 		{
-			result = WaitForSingleObject(hEvent, 100);
+			result = WaitForSingleObject(hEvent, INFINITE);
 			Sleep(100);
 		} while (result == WAIT_OBJECT_0 && htHandle->getState() != HTHANDLE::IDLE);
 

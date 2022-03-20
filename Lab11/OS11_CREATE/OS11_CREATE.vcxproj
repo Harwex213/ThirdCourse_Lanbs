@@ -142,6 +142,11 @@
   <ItemGroup>
     <ClCompile Include="OS11_CREATE.cpp" />
   </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\OS11_HTAPI\OS11_HTAPI.vcxproj">
+      <Project>{3eb476fa-b457-46d9-b1d0-28fdc121c66d}</Project>
+    </ProjectReference>
+  </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
   </ImportGroup>

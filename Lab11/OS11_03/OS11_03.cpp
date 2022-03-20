@@ -11,6 +11,7 @@ typedef Core::Element* (*CreateElementWithKey)(const void*, int);
 
 int main(int argc, char* argv[])
 {
+	HMODULE hModule = NULL;
 	try
 	{
 		if (argc != 2) {
@@ -18,7 +19,7 @@ int main(int argc, char* argv[])
 		}
 		const char* fileName = argv[1];
 
-		HMODULE hModule = LoadLibraryA("OS11_HTAPI.dll");
+		hModule = LoadLibraryA("OS11_HTAPI.dll");
 		if (hModule == NULL) {
 			throw std::exception("Error load library");
 		}
@@ -48,7 +49,7 @@ int main(int argc, char* argv[])
 
 		srand(time(0));
 		std::string keyName = "key ";
-		std::string payloadName = "payload ";
+		std::string payloadName = "abra ";
 		int number = 0;
 		BOOL result = false;
 		while (true)
@@ -66,6 +67,10 @@ int main(int argc, char* argv[])
 			}
 			else {
 				printf_s("%s\n", getHtLastError(htHandle));
+				if (htHandle->state.load(std::memory_order_relaxed) == Core::HTHANDLE::State::IDLE)
+				{
+					throw std::exception("Program stopped due to closed storage");
+				}
 			}
 			printf_s("-----------------------\n");
 
@@ -78,6 +83,10 @@ int main(int argc, char* argv[])
 	catch (const std::exception& error)
 	{
 		printf_s("%s\n", error.what());
+		if (hModule != NULL && FreeLibrary(hModule) != FALSE)
+		{
+			printf_s("Successfully unloaded library\n");
+		}
 	}
 
 	system("pause");

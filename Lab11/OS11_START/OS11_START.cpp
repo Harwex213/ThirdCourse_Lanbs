@@ -11,6 +11,7 @@ typedef void (*PrintAllElements)(Core::HTHANDLE*);
 
 int main(int argc, char* argv[])
 {
+	HMODULE hModule = NULL;
 	try
 	{
 		if (argc != 2) {
@@ -18,7 +19,7 @@ int main(int argc, char* argv[])
 		}
 		const char* fileName = argv[1];
 
-		HMODULE hModule = LoadLibraryA("OS11_HTAPI.dll");
+		hModule = LoadLibraryA("OS11_HTAPI.dll");
 		if (hModule == NULL) {
 			throw std::exception("Error load library");
 		}
@@ -80,5 +81,9 @@ int main(int argc, char* argv[])
 	catch (const std::exception& error)
 	{
 		printf_s("%s\n", error.what());
+		if (hModule != NULL && FreeLibrary(hModule) != FALSE)
+		{
+			printf_s("Successfully unloaded library\n");
+		}
 	}
 }

@@ -11,6 +11,7 @@ typedef Core::Element* (*CreateElementWithKey)(const void*, int);
 
 int main(int argc, char* argv[])
 {
+	HMODULE hModule = NULL;
 	try
 	{
 		if (argc != 2) {
@@ -18,7 +19,7 @@ int main(int argc, char* argv[])
 		}
 		const char* fileName = argv[1];
 
-		HMODULE hModule = LoadLibraryA("OS11_HTAPI.dll");
+		hModule = LoadLibraryA("OS11_HTAPI.dll");
 		if (hModule == NULL) {
 			throw std::exception("Error load library");
 		}
@@ -58,14 +59,18 @@ int main(int argc, char* argv[])
 			payloadName += std::to_string(number);
 
 			printf_s("-----------------------\n");
-			printf_s("Attempt to update element %s:%s\n", keyName.c_str(), payloadName.c_str());
+			printf_s("Attempt to delete element %s:%s\n", keyName.c_str(), payloadName.c_str());
 			result = deleteEl(htHandle, createEl(keyName.c_str(), keyName.size() + 1));
 			if (result)
 			{
-				printf_s("Successfully update element %s:%s\n", keyName.c_str(), payloadName.c_str());
+				printf_s("Successfully delete element %s:%s\n", keyName.c_str(), payloadName.c_str());
 			}
 			else {
 				printf_s("%s\n", getHtLastError(htHandle));
+				if (htHandle->state.load(std::memory_order_relaxed) == Core::HTHANDLE::State::IDLE)
+				{
+					throw std::exception("Program stopped due to closed storage");
+				}
 			}
 			printf_s("-----------------------\n");
 
@@ -78,6 +83,10 @@ int main(int argc, char* argv[])
 	catch (const std::exception& error)
 	{
 		printf_s("%s\n", error.what());
+		if (hModule != NULL && FreeLibrary(hModule) != FALSE)
+		{
+			printf_s("Successfully unloaded library\n");
+		}
 	}
 
 	system("pause");

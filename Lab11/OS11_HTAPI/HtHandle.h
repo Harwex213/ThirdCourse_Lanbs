@@ -44,7 +44,6 @@ namespace Core
 		StorageService storageService;
 		SnapService* snapService;
 		IntervalSnapService intervalSnapService;
-		std::atomic<State> state;
 		std::mutex internalMutex;
 
 		HANDLE hMutex;
@@ -56,6 +55,7 @@ namespace Core
 		char mutexName[CHAR_MAX_LENGTH + 20];
 	public:
 		bool isInitError;
+		std::atomic<State> state;
 
 	public: // Getters; Setters;
 		void setLastErrorMessage(const char* error);
