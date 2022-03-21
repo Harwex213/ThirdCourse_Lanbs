@@ -1,0 +1,92 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="Исходные файлы">
+      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
+      <Extensions>cpp;c;cc;cxx;c++;cppm;ixx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
+    </Filter>
+    <Filter Include="Файлы заголовков">
+      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
+      <Extensions>h;hh;hpp;hxx;h++;hm;inl;inc;ipp;xsd</Extensions>
+    </Filter>
+    <Filter Include="Файлы ресурсов">
+      <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
+      <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
+    </Filter>
+    <Filter Include="Файлы заголовков\Interfaces">
+      <UniqueIdentifier>{90970d77-1537-4543-8e6a-90355cbef40f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Исходные файлы\Config">
+      <UniqueIdentifier>{40f39999-2d64-42fd-acbb-506fe696f17c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Файлы заголовков\Config">
+      <UniqueIdentifier>{974801e7-406b-44dc-bee8-07eef5b9d4e0}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Исходные файлы\Components">
+      <UniqueIdentifier>{e6deba52-7845-41af-b722-e6b5953bd0df}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Файлы заголовков\Components">
+      <UniqueIdentifier>{6e587f90-a966-4834-8d0e-0affc53e03f0}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Файлы заголовков\Factory">
+      <UniqueIdentifier>{0e3439e3-df0c-4c89-9698-c0814f019d9b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Исходные файлы\Factory">
+      <UniqueIdentifier>{987d05fe-3ce5-4b15-8c75-7d4b1663abea}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Файлы заголовков\Install">
+      <UniqueIdentifier>{a109a505-267a-4c24-87ae-115ccadf9aba}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Исходные файлы\Install">
+      <UniqueIdentifier>{3af63edc-6fd3-4b0e-bd6a-e8daa443ca12}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="IAdder.h">
+      <Filter>Файлы заголовков\Interfaces</Filter>
+    </ClInclude>
+    <ClInclude Include="IMultiplier.h">
+      <Filter>Файлы заголовков\Interfaces</Filter>
+    </ClInclude>
+    <ClInclude Include="framework.h">
+      <Filter>Файлы заголовков\Config</Filter>
+    </ClInclude>
+    <ClInclude Include="pch.h">
+      <Filter>Файлы заголовков\Config</Filter>
+    </ClInclude>
+    <ClInclude Include="C_OS12.h">
+      <Filter>Файлы заголовков\Components</Filter>
+    </ClInclude>
+    <ClInclude Include="C_OS12_Factory.h">
+      <Filter>Файлы заголовков\Factory</Filter>
+    </ClInclude>
+    <ClInclude Include="Registry.h">
+      <Filter>Файлы заголовков\Install</Filter>
+    </ClInclude>
+    <ClInclude Include="LOG.h">
+      <Filter>Файлы заголовков\Config</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="pch.cpp">
+      <Filter>Исходные файлы\Config</Filter>
+    </ClCompile>
+    <ClCompile Include="dllmain.cpp">
+      <Filter>Исходные файлы</Filter>
+    </ClCompile>
+    <ClCompile Include="C_OS12.cpp">
+      <Filter>Исходные файлы\Components</Filter>
+    </ClCompile>
+    <ClCompile Include="C_OS12_Factory.cpp">
+      <Filter>Исходные файлы\Factory</Filter>
+    </ClCompile>
+    <ClCompile Include="Registry.cpp">
+      <Filter>Исходные файлы\Install</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="OS12_COM.def">
+      <Filter>Исходные файлы</Filter>
+    </None>
+  </ItemGroup>
+</Project>
