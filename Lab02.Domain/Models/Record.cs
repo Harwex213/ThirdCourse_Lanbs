@@ -1,11 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace Lab02.Models
+namespace Lab02.Domain.Models
 {
-    public class Record
+    public class Record : BaseModel
     {
-        public int Id { get; set; }
         public string OwnerName { get; set; }
         public Operator Operator { get; set; }
         public string Number { get; set; }

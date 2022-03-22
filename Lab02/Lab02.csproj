@@ -43,6 +43,22 @@
     </PropertyGroup>
     <ItemGroup>
         <Reference Include="Microsoft.CSharp" />
+        <Reference Include="Ninject, Version=3.3.3.0, Culture=neutral, PublicKeyToken=c7192dc5380945e7">
+          <HintPath>..\packages\Ninject.3.3.3\lib\net45\Ninject.dll</HintPath>
+          <Private>True</Private>
+        </Reference>
+        <Reference Include="Ninject.Web.Common, Version=3.3.0.0, Culture=neutral, PublicKeyToken=c7192dc5380945e7">
+          <HintPath>..\packages\Ninject.Web.Common.3.3.0\lib\net45\Ninject.Web.Common.dll</HintPath>
+          <Private>True</Private>
+        </Reference>
+        <Reference Include="Ninject.Web.Common.WebHost, Version=3.3.0.0, Culture=neutral, PublicKeyToken=c7192dc5380945e7">
+          <HintPath>..\packages\Ninject.Web.Common.WebHost.3.3.0\lib\net45\Ninject.Web.Common.WebHost.dll</HintPath>
+          <Private>True</Private>
+        </Reference>
+        <Reference Include="Ninject.Web.Mvc, Version=3.3.0.0, Culture=neutral, PublicKeyToken=c7192dc5380945e7">
+          <HintPath>..\packages\Ninject.MVC5.3.3.0\lib\net45\Ninject.Web.Mvc.dll</HintPath>
+          <Private>True</Private>
+        </Reference>
         <Reference Include="System" />
         <Reference Include="System.Data" />
         <Reference Include="System.Drawing" />
@@ -125,9 +141,7 @@
             <DependentUpon>Global.asax</DependentUpon>
         </Compile>
         <Compile Include="Helpers\FormHelper.cs" />
-        <Compile Include="Models\Storage.cs" />
-        <Compile Include="Models\Operator.cs" />
-        <Compile Include="Models\Record.cs" />
+        <Compile Include="InjectionRegistrations\NinjectRegistrations.cs" />
         <Compile Include="Properties\AssemblyInfo.cs" />
     </ItemGroup>
     <ItemGroup>
@@ -165,6 +179,16 @@
     </ItemGroup>
     <ItemGroup>
         <None Include="packages.config" />
+    </ItemGroup>
+    <ItemGroup>
+      <ProjectReference Include="..\Lab02.Domain\Lab02.Domain.csproj">
+        <Project>{13b802ed-22e2-4485-898d-3d815da7b06b}</Project>
+        <Name>Lab02.Domain</Name>
+      </ProjectReference>
+      <ProjectReference Include="..\Lab02.Infrastructure.JSON\Lab02.Infrastructure.JSON.csproj">
+        <Project>{450de888-d6a8-4801-b8bf-587d6ef25e34}</Project>
+        <Name>Lab02.Infrastructure.JSON</Name>
+      </ProjectReference>
     </ItemGroup>
     <PropertyGroup>
         <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>

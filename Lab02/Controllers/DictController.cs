@@ -1,67 +1,77 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
+﻿using System.Threading.Tasks;
 using System.Web.Mvc;
+using Lab02.Domain.Interfaces;
+using Lab02.Domain.Models;
 using Lab02.DTOs.Dict;
-using Lab02.Models;
-using Newtonsoft.Json.Serialization;
 
 namespace Lab02.Controllers
 {
     public class DictController : Controller
     {
+        private IUnitOfWork _unitOfWork;
+        
+        public DictController(IUnitOfWork unitOfWork)
+        {
+            _unitOfWork = unitOfWork;
+        }
+        
         public ActionResult Index()
         {
-            return View(Storage.Records);
+            return View(_unitOfWork.Repository<Record>().GetAll());
         }
         
         public ActionResult Add()
         {
-            ViewBag.Operators = Storage.Operators;
+            ViewBag.Operators = _unitOfWork.Repository<Operator>().GetAll();
             return View(new AddDto());
         }
         
         [HttpPost]
-        public ActionResult Add(AddDto addDto)
+        public async Task<ActionResult> Add(AddDto addDto)
         {
             if (!ModelState.IsValid)
             {
                 return RedirectToAction(nameof(Add));
             }
-            Storage.Records.Add(new Record
+            _unitOfWork.Repository<Record>().Add(new Record
             {
-                Id = Storage.Records.Count,
                 OwnerName = addDto.Name,
                 Operator = new Operator { Code = addDto.Code },
                 Number = addDto.Number
             });
+            await _unitOfWork.CommitAsync();
 
             return RedirectToAction(nameof(Index));
         }
         
         public ActionResult Update(int id, RecordDto recordDto)
         {
-            ViewBag.Operators = Storage.Operators;
-            ViewBag.Name = recordDto.Name;
-            ViewBag.Code = recordDto.Code;
-            ViewBag.Number = recordDto.Number;
+            ViewBag.Operators = _unitOfWork.Repository<Operator>().GetAll();
             return View(new UpdateDto
             {
-                Id = id
+                Id = id,
+                Name = recordDto.Name,
+                Code = recordDto.Code,
+                Number = recordDto.Number
             });
         }
         
         [HttpPost]
-        public ActionResult Update(UpdateDto updateDto)
+        public async Task<ActionResult> Update(UpdateDto updateDto)
         {
-            var recordToUpdate = Storage.Records.FirstOrDefault(record => record.Id == updateDto.Id);
-            if (recordToUpdate != null)
+            if (!ModelState.IsValid)
             {
-                recordToUpdate.OwnerName = updateDto.Name;
-                recordToUpdate.Operator = new Operator { Code = updateDto.Code };
-                recordToUpdate.Number = updateDto.Number;
+                return RedirectToAction(nameof(Update));
             }
-            
+            _unitOfWork.Repository<Record>().Update(new Record
+            {
+                Id = updateDto.Id,
+                OwnerName = updateDto.Name,
+                Operator = new Operator { Code = updateDto.Code },
+                Number = updateDto.Number
+            });
+            await _unitOfWork.CommitAsync();
+
             return RedirectToAction(nameof(Index));
         }
 
@@ -74,13 +84,17 @@ namespace Lab02.Controllers
         }
         
         [HttpPost]
-        public ActionResult Delete(DeleteDto deleteDto)
+        public async Task<ActionResult> Delete(DeleteDto deleteDto)
         {
-            var recordToDelete = Storage.Records.FirstOrDefault(record => record.Id == deleteDto.Id);
-            if (recordToDelete != null)
+            if (!ModelState.IsValid)
             {
-                Storage.Records.Remove(recordToDelete);
+                return RedirectToAction(nameof(Update));
             }
+            _unitOfWork.Repository<Record>().Delete(new Record
+            {
+                Id = deleteDto.Id
+            });
+            await _unitOfWork.CommitAsync();
             
             return RedirectToAction(nameof(Index));
         }

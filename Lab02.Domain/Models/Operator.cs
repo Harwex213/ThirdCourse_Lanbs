@@ -1,6 +1,6 @@
-﻿namespace Lab02.Models
+﻿namespace Lab02.Domain.Models
 {
-    public class Operator
+    public class Operator : BaseModel
     {
         public int Code { get; set; }
 
