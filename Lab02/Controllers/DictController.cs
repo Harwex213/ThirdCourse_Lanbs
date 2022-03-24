@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using System.Collections.Generic;
+using System.Threading.Tasks;
 using System.Web.Mvc;
 using Lab02.Domain.Interfaces;
 using Lab02.Domain.Models;
@@ -8,21 +9,23 @@ namespace Lab02.Controllers
 {
     public class DictController : Controller
     {
-        private IUnitOfWork _unitOfWork;
+        private IOperatorRepository _operatorRepository;
+        private IRecordRepository _recordRepository;
         
-        public DictController(IUnitOfWork unitOfWork)
+        public DictController(IOperatorRepository operatorRepository, IRecordRepository recordRepository)
         {
-            _unitOfWork = unitOfWork;
+            _operatorRepository = operatorRepository;
+            _recordRepository = recordRepository;
         }
         
         public ActionResult Index()
         {
-            return View(_unitOfWork.Repository<Record>().GetAll());
+            return View(_recordRepository.GetAll());
         }
         
         public ActionResult Add()
         {
-            ViewBag.Operators = _unitOfWork.Repository<Operator>().GetAll();
+            ViewBag.Operators = _operatorRepository.GetAll();
             return View(new AddDto());
         }
         
@@ -33,20 +36,20 @@ namespace Lab02.Controllers
             {
                 return RedirectToAction(nameof(Add));
             }
-            _unitOfWork.Repository<Record>().Add(new Record
+            _recordRepository.Create(new Record
             {
                 OwnerName = addDto.Name,
                 Operator = new Operator { Code = addDto.Code },
                 Number = addDto.Number
             });
-            await _unitOfWork.CommitAsync();
+            await _recordRepository.SaveAsync();
 
             return RedirectToAction(nameof(Index));
         }
         
         public ActionResult Update(int id, RecordDto recordDto)
         {
-            ViewBag.Operators = _unitOfWork.Repository<Operator>().GetAll();
+            ViewBag.Operators = _operatorRepository.GetAll();
             return View(new UpdateDto
             {
                 Id = id,
@@ -63,14 +66,14 @@ namespace Lab02.Controllers
             {
                 return RedirectToAction(nameof(Update));
             }
-            _unitOfWork.Repository<Record>().Update(new Record
+            _recordRepository.Update(new Record
             {
                 Id = updateDto.Id,
                 OwnerName = updateDto.Name,
                 Operator = new Operator { Code = updateDto.Code },
                 Number = updateDto.Number
             });
-            await _unitOfWork.CommitAsync();
+            await _recordRepository.SaveAsync();
 
             return RedirectToAction(nameof(Index));
         }
@@ -90,12 +93,12 @@ namespace Lab02.Controllers
             {
                 return RedirectToAction(nameof(Update));
             }
-            _unitOfWork.Repository<Record>().Delete(new Record
+            _recordRepository.Delete(new Record
             {
                 Id = deleteDto.Id
             });
-            await _unitOfWork.CommitAsync();
-            
+            await _recordRepository.SaveAsync();
+
             return RedirectToAction(nameof(Index));
         }
     }

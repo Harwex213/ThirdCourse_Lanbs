@@ -8,7 +8,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Lab02", "Lab02\Lab02.csproj
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Lab02.Domain", "Lab02.Domain\Lab02.Domain.csproj", "{13B802ED-22E2-4485-898D-3D815DA7B06B}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Lab02.Infrastructure.JSON", "Lab02.Infrastructure.JSON\Lab02.Infrastructure.JSON.csproj", "{450DE888-D6A8-4801-B8BF-587D6EF25E34}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Lab02.Infrastructure.JSON", "Lab02.Infrastructure.JSON\Lab02.Infrastructure.JSON.csproj", "{76616BA8-69A6-451A-AD99-13F7E729C7D8}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -32,9 +32,9 @@ Global
 		{13B802ED-22E2-4485-898D-3D815DA7B06B}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{13B802ED-22E2-4485-898D-3D815DA7B06B}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{13B802ED-22E2-4485-898D-3D815DA7B06B}.Release|Any CPU.Build.0 = Release|Any CPU
-		{450DE888-D6A8-4801-B8BF-587D6EF25E34}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{450DE888-D6A8-4801-B8BF-587D6EF25E34}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{450DE888-D6A8-4801-B8BF-587D6EF25E34}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{450DE888-D6A8-4801-B8BF-587D6EF25E34}.Release|Any CPU.Build.0 = Release|Any CPU
+		{76616BA8-69A6-451A-AD99-13F7E729C7D8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{76616BA8-69A6-451A-AD99-13F7E729C7D8}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{76616BA8-69A6-451A-AD99-13F7E729C7D8}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{76616BA8-69A6-451A-AD99-13F7E729C7D8}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal
