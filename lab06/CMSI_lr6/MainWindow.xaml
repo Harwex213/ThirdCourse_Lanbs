@@ -1,0 +1,254 @@
+﻿<Window x:Class="CMSI_lr6.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:CMSI_lr6"
+        mc:Ignorable="d"
+        Background="#fcfcfc"
+        Title="Lab06 - Harwex" Height="800.667" Width="1200" Loaded="Window_Loaded">
+
+    <Grid Margin="0,0,0,0">
+
+        <Grid.RowDefinitions>
+            <RowDefinition Height="135"></RowDefinition>
+            <RowDefinition Height="70"></RowDefinition>
+            <RowDefinition Height="256"></RowDefinition>
+            <RowDefinition Height="266"></RowDefinition>
+        </Grid.RowDefinitions>
+
+        <Grid Grid.Row="0">
+
+            <Grid.RowDefinitions>
+                <RowDefinition Height="3*"></RowDefinition>
+                <RowDefinition Height="*"></RowDefinition>
+            </Grid.RowDefinitions>
+
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition></ColumnDefinition>
+                <ColumnDefinition></ColumnDefinition>
+                <ColumnDefinition></ColumnDefinition>
+                <ColumnDefinition></ColumnDefinition>
+                <ColumnDefinition></ColumnDefinition>
+                <ColumnDefinition></ColumnDefinition>
+            </Grid.ColumnDefinitions>
+
+            <StackPanel Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2">
+                <TextBlock Name="LabelRotorL" FontFamily="Microsoft YaHei Bold" Margin="5, 5, 5, 5" FontSize="24" >Rotor L (I):</TextBlock>
+                <TextBlock Name="AlphabetRotorL" FontFamily="Consolas Bold" Margin="5, 5, 5, 5" FontSize="16" >ekmflgdqvzntowyhxuspaibrcj</TextBlock>
+                <TextBlock Name="RotorL" FontFamily="Consolas Bold" Margin="5, 5, 5, 5" FontSize="16" >ekmflgdqvzntowyhxuspaibrcj</TextBlock>
+            </StackPanel>
+            <StackPanel Grid.Row="0" Grid.Column="2" Grid.ColumnSpan="2">
+                <TextBlock Name="LabelRotorM" FontFamily="Microsoft YaHei Bold" Margin="5, 5, 5, 5" FontSize="24" >Rotor M (Beta):</TextBlock>
+                <TextBlock Name="AlphabetRotorM" FontFamily="Consolas Bold" Margin="5, 5, 5, 5" FontSize="16" >ekmflgdqvzntowyhxuspaibrcj</TextBlock>
+                <TextBlock Name="RotorM" FontFamily="Consolas Bold" Margin="5, 5, 5, 5" FontSize="16" >leyjvcnixwpbqmdrtakzgfuhos</TextBlock>
+            </StackPanel>
+            <StackPanel Grid.Row="0" Grid.Column="4" Grid.ColumnSpan="2">
+                <TextBlock Name="LabelRotorR" FontFamily="Microsoft YaHei Bold" Margin="5, 5, 5, 5" FontSize="24" >Rotor R (Gamma):</TextBlock>
+                <TextBlock Name="AlphabetRotorR" FontFamily="Consolas Bold" Margin="5, 5, 5, 5" FontSize="16" >ekmflgdqvzntowyhxuspaibrcj</TextBlock>
+                <TextBlock Name="RotorR" FontFamily="Consolas Bold" Margin="5, 5, 5, 5" FontSize="16" >fsokanuerhmbtiycwlqpzxvgjd</TextBlock>
+            </StackPanel>
+            <!-- <ComboBox Name="RotorL" Margin="5, 5, 5, 5" FontSize="18"  Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2" VerticalContentAlignment="Center" HorizontalContentAlignment="Center" SelectionChanged="RotorL_SelectionChanged"></ComboBox> -->
+            <!-- <ComboBox Name="RotorM" Margin="5, 5, 5, 5" FontSize="18"  Grid.Row="0" Grid.Column="2" Grid.ColumnSpan="2" VerticalContentAlignment="Center" HorizontalContentAlignment="Center" SelectionChanged="RotorM_SelectionChanged"></ComboBox> -->
+            <!-- <ComboBox Name="RotorR" Margin="5, 5, 5, 5" FontSize="18"  Grid.Row="0" Grid.Column="4" Grid.ColumnSpan="2" VerticalContentAlignment="Center" HorizontalContentAlignment="Center" SelectionChanged="RotorR_SelectionChanged"></ComboBox> -->
+
+            <TextBlock Grid.Row="1" Grid.Column="0" Margin="5, 5, 5, 5" FontFamily="Microsoft YaHei Light" FontSize="14" >Step - 4. Current position:</TextBlock>
+            <TextBox Grid.Row="1" Grid.Column="1" Name="RotorLValue"  Margin="5, 5, 5, 5" FontSize="14" VerticalContentAlignment="Center" PreviewTextInput="NumberValidationTextBox"></TextBox>
+            <!-- <TextBox Name="RotorLStep" Margin="5, 5, 5, 5" FontSize="18"  Grid.Row="1" Grid.Column="1" VerticalContentAlignment="Center" HorizontalContentAlignment="Center" PreviewTextInput="NumberValidationTextBox"></TextBox> -->
+            
+            <TextBlock Grid.Row="1" Grid.Column="2" Margin="5, 5, 5, 5" FontFamily="Microsoft YaHei Light" FontSize="14">Step - 2. Current position:</TextBlock>
+            <TextBox Grid.Row="1" Grid.Column="3" Name="RotorMValue" Margin="5, 5, 5, 5" FontSize="14" VerticalContentAlignment="Center" PreviewTextInput="NumberValidationTextBox"></TextBox>
+            <!-- <TextBox Name="RotorMStep" Margin="5, 5, 5, 5" FontSize="18"  Grid.Row="1" Grid.Column="3" VerticalContentAlignment="Center" HorizontalContentAlignment="Center" PreviewTextInput="NumberValidationTextBox"></TextBox> -->
+
+            <TextBlock Grid.Row="1" Grid.Column="4" Margin="5, 5, 5, 5" FontFamily="Microsoft YaHei Light" FontSize="14">Step - 4. Current position:</TextBlock>
+            <TextBox Grid.Row="1" Grid.Column="5" Name="RotorRValue" Margin="5, 5, 5, 5" FontSize="14" VerticalContentAlignment="Center" PreviewTextInput="NumberValidationTextBox"></TextBox>
+            <!-- <TextBox Name="RotorRStep" Margin="5, 5, 5, 5" FontSize="18"  Grid.Row="1" Grid.Column="5" VerticalContentAlignment="Center" HorizontalContentAlignment="Center" PreviewTextInput="NumberValidationTextBox"></TextBox> -->
+
+        </Grid>
+        
+        <Grid Name="ReflectorGrid" Grid.Row="1">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="32"></RowDefinition>
+                <RowDefinition Height="*"></RowDefinition>
+            </Grid.RowDefinitions>
+            
+            <TextBlock Grid.Row="0" FontFamily="Microsoft YaHei Bold" Margin="5, 0, 5, 0" FontSize="24" >Reflector (B):</TextBlock>
+            <TextBlock Grid.Row="1" Name="Reflector" FontFamily="Consolas Bold" Margin="5, 5, 5, 5" FontSize="16" >le yj vc ni xwpbqmdrtakzgfuhos</TextBlock>
+
+        </Grid>
+        <!-- <Grid Name="ReflectorGrid" Grid.Row="1"> -->
+        <!-- -->
+        <!--     <Grid.RowDefinitions> -->
+        <!--         <RowDefinition></RowDefinition> -->
+        <!--         <RowDefinition></RowDefinition> -->
+        <!--     </Grid.RowDefinitions> -->
+        <!-- -->
+        <!--     <Grid.ColumnDefinitions> -->
+        <!--         <ColumnDefinition></ColumnDefinition> -->
+        <!--         <ColumnDefinition></ColumnDefinition> -->
+        <!--         <ColumnDefinition></ColumnDefinition> -->
+        <!--         <ColumnDefinition></ColumnDefinition> -->
+        <!--         <ColumnDefinition></ColumnDefinition> -->
+        <!--         <ColumnDefinition></ColumnDefinition> -->
+        <!--         <ColumnDefinition></ColumnDefinition> -->
+        <!--         <ColumnDefinition></ColumnDefinition> -->
+        <!--         <ColumnDefinition></ColumnDefinition> -->
+        <!--         <ColumnDefinition></ColumnDefinition> -->
+        <!--         <ColumnDefinition></ColumnDefinition> -->
+        <!--         <ColumnDefinition></ColumnDefinition> -->
+        <!--         <ColumnDefinition></ColumnDefinition> -->
+        <!--     </Grid.ColumnDefinitions> -->
+        <!-- -->
+        <!--     <ComboBox Name="Reflector0_0" Margin="5, 5, 5, 5" FontSize="25"  Grid.Row="0" Grid.Column="0" VerticalContentAlignment="Center" HorizontalContentAlignment="Center" SelectionChanged="Reflector_SelectionChanged"></ComboBox> -->
+        <!--     <ComboBox Name="Reflector1_0" Margin="5, 5, 5, 5" FontSize="25"  Grid.Row="0" Grid.Column="1" VerticalContentAlignment="Center" HorizontalContentAlignment="Center" SelectionChanged="Reflector_SelectionChanged"></ComboBox> -->
+        <!--     <ComboBox Name="Reflector2_0" Margin="5, 5, 5, 5" FontSize="25"  Grid.Row="0" Grid.Column="2" VerticalContentAlignment="Center" HorizontalContentAlignment="Center" SelectionChanged="Reflector_SelectionChanged"></ComboBox> -->
+        <!--     <ComboBox Name="Reflector3_0" Margin="5, 5, 5, 5" FontSize="25"  Grid.Row="0" Grid.Column="3" VerticalContentAlignment="Center" HorizontalContentAlignment="Center" SelectionChanged="Reflector_SelectionChanged"></ComboBox> -->
+        <!--     <ComboBox Name="Reflector4_0" Margin="5, 5, 5, 5" FontSize="25"  Grid.Row="0" Grid.Column="4" VerticalContentAlignment="Center" HorizontalContentAlignment="Center" SelectionChanged="Reflector_SelectionChanged"></ComboBox> -->
+        <!--     <ComboBox Name="Reflector5_0" Margin="5, 5, 5, 5" FontSize="25"  Grid.Row="0" Grid.Column="5" VerticalContentAlignment="Center" HorizontalContentAlignment="Center" SelectionChanged="Reflector_SelectionChanged"></ComboBox> -->
+        <!--     <ComboBox Name="Reflector6_0" Margin="5, 5, 5, 5" FontSize="25"  Grid.Row="0" Grid.Column="6" VerticalContentAlignment="Center" HorizontalContentAlignment="Center" SelectionChanged="Reflector_SelectionChanged"></ComboBox> -->
+        <!--     <ComboBox Name="Reflector7_0" Margin="5, 5, 5, 5" FontSize="25"  Grid.Row="0" Grid.Column="7" VerticalContentAlignment="Center" HorizontalContentAlignment="Center" SelectionChanged="Reflector_SelectionChanged"></ComboBox> -->
+        <!--     <ComboBox Name="Reflector8_0" Margin="5, 5, 5, 5" FontSize="25"  Grid.Row="0" Grid.Column="8" VerticalContentAlignment="Center" HorizontalContentAlignment="Center" SelectionChanged="Reflector_SelectionChanged"></ComboBox> -->
+        <!--     <ComboBox Name="Reflector9_0" Margin="5, 5, 5, 5" FontSize="25"  Grid.Row="0" Grid.Column="9" VerticalContentAlignment="Center" HorizontalContentAlignment="Center" SelectionChanged="Reflector_SelectionChanged"></ComboBox> -->
+        <!--     <ComboBox Name="Reflector10_0" Margin="5, 5, 5, 5" FontSize="25"  Grid.Row="0" Grid.Column="10" VerticalContentAlignment="Center" HorizontalContentAlignment="Center" SelectionChanged="Reflector_SelectionChanged"></ComboBox> -->
+        <!--     <ComboBox Name="Reflector11_0" Margin="5, 5, 5, 5" FontSize="25"  Grid.Row="0" Grid.Column="11" VerticalContentAlignment="Center" HorizontalContentAlignment="Center" SelectionChanged="Reflector_SelectionChanged"></ComboBox> -->
+        <!--     <ComboBox Name="Reflector12_0" Margin="5, 5, 5, 5" FontSize="25"  Grid.Row="0" Grid.Column="12" VerticalContentAlignment="Center" HorizontalContentAlignment="Center" SelectionChanged="Reflector_SelectionChanged"></ComboBox> -->
+        <!-- -->
+        <!--     <ComboBox Name="Reflector0_1" Margin="5, 5, 5, 5" FontSize="25"  Grid.Row="1" Grid.Column="0" VerticalContentAlignment="Center" HorizontalContentAlignment="Center" SelectionChanged="Reflector_SelectionChanged"></ComboBox> -->
+        <!--     <ComboBox Name="Reflector1_1" Margin="5, 5, 5, 5" FontSize="25"  Grid.Row="1" Grid.Column="1" VerticalContentAlignment="Center" HorizontalContentAlignment="Center" SelectionChanged="Reflector_SelectionChanged"></ComboBox> -->
+        <!--     <ComboBox Name="Reflector2_1" Margin="5, 5, 5, 5" FontSize="25"  Grid.Row="1" Grid.Column="2" VerticalContentAlignment="Center" HorizontalContentAlignment="Center" SelectionChanged="Reflector_SelectionChanged"></ComboBox> -->
+        <!--     <ComboBox Name="Reflector3_1" Margin="5, 5, 5, 5" FontSize="25"  Grid.Row="1" Grid.Column="3" VerticalContentAlignment="Center" HorizontalContentAlignment="Center" SelectionChanged="Reflector_SelectionChanged"></ComboBox> -->
+        <!--     <ComboBox Name="Reflector4_1" Margin="5, 5, 5, 5" FontSize="25"  Grid.Row="1" Grid.Column="4" VerticalContentAlignment="Center" HorizontalContentAlignment="Center" SelectionChanged="Reflector_SelectionChanged"></ComboBox> -->
+        <!--     <ComboBox Name="Reflector5_1" Margin="5, 5, 5, 5" FontSize="25"  Grid.Row="1" Grid.Column="5" VerticalContentAlignment="Center" HorizontalContentAlignment="Center" SelectionChanged="Reflector_SelectionChanged"></ComboBox> -->
+        <!--     <ComboBox Name="Reflector6_1" Margin="5, 5, 5, 5" FontSize="25"  Grid.Row="1" Grid.Column="6" VerticalContentAlignment="Center" HorizontalContentAlignment="Center" SelectionChanged="Reflector_SelectionChanged"></ComboBox> -->
+        <!--     <ComboBox Name="Reflector7_1" Margin="5, 5, 5, 5" FontSize="25"  Grid.Row="1" Grid.Column="7" VerticalContentAlignment="Center" HorizontalContentAlignment="Center" SelectionChanged="Reflector_SelectionChanged"></ComboBox> -->
+        <!--     <ComboBox Name="Reflector8_1" Margin="5, 5, 5, 5" FontSize="25"  Grid.Row="1" Grid.Column="8" VerticalContentAlignment="Center" HorizontalContentAlignment="Center" SelectionChanged="Reflector_SelectionChanged"></ComboBox> -->
+        <!--     <ComboBox Name="Reflector9_1" Margin="5, 5, 5, 5" FontSize="25"  Grid.Row="1" Grid.Column="9" VerticalContentAlignment="Center" HorizontalContentAlignment="Center" SelectionChanged="Reflector_SelectionChanged"></ComboBox> -->
+        <!--     <ComboBox Name="Reflector10_1" Margin="5, 5, 5, 5" FontSize="25"  Grid.Row="1" Grid.Column="10" VerticalContentAlignment="Center" HorizontalContentAlignment="Center" SelectionChanged="Reflector_SelectionChanged"></ComboBox> -->
+        <!--     <ComboBox Name="Reflector11_1" Margin="5, 5, 5, 5" FontSize="25"  Grid.Row="1" Grid.Column="11" VerticalContentAlignment="Center" HorizontalContentAlignment="Center" SelectionChanged="Reflector_SelectionChanged"></ComboBox> -->
+        <!--     <ComboBox Name="Reflector12_1" Margin="5, 5, 5, 5" FontSize="25"  Grid.Row="1" Grid.Column="12" VerticalContentAlignment="Center" HorizontalContentAlignment="Center" SelectionChanged="Reflector_SelectionChanged"></ComboBox> -->
+        <!-- -->
+        <!-- </Grid> -->
+
+        <Border BorderBrush="Black" BorderThickness="0, 0, 0, 0" Grid.Row="2">
+            
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="32"></RowDefinition>
+                    <RowDefinition Height="*"></RowDefinition>
+                </Grid.RowDefinitions>
+                <TextBlock Grid.Row="0" FontFamily="Microsoft YaHei Bold" Margin="5, 0, 5, 0" FontSize="24" >Output</TextBlock>
+                
+                <Grid Grid.Row="1" Margin="5, 5, 5, 5">
+
+                    <Grid.RowDefinitions>
+                        <RowDefinition></RowDefinition>
+                        <RowDefinition></RowDefinition>
+                        <RowDefinition></RowDefinition>
+                    </Grid.RowDefinitions>
+
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition></ColumnDefinition>
+                        <ColumnDefinition></ColumnDefinition>
+                        <ColumnDefinition></ColumnDefinition>
+                        <ColumnDefinition></ColumnDefinition>
+                        <ColumnDefinition></ColumnDefinition>
+                        <ColumnDefinition></ColumnDefinition>
+                        <ColumnDefinition></ColumnDefinition>
+                        <ColumnDefinition></ColumnDefinition>
+                        <ColumnDefinition></ColumnDefinition>
+                        <ColumnDefinition></ColumnDefinition>
+                    </Grid.ColumnDefinitions>
+
+                    <TextBox Name="TextQ" Text="Q" FontWeight="Bold" FontSize="40" Grid.Row="0" Grid.Column="1" VerticalContentAlignment="Center" HorizontalContentAlignment="Center" IsReadOnly="True"></TextBox>
+                    <TextBox Name="TextW" Text="W" FontWeight="Bold" FontSize="40" Grid.Row="0" Grid.Column="2" VerticalContentAlignment="Center" HorizontalContentAlignment="Center" IsReadOnly="True"></TextBox>
+                    <TextBox Name="TextE" Text="E" FontWeight="Bold" FontSize="40" Grid.Row="0" Grid.Column="3" VerticalContentAlignment="Center" HorizontalContentAlignment="Center" IsReadOnly="True"></TextBox>
+                    <TextBox Name="TextR" Text="R" FontWeight="Bold" FontSize="40" Grid.Row="0" Grid.Column="4" VerticalContentAlignment="Center" HorizontalContentAlignment="Center" IsReadOnly="True"></TextBox>
+                    <TextBox Name="TextT" Text="T" FontWeight="Bold" FontSize="40" Grid.Row="0" Grid.Column="5" VerticalContentAlignment="Center" HorizontalContentAlignment="Center" IsReadOnly="True"></TextBox>
+                    <TextBox Name="TextY" Text="Y" FontWeight="Bold" FontSize="40" Grid.Row="0" Grid.Column="6" VerticalContentAlignment="Center" HorizontalContentAlignment="Center" IsReadOnly="True"></TextBox>
+                    <TextBox Name="TextU" Text="U" FontWeight="Bold" FontSize="40" Grid.Row="0" Grid.Column="7" VerticalContentAlignment="Center" HorizontalContentAlignment="Center" IsReadOnly="True"></TextBox>
+                    <TextBox Name="TextI" Text="I" FontWeight="Bold" FontSize="40" Grid.Row="0" Grid.Column="8" VerticalContentAlignment="Center" HorizontalContentAlignment="Center" IsReadOnly="True"></TextBox>
+                    <TextBox Name="TextA" Text="A" FontWeight="Bold" FontSize="40" Grid.Row="1" Grid.Column="0" VerticalContentAlignment="Center" HorizontalContentAlignment="Center" IsReadOnly="True"></TextBox>
+                    <TextBox Name="TextS" Text="S" FontWeight="Bold" FontSize="40" Grid.Row="1" Grid.Column="1" VerticalContentAlignment="Center" HorizontalContentAlignment="Center" IsReadOnly="True"></TextBox>
+                    <TextBox Name="TextD" Text="D" FontWeight="Bold" FontSize="40" Grid.Row="1" Grid.Column="2" VerticalContentAlignment="Center" HorizontalContentAlignment="Center" IsReadOnly="True"></TextBox>
+                    <TextBox Name="TextF" Text="F" FontWeight="Bold" FontSize="40" Grid.Row="1" Grid.Column="3" VerticalContentAlignment="Center" HorizontalContentAlignment="Center" IsReadOnly="True"></TextBox>
+                    <TextBox Name="TextG" Text="G" FontWeight="Bold" FontSize="40" Grid.Row="1" Grid.Column="4" VerticalContentAlignment="Center" HorizontalContentAlignment="Center" IsReadOnly="True"></TextBox>
+                    <TextBox Name="TextH" Text="H" FontWeight="Bold" FontSize="40" Grid.Row="1" Grid.Column="5" VerticalContentAlignment="Center" HorizontalContentAlignment="Center" IsReadOnly="True"></TextBox>
+                    <TextBox Name="TextJ" Text="J" FontWeight="Bold" FontSize="40" Grid.Row="1" Grid.Column="6" VerticalContentAlignment="Center" HorizontalContentAlignment="Center" IsReadOnly="True"></TextBox>
+                    <TextBox Name="TextK" Text="K" FontWeight="Bold" FontSize="40" Grid.Row="1" Grid.Column="7" VerticalContentAlignment="Center" HorizontalContentAlignment="Center" IsReadOnly="True"></TextBox>
+                    <TextBox Name="TextL" Text="L" FontWeight="Bold" FontSize="40" Grid.Row="1" Grid.Column="8" VerticalContentAlignment="Center" HorizontalContentAlignment="Center" IsReadOnly="True"></TextBox>
+                    <TextBox Name="TextO" Text="O" FontWeight="Bold" FontSize="40" Grid.Row="1" Grid.Column="9" VerticalContentAlignment="Center" HorizontalContentAlignment="Center" IsReadOnly="True"></TextBox>
+                    <TextBox Name="TextZ" Text="Z" FontWeight="Bold" FontSize="40" Grid.Row="2" Grid.Column="1" VerticalContentAlignment="Center" HorizontalContentAlignment="Center" IsReadOnly="True"></TextBox>
+                    <TextBox Name="TextX" Text="X" FontWeight="Bold" FontSize="40" Grid.Row="2" Grid.Column="2" VerticalContentAlignment="Center" HorizontalContentAlignment="Center" IsReadOnly="True"></TextBox>
+                    <TextBox Name="TextC" Text="C" FontWeight="Bold" FontSize="40" Grid.Row="2" Grid.Column="3" VerticalContentAlignment="Center" HorizontalContentAlignment="Center" IsReadOnly="True"></TextBox>
+                    <TextBox Name="TextV" Text="V" FontWeight="Bold" FontSize="40" Grid.Row="2" Grid.Column="4" VerticalContentAlignment="Center" HorizontalContentAlignment="Center" IsReadOnly="True"></TextBox>
+                    <TextBox Name="TextB" Text="B" FontWeight="Bold" FontSize="40" Grid.Row="2" Grid.Column="5" VerticalContentAlignment="Center" HorizontalContentAlignment="Center" IsReadOnly="True"></TextBox>
+                    <TextBox Name="TextN" Text="N" FontWeight="Bold" FontSize="40" Grid.Row="2" Grid.Column="6" VerticalContentAlignment="Center" HorizontalContentAlignment="Center" IsReadOnly="True"></TextBox>
+                    <TextBox Name="TextM" Text="M" FontWeight="Bold" FontSize="40" Grid.Row="2" Grid.Column="7" VerticalContentAlignment="Center" HorizontalContentAlignment="Center" IsReadOnly="True"></TextBox>
+                    <TextBox Name="TextP" Text="P" FontWeight="Bold" FontSize="40" Grid.Row="2" Grid.Column="8" VerticalContentAlignment="Center" HorizontalContentAlignment="Center" IsReadOnly="True"></TextBox>
+
+                </Grid>
+            </Grid>
+
+
+        </Border>
+
+        <Grid Grid.Row="3">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="32"></RowDefinition>
+                <RowDefinition Height="*"></RowDefinition>
+            </Grid.RowDefinitions>
+            <TextBlock Grid.Row="0" FontFamily="Microsoft YaHei Bold" Margin="5, 0, 5, 0" FontSize="24" >Input keyboard</TextBlock>
+
+            <Grid Grid.Row="1" Margin="5, 5, 5, 5">
+
+                <Grid.RowDefinitions>
+                    <RowDefinition></RowDefinition>
+                    <RowDefinition></RowDefinition>
+                    <RowDefinition></RowDefinition>
+                </Grid.RowDefinitions>
+
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition></ColumnDefinition>
+                    <ColumnDefinition></ColumnDefinition>
+                    <ColumnDefinition></ColumnDefinition>
+                    <ColumnDefinition></ColumnDefinition>
+                    <ColumnDefinition></ColumnDefinition>
+                    <ColumnDefinition></ColumnDefinition>
+                    <ColumnDefinition></ColumnDefinition>
+                    <ColumnDefinition></ColumnDefinition>
+                    <ColumnDefinition></ColumnDefinition>
+                    <ColumnDefinition></ColumnDefinition>
+                </Grid.ColumnDefinitions>
+
+                <Button Name="ButtonQ" Content="Q" FontFamily="Microsoft YaHei Bold" Background="White" FontSize="40" Grid.Row="0" Grid.Column="1" VerticalContentAlignment="Center" HorizontalContentAlignment="Center" Click="Button_Click"></Button>
+                <Button Name="ButtonW" Content="W" FontFamily="Microsoft YaHei Bold" Background="White" FontSize="40" Grid.Row="0" Grid.Column="2" VerticalContentAlignment="Center" HorizontalContentAlignment="Center" Click="Button_Click"></Button>
+                <Button Name="ButtonE" Content="E" FontFamily="Microsoft YaHei Bold" Background="White" FontSize="40" Grid.Row="0" Grid.Column="3" VerticalContentAlignment="Center" HorizontalContentAlignment="Center" Click="Button_Click"></Button>
+                <Button Name="ButtonR" Content="R" FontFamily="Microsoft YaHei Bold" Background="White" FontSize="40" Grid.Row="0" Grid.Column="4" VerticalContentAlignment="Center" HorizontalContentAlignment="Center" Click="Button_Click"></Button>
+                <Button Name="ButtonT" Content="T" FontFamily="Microsoft YaHei Bold" Background="White" FontSize="40" Grid.Row="0" Grid.Column="5" VerticalContentAlignment="Center" HorizontalContentAlignment="Center" Click="Button_Click"></Button>
+                <Button Name="ButtonY" Content="Y" FontFamily="Microsoft YaHei Bold" Background="White" FontSize="40" Grid.Row="0" Grid.Column="6" VerticalContentAlignment="Center" HorizontalContentAlignment="Center" Click="Button_Click"></Button>
+                <Button Name="ButtonU" Content="U" FontFamily="Microsoft YaHei Bold" Background="White" FontSize="40" Grid.Row="0" Grid.Column="7" VerticalContentAlignment="Center" HorizontalContentAlignment="Center" Click="Button_Click"></Button>
+                <Button Name="ButtonI" Content="I" FontFamily="Microsoft YaHei Bold" Background="White" FontSize="40" Grid.Row="0" Grid.Column="8" VerticalContentAlignment="Center" HorizontalContentAlignment="Center" Click="Button_Click"></Button>
+                <Button Name="ButtonA" Content="A" FontFamily="Microsoft YaHei Bold" Background="White" FontSize="40" Grid.Row="1" Grid.Column="0" VerticalContentAlignment="Center" HorizontalContentAlignment="Center" Click="Button_Click"></Button>
+                <Button Name="ButtonS" Content="S" FontFamily="Microsoft YaHei Bold" Background="White" FontSize="40" Grid.Row="1" Grid.Column="1" VerticalContentAlignment="Center" HorizontalContentAlignment="Center" Click="Button_Click"></Button>
+                <Button Name="ButtonD" Content="D" FontFamily="Microsoft YaHei Bold" Background="White" FontSize="40" Grid.Row="1" Grid.Column="2" VerticalContentAlignment="Center" HorizontalContentAlignment="Center" Click="Button_Click"></Button>
+                <Button Name="ButtonF" Content="F" FontFamily="Microsoft YaHei Bold" Background="White" FontSize="40" Grid.Row="1" Grid.Column="3" VerticalContentAlignment="Center" HorizontalContentAlignment="Center" Click="Button_Click"></Button>
+                <Button Name="ButtonG" Content="G" FontFamily="Microsoft YaHei Bold" Background="White" FontSize="40" Grid.Row="1" Grid.Column="4" VerticalContentAlignment="Center" HorizontalContentAlignment="Center" Click="Button_Click"></Button>
+                <Button Name="ButtonH" Content="H" FontFamily="Microsoft YaHei Bold" Background="White" FontSize="40" Grid.Row="1" Grid.Column="5" VerticalContentAlignment="Center" HorizontalContentAlignment="Center" Click="Button_Click"></Button>
+                <Button Name="ButtonJ" Content="J" FontFamily="Microsoft YaHei Bold" Background="White" FontSize="40" Grid.Row="1" Grid.Column="6" VerticalContentAlignment="Center" HorizontalContentAlignment="Center" Click="Button_Click"></Button>
+                <Button Name="ButtonK" Content="K" FontFamily="Microsoft YaHei Bold" Background="White" FontSize="40" Grid.Row="1" Grid.Column="7" VerticalContentAlignment="Center" HorizontalContentAlignment="Center" Click="Button_Click"></Button>
+                <Button Name="ButtonL" Content="L" FontFamily="Microsoft YaHei Bold" Background="White" FontSize="40" Grid.Row="1" Grid.Column="8" VerticalContentAlignment="Center" HorizontalContentAlignment="Center" Click="Button_Click"></Button>
+                <Button Name="ButtonO" Content="O" FontFamily="Microsoft YaHei Bold" Background="White" FontSize="40" Grid.Row="1" Grid.Column="9" VerticalContentAlignment="Center" HorizontalContentAlignment="Center" Click="Button_Click"></Button>
+                <Button Name="ButtonZ" Content="Z" FontFamily="Microsoft YaHei Bold" Background="White" FontSize="40" Grid.Row="2" Grid.Column="1" VerticalContentAlignment="Center" HorizontalContentAlignment="Center" Click="Button_Click"></Button>
+                <Button Name="ButtonX" Content="X" FontFamily="Microsoft YaHei Bold" Background="White" FontSize="40" Grid.Row="2" Grid.Column="2" VerticalContentAlignment="Center" HorizontalContentAlignment="Center" Click="Button_Click"></Button>
+                <Button Name="ButtonC" Content="C" FontFamily="Microsoft YaHei Bold" Background="White" FontSize="40" Grid.Row="2" Grid.Column="3" VerticalContentAlignment="Center" HorizontalContentAlignment="Center" Click="Button_Click"></Button>
+                <Button Name="ButtonV" Content="V" FontFamily="Microsoft YaHei Bold" Background="White" FontSize="40" Grid.Row="2" Grid.Column="4" VerticalContentAlignment="Center" HorizontalContentAlignment="Center" Click="Button_Click"></Button>
+                <Button Name="ButtonB" Content="B" FontFamily="Microsoft YaHei Bold" Background="White" FontSize="40" Grid.Row="2" Grid.Column="5" VerticalContentAlignment="Center" HorizontalContentAlignment="Center" Click="Button_Click"></Button>
+                <Button Name="ButtonN" Content="N" FontFamily="Microsoft YaHei Bold" Background="White" FontSize="40" Grid.Row="2" Grid.Column="6" VerticalContentAlignment="Center" HorizontalContentAlignment="Center" Click="Button_Click"></Button>
+                <Button Name="ButtonM" Content="M" FontFamily="Microsoft YaHei Bold" Background="White" FontSize="40" Grid.Row="2" Grid.Column="7" VerticalContentAlignment="Center" HorizontalContentAlignment="Center" Click="Button_Click"></Button>
+                <Button Name="ButtonP" Content="P" FontFamily="Microsoft YaHei Bold" Background="White" FontSize="40" Grid.Row="2" Grid.Column="8" VerticalContentAlignment="Center" HorizontalContentAlignment="Center" Click="Button_Click"></Button>
+
+            </Grid>
+        </Grid>
+
+    </Grid>
+</Window>
