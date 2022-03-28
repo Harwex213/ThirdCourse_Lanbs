@@ -8,8 +8,8 @@ namespace Lab02.Infrastructure.JSON.Repositories
 {
     public class JsonBaseRepository<T> : IBaseRepository<T> where T : BaseModel
     {
-        private ICollection<T> _collection;
-        private readonly IStorage _storage;
+        private readonly ICollection<T> _collection;
+        private readonly JsonStorage _storage;
 
         public JsonBaseRepository(JsonStorage storage)
         {
