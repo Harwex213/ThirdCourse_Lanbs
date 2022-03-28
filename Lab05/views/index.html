@@ -1,0 +1,99 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Шифрование перестановками</title>
+</head>
+<body>
+<script src='https://cdn.plot.ly/plotly-2.9.0.min.js'></script>
+<h1>Шифрование перестановками</h1>
+<form onsubmit="onFormSubmit(); return false;" style="display: flex; flex-direction: column;">
+    <p>Choose task:</p>
+    <div>
+        <input type="radio" id="task1"
+               name="task" value="task1" checked>
+        <label for="task1">Task 1</label>
+
+        <input type="radio" id="task2"
+               name="task" value="task2">
+        <label for="task2">Task 2</label>
+    </div>
+    <textarea style="margin: 15px 0" name="text" id="text"></textarea>
+    <button style="margin: 15px 0" type="submit">Submit</button>
+</form>
+<div id="encrypted"></div>
+<div style="margin-top: 5px" id="decrypted"></div>
+<div id='myDiv1'><!-- Plotly chart will be drawn inside this DIV --></div>
+<div id='myDiv2'><!-- Plotly chart will be drawn inside this DIV --></div>
+
+</div>
+<script>
+    const plotly = Plotly;
+
+    const getAxes = (data) => {
+        const x = data.chars;
+        for (let i = 0; i < x.length; i++) {
+            x[i] = x[i] + ", " + data.percentage[i];
+        }
+        const y = data.percentage.map(percent => {
+            if (percent === 0) {
+                return 0.0000001;
+            }
+            return percent;
+        });
+
+        return [x, y];
+    }
+    const onFormSubmit = async () => {
+        const messageToEncrypt = {
+            text: document.querySelector("#text").value,
+        }
+
+        const chosenTask = document.querySelector("#task1").checked ?
+            document.querySelector("#task1").value : document.querySelector("#task2").value;
+
+        const encryptResponse = await fetch("/encrypt/" + chosenTask, {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify(messageToEncrypt)
+        });
+        const encrypted = await encryptResponse.json();
+        document.querySelector("#encrypted").innerHTML = encrypted.data;
+
+        const decryptResponse = await fetch("/decrypt/" + chosenTask, {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify({
+                text: encrypted.data
+            })
+        });
+        const decrypted = await decryptResponse.json();
+        document.querySelector("#decrypted").innerHTML = decrypted.data;
+
+        const [encryptX, encryptY] = getAxes(encrypted);
+        const [decryptX, decryptY] = getAxes(decrypted);
+        console.log(encryptX);
+        console.log(encryptY);
+        plotly.newPlot("myDiv1", [{
+            x: encryptX,
+            y: encryptY,
+            histfunc: "sum",
+            type: "histogram",
+        }])
+        plotly.newPlot("myDiv2", [{
+            x: decryptX,
+            y: decryptY,
+            histfunc: "sum",
+            type: "histogram",
+        }])
+    }
+</script>
+</body>
+</html>
