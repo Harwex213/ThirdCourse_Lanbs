@@ -133,6 +133,7 @@
         <Compile Include="App_Start\FilterConfig.cs" />
         <Compile Include="App_Start\RouteConfig.cs" />
         <Compile Include="Controllers\DictController.cs" />
+        <Compile Include="Controllers\ErrorController.cs" />
         <Compile Include="DTOs\Dict\AddDto.cs" />
         <Compile Include="DTOs\Dict\DeleteDto.cs" />
         <Compile Include="DTOs\Dict\RecordDto.cs" />
@@ -162,6 +163,7 @@
         <Content Include="Views\Dict\Delete.cshtml" />
         <Content Include="Views\Dict\Index.cshtml" />
         <Content Include="Views\Dict\Update.cshtml" />
+        <Content Include="Views\Error\NotFound.cshtml" />
         <Content Include="Views\Shared\Record.cshtml" />
         <Content Include="Views\Shared\_Layout.cshtml" />
         <Content Include="Web.config" />
