@@ -1,9 +1,13 @@
 const express = require("express");
 const bodyParser = require("body-parser");
 const cookieParser = require("cookie-parser");
+const authMiddleware = require("../middleware/authMiddleware");
+const authorizationMiddleware = require("../middleware/authorizationMiddleware");
 const formsAuthController = require("../controllers/formsAuthController");
 const tokensAuthController = require("../controllers/tokensAuthController");
-const authMiddleware = require("../middleware/authMiddleware");
+const abilityController = require("../controllers/abilityController");
+const usersController = require("../controllers/usersController");
+const reposController = require("../controllers/reposController");
 
 const app = express();
 
@@ -16,6 +20,9 @@ if (process.argv[2] === "tokens") {
     app.use(cookieParser("cookie_key"));
     
     app.use("/auth/", authMiddleware, tokensAuthController);
+    app.use("/api/ability", authMiddleware, authorizationMiddleware, abilityController);
+    app.use("/api/users", authMiddleware, authorizationMiddleware, usersController);
+    app.use("/api/repos", authMiddleware, authorizationMiddleware, reposController);
 }
 else {
     const passport = require("../passport/passport");

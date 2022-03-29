@@ -28,8 +28,25 @@ const createUser = async ({ username, password, email }) => {
     })
 }
 
+const getUserById = async ({ id }) => {
+    return await sequelize.model("users").findOne({
+        where: {
+            id: id
+        },
+        raw: true
+    })
+}
+
+const getAllUsers = async () => {
+    return await sequelize.model("users").findAll({
+        raw: true
+    })
+}
+
 module.exports = {
     getUserByUsername,
     checkUserPassword,
-    createUser
+    createUser,
+    getUserById,
+    getAllUsers,
 }
