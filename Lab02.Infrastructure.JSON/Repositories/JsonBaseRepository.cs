@@ -8,53 +8,53 @@ namespace Lab02.Infrastructure.JSON.Repositories
 {
     public class JsonBaseRepository<T> : IBaseRepository<T> where T : BaseModel
     {
-        private readonly ICollection<T> _collection;
-        private readonly JsonStorage _storage;
+        protected readonly ICollection<T> Collection;
+        protected readonly JsonStorage Storage;
 
         public JsonBaseRepository(JsonStorage storage)
         {
-            _storage = storage;
-            _collection = storage.GetCollection<T>();
+            Storage = storage;
+            Collection = storage.GetCollection<T>();
         }
         
         public ICollection<T> GetAll()
         {
-            return _collection;
+            return Collection;
         }
 
         public T Find(int id)
         {
-            return _collection.FirstOrDefault(item => item.Id == id);
+            return Collection.FirstOrDefault(item => item.Id == id);
         }
 
         public void Create(T entity)
         {
-            entity.Id = _collection.Count == 0 ? 0 : _collection.Max(item => item.Id) + 1;
-            _collection.Add(entity);
+            entity.Id = Collection.Count == 0 ? 0 : Collection.Max(item => item.Id) + 1;
+            Collection.Add(entity);
         }
 
         public void Update(T entity)
         {
-            var entityToUpdate = _collection.FirstOrDefault(item => item.Id == entity.Id);
+            var entityToUpdate = Collection.FirstOrDefault(item => item.Id == entity.Id);
             if (entityToUpdate != null)
             {
-                _collection.Remove(entityToUpdate);
-                _collection.Add(entity);
+                Collection.Remove(entityToUpdate);
+                Collection.Add(entity);
             }
         }
 
         public void Delete(T entity)
         {
-            var entityToDelete = _collection.FirstOrDefault(item => item.Id == entity.Id);
+            var entityToDelete = Collection.FirstOrDefault(item => item.Id == entity.Id);
             if (entityToDelete != null)
             {
-                _collection.Remove(entityToDelete);
+                Collection.Remove(entityToDelete);
             }
         }
 
         public async Task SaveAsync()
         {
-            await _storage.SaveChangesAsync();
+            await Storage.SaveChangesAsync();
         }
     }
 }

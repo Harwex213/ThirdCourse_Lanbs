@@ -10,56 +10,53 @@ namespace Lab02.Infrastructure.EF.Repositories
 {
     public class EfBaseRepository<TEntity, TModel> : IBaseRepository<TModel> 
         where TModel : BaseModel 
-        where TEntity : class
+        where TEntity : BaseEntity
     {
-        private readonly DbSet<TEntity> _dbSet;
-        private readonly AppDbContext _dbContext;
-        private readonly IMapper<TEntity, TModel> _mapper;
+        protected readonly DbSet<TEntity> DbSet;
+        protected readonly AppDbContext DbContext;
+        protected readonly IMapper<TEntity, TModel> Mapper;
         
         public EfBaseRepository(AppDbContext dbContext, IMapper<TEntity, TModel> mapper)
         {
-            _dbContext = dbContext;
-            _mapper = mapper;
-            _dbSet = dbContext.Set<TEntity>();
+            DbContext = dbContext;
+            Mapper = mapper;
+            DbSet = dbContext.Set<TEntity>();
         }
         
         public ICollection<TModel> GetAll()
         {
-            return _mapper.MapAll(_dbSet.ToList());
+            return Mapper.MapAll(DbSet.ToList());
         }
 
         public TModel Find(int id)
         {
-            return _mapper.Map(_dbSet.Find(id));
+            return Mapper.Map(DbSet.Find(id));
         }
 
         public void Create(TModel model)
         {
-            _dbSet.Add(_mapper.Map(model));
+            DbSet.Add(Mapper.Map(model));
         }
 
         public void Update(TModel model)
         {
-            var entity = _mapper.Map(model);
-            var entityToUpdate = _dbSet.Find(model.Id);
-            if (entityToUpdate != null)
-            {
-                entityToUpdate = entity;
-            }
+            var entityToUpdate = DbSet.FirstOrDefault(entity => entity.Id == model.Id);
+
+            entityToUpdate?.Clone(Mapper.Map(model));
         }
 
         public void Delete(TModel model)
         {
-            var entityToDelete = _dbSet.Find(model.Id);
+            var entityToDelete = DbSet.Find(model.Id);
             if (entityToDelete != null)
             {
-                _dbSet.Remove(entityToDelete);
+                DbSet.Remove(entityToDelete);
             }
         }
 
         public async Task SaveAsync()
         {
-            await _dbContext.SaveChangesAsync();
+            await DbContext.SaveChangesAsync();
         }
     }
 }

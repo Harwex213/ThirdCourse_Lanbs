@@ -8,20 +8,25 @@ using Lab02.Infrastructure.EF.Repositories;
 namespace Lab02.Infrastructure.EF.Entities
 {
     [Table("Operator")]
-    public class OperatorEntity
+    public class OperatorEntity : BaseEntity
     {
         public OperatorEntity()
         {
             Records = new List<RecordEntity>();
         }
-        
-        [Key]
-        public int Id { get; set; }
-        
+
         [Required]
         public int Code { get; set; }
 
         public virtual IEnumerable<RecordEntity> Records { get; set; }
+        
+        public override void Clone(BaseEntity @from)
+        {
+            if (@from is OperatorEntity operatorFrom)
+            {
+                Code = operatorFrom.Code;
+            }
+        }
     }
     
     public class OperatorEntityMapper : IMapper<OperatorEntity, Operator>

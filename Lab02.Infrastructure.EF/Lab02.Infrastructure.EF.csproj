@@ -49,6 +49,7 @@
     </ItemGroup>
     <ItemGroup>
         <Compile Include="AppDbContext.cs" />
+        <Compile Include="Entities\BaseEntity.cs" />
         <Compile Include="Entities\OperatorEntity.cs" />
         <Compile Include="Entities\RecordEntity.cs" />
         <Compile Include="Properties\AssemblyInfo.cs" />

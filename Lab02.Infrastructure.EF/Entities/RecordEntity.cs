@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
@@ -8,11 +9,8 @@ using Lab02.Infrastructure.EF.Repositories;
 namespace Lab02.Infrastructure.EF.Entities
 {
     [Table("Record")]
-    public class RecordEntity
+    public class RecordEntity : BaseEntity
     {
-        [Key]
-        public int Id { get; set; }
-        
         [Required]
         public int OperatorCode { get; set; }
         
@@ -24,6 +22,16 @@ namespace Lab02.Infrastructure.EF.Entities
         
         [ForeignKey("OperatorCode")]
         public virtual OperatorEntity Operator { get; set; }
+
+        public override void Clone(BaseEntity @from)
+        {
+            if (@from is RecordEntity recordFrom)
+            {
+                Number = recordFrom.Number;
+                OwnerName = recordFrom.OwnerName;
+                OperatorCode = recordFrom.OperatorCode;
+            }
+        }
     }
     
     public class RecordEntityMapper : IMapper<RecordEntity, Record>
@@ -48,11 +56,7 @@ namespace Lab02.Infrastructure.EF.Entities
             return new RecordEntity
             {
                 Id = model.Id,
-                Operator = new OperatorEntity
-                {
-                    Id = model.Operator.Id,
-                    Code = model.Operator.Code
-                },
+                OperatorCode = model.Operator.Id,
                 OwnerName = model.OwnerName,
                 Number = model.Number
             };

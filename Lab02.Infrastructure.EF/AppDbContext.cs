@@ -30,14 +30,12 @@ namespace Lab02.Infrastructure.EF
     
     public class AppDbContext : DbContext
     {
-        private const string ConnectionString = "Server=.;Database=AspLab03;Trusted_Connection=True;";
-        
         public DbSet<OperatorEntity> Operators { get; set; }
         public DbSet<RecordEntity> Records { get; set; }
         
-        public AppDbContext() : base(ConnectionString)
+        public AppDbContext() : base("DictionaryDb")
         {
-            Database.SetInitializer(new AppDbContextInitializer());
+            // Database.SetInitializer(new AppDbContextInitializer());
         }
     }
 }

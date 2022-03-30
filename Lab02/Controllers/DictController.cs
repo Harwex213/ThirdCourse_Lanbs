@@ -20,7 +20,7 @@ namespace Lab02.Controllers
         
         public ActionResult Index()
         {
-            return View(_recordRepository.GetAll());
+            return View(_recordRepository.GetAllSorted());
         }
         
         public ActionResult Add()
@@ -39,7 +39,7 @@ namespace Lab02.Controllers
             _recordRepository.Create(new Record
             {
                 OwnerName = addDto.Name,
-                Operator = new Operator { Code = addDto.Code },
+                Operator = _operatorRepository.GetByCode(addDto.Code),
                 Number = addDto.Number
             });
             await _recordRepository.SaveAsync();
@@ -70,7 +70,7 @@ namespace Lab02.Controllers
             {
                 Id = updateDto.Id,
                 OwnerName = updateDto.Name,
-                Operator = new Operator { Code = updateDto.Code },
+                Operator = _operatorRepository.GetByCode(updateDto.Code),
                 Number = updateDto.Number
             });
             await _recordRepository.SaveAsync();
