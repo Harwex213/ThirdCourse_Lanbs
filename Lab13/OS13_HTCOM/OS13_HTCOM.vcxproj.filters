@@ -31,6 +31,9 @@
     <Filter Include="Исходные файлы\Ole32">
       <UniqueIdentifier>{39000476-b7a1-4d07-852f-105410970657}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Файлы заголовков\Components\Interfaces">
+      <UniqueIdentifier>{64482d6a-7820-458f-a18c-4044a27ee199}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="framework.h">
@@ -68,6 +71,24 @@
     </ClInclude>
     <ClInclude Include="ISnap.h">
       <Filter>Файлы заголовков\Interfaces</Filter>
+    </ClInclude>
+    <ClInclude Include="ICreateComponent.h">
+      <Filter>Файлы заголовков\Components\Interfaces</Filter>
+    </ClInclude>
+    <ClInclude Include="IStartComponent.h">
+      <Filter>Файлы заголовков\Components\Interfaces</Filter>
+    </ClInclude>
+    <ClInclude Include="IClientComponent.h">
+      <Filter>Файлы заголовков\Components\Interfaces</Filter>
+    </ClInclude>
+    <ClInclude Include="ClientComponent.h">
+      <Filter>Файлы заголовков\Components</Filter>
+    </ClInclude>
+    <ClInclude Include="CreateComponent.h">
+      <Filter>Файлы заголовков\Components</Filter>
+    </ClInclude>
+    <ClInclude Include="StartComponent.h">
+      <Filter>Файлы заголовков\Components</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

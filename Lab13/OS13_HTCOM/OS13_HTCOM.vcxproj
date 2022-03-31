@@ -157,17 +157,23 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="CFactory.h" />
+    <ClInclude Include="ClientComponent.h" />
     <ClInclude Include="ComApi.h" />
+    <ClInclude Include="CreateComponent.h" />
     <ClInclude Include="framework.h" />
+    <ClInclude Include="IClientComponent.h" />
     <ClInclude Include="ICloseStorage.h" />
+    <ClInclude Include="ICreateComponent.h" />
     <ClInclude Include="ICreateStorage.h" />
     <ClInclude Include="ICrud.h" />
     <ClInclude Include="ILoadStorage.h" />
     <ClInclude Include="IOpenStorage.h" />
     <ClInclude Include="ISnap.h" />
+    <ClInclude Include="IStartComponent.h" />
     <ClInclude Include="Logger.h" />
     <ClInclude Include="pch.h" />
     <ClInclude Include="SelfRegistration.h" />
+    <ClInclude Include="StartComponent.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="CFactory.cpp" />
