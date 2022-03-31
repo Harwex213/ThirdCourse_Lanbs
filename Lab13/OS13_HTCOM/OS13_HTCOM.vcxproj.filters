@@ -1,0 +1,95 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="Исходные файлы">
+      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
+      <Extensions>cpp;c;cc;cxx;c++;cppm;ixx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
+    </Filter>
+    <Filter Include="Файлы заголовков">
+      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
+      <Extensions>h;hh;hpp;hxx;h++;hm;inl;inc;ipp;xsd</Extensions>
+    </Filter>
+    <Filter Include="Файлы ресурсов">
+      <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
+      <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
+    </Filter>
+    <Filter Include="Файлы заголовков\Components">
+      <UniqueIdentifier>{e414d1e7-ec2d-40ea-b9a5-2fdd1e51302c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Файлы заголовков\Config">
+      <UniqueIdentifier>{23256ef1-61cc-4744-8301-b7f62e5f95be}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Файлы заголовков\Interfaces">
+      <UniqueIdentifier>{52ca430c-0712-4901-9774-950ac684fbf0}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Файлы заголовков\Ole32">
+      <UniqueIdentifier>{479049ae-cf1e-4f7e-8b58-76fe0311d6a1}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Исходные файлы\Config">
+      <UniqueIdentifier>{9aa8d154-5082-41df-a440-2cea3c44dfe3}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Исходные файлы\Ole32">
+      <UniqueIdentifier>{39000476-b7a1-4d07-852f-105410970657}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="framework.h">
+      <Filter>Файлы заголовков\Config</Filter>
+    </ClInclude>
+    <ClInclude Include="pch.h">
+      <Filter>Файлы заголовков\Config</Filter>
+    </ClInclude>
+    <ClInclude Include="CFactory.h">
+      <Filter>Файлы заголовков\Ole32</Filter>
+    </ClInclude>
+    <ClInclude Include="SelfRegistration.h">
+      <Filter>Файлы заголовков\Ole32</Filter>
+    </ClInclude>
+    <ClInclude Include="ComApi.h">
+      <Filter>Файлы заголовков\Ole32</Filter>
+    </ClInclude>
+    <ClInclude Include="Logger.h">
+      <Filter>Файлы заголовков\Config</Filter>
+    </ClInclude>
+    <ClInclude Include="ICrud.h">
+      <Filter>Файлы заголовков\Interfaces</Filter>
+    </ClInclude>
+    <ClInclude Include="ICloseStorage.h">
+      <Filter>Файлы заголовков\Interfaces</Filter>
+    </ClInclude>
+    <ClInclude Include="ICreateStorage.h">
+      <Filter>Файлы заголовков\Interfaces</Filter>
+    </ClInclude>
+    <ClInclude Include="ILoadStorage.h">
+      <Filter>Файлы заголовков\Interfaces</Filter>
+    </ClInclude>
+    <ClInclude Include="IOpenStorage.h">
+      <Filter>Файлы заголовков\Interfaces</Filter>
+    </ClInclude>
+    <ClInclude Include="ISnap.h">
+      <Filter>Файлы заголовков\Interfaces</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="dllmain.cpp">
+      <Filter>Исходные файлы</Filter>
+    </ClCompile>
+    <ClCompile Include="pch.cpp">
+      <Filter>Исходные файлы\Config</Filter>
+    </ClCompile>
+    <ClCompile Include="CFactory.cpp">
+      <Filter>Исходные файлы\Ole32</Filter>
+    </ClCompile>
+    <ClCompile Include="ComApi.cpp">
+      <Filter>Исходные файлы\Ole32</Filter>
+    </ClCompile>
+    <ClCompile Include="SelfRegistration.cpp">
+      <Filter>Исходные файлы\Ole32</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="OS13_HTCOM.def">
+      <Filter>Исходные файлы</Filter>
+    </None>
+  </ItemGroup>
+</Project>
