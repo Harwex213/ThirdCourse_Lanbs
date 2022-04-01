@@ -1,63 +1,97 @@
 #include "pch.h"
 #include "SelfRegistration.h"
 #include "Logger.h"
+#include "ClientComponent.h"
+#include "CreateComponent.h"
+#include "StartComponent.h"
+
+// TODO: Array of components info: clsid, fname, vindx, pgid
 
 STDAPI DllRegisterServer()
 {
 	HRESULT hResult = NULL;
 	logger << "DllRegisterServer: " << "Start" << std::endl;
 
-	// TODO: Register all components
-	// 
-	//hResult = RegisterServer(
-	//	g_hModule,
-	//	IID_C_OS12,
-	//	FNAME,
-	//	VINDX,
-	//	PGID
-	//);
-	//if (FAILED(hResult))
-	//{
-	//	LOG("LOGCOM: ", "DllRegisterServer error");
-	//	return hResult;
-	//}
-	//hResult = RegisterServer(
-	//	g_hModule,
-	//	IID_C_Test,
-	//	TEST_FNAME,
-	//	TEST_VINDX,
-	//	TEST_PGID
-	//);
+	// TODO: Register through iteration over array
+	hResult = RegisterServer(
+		g_hModule,
+		CLSID_CreateComponent,
+		FNAME_CreateComponent,
+		VINDX_CreateComponent,
+		PGID_CreateComponent
+	);
+	if (FAILED(hResult))
+	{
+		logger << "DllRegisterServer: CreateComponent registration failed. HResult - " << hResult << std::endl;
+		return hResult;
+	}
+	hResult = RegisterServer(
+		g_hModule,
+		CLSID_ClientComponent,
+		FNAME_ClientComponent,
+		VINDX_ClientComponent,
+		PGID_ClientComponent
+	);
+	if (FAILED(hResult))
+	{
+		logger << "DllRegisterServer: ClientComponent registration failed. HResult - " << hResult << std::endl;
+		return hResult;
+	}
+	hResult = RegisterServer(
+		g_hModule,
+		CLSID_StartComponent,
+		FNAME_StartComponent,
+		VINDX_StartComponent,
+		 PGID_StartComponent
+	);
+	if (FAILED(hResult))
+	{
+		logger << "DllRegisterServer: StartComponent registration failed. HResult - " << hResult << std::endl;
+		return hResult;
+	}
 
-	logger << "DllRegisterServer: Finished. HResult: " << hResult << std::endl;
+	logger << "DllRegisterServer: Success" << std::endl;
 	return hResult;
 }
 
-// TODO: Unregister all components
 STDAPI DllUnregisterServer()
 {
 	HRESULT hResult = NULL;
 	logger << "DllUnregisterServer: " << "Start" << std::endl;
 
-	// TODO: Unregister all components
-	// 
-	//hResult = UnregisterServer(
-	//	IID_C_OS12,
-	//	VINDX,
-	//	PGID
-	//);
-	//if (FAILED(hResult))
-	//{
-	//	LOG("LOGCOM: ", "DllRegisterServer error");
-	//	return hResult;
-	//}
-	//hResult = UnregisterServer(
-	//	IID_C_Test,
-	//	TEST_VINDX,
-	//	TEST_PGID
-	//);
+	// TODO: Unregister through iteration over array
+	hResult = UnregisterServer(
+		CLSID_CreateComponent,
+		VINDX_CreateComponent,
+		PGID_CreateComponent
+	);
+	if (FAILED(hResult))
+	{
+		logger << "DllUnregisterServer: CreateComponent deregistration failed. HResult - " << hResult << std::endl;
+		return hResult;
+	}
+	hResult = UnregisterServer(
+		CLSID_StartComponent,
+		VINDX_StartComponent,
+		 PGID_StartComponent
+	);
+	if (FAILED(hResult))
+	{
+		logger << "DllUnregisterServer: StartComponent deregistration failed. HResult - " << hResult << std::endl;
+		return hResult;
+	}
+	hResult = UnregisterServer(
+		CLSID_ClientComponent,
+		VINDX_ClientComponent,
+		 PGID_ClientComponent
+	);
+	if (FAILED(hResult))
+	{
+		logger << "DllUnregisterServer: ClientComponent deregistration failed. HResult - " << hResult << std::endl;
+		return hResult;
+	}
 
-	logger << "DllUnregisterServer: Finished. HResult: " << hResult << std::endl;
+	logger << "DllUnregisterServer: Success" << std::endl;
 	return hResult;
 }
 

@@ -1,6 +1,9 @@
 #include "pch.h"
 #include "CFactory.h"
 #include "Logger.h"
+#include "ClientComponent.h"
+#include "CreateComponent.h"
+#include "StartComponent.h"
 
 struct GUIDComparer
 {
@@ -10,10 +13,10 @@ struct GUIDComparer
 	}
 };
 
-// TODO: Fill CLSID of Components
-std::map<GUID, CreateInstanceFunc, GUIDComparer> slcIdTable = {
-	//{ IID_C_OS12, reinterpret_cast<CreateInstanceFunc>(C_OS12_CreateInstance) },
-	//{ IID_C_Test, reinterpret_cast<CreateInstanceFunc>(C_Test_CreateInstance) }
+std::map<GUID, CreateInstanceFunc, GUIDComparer> clsIdTable = {
+	{ CLSID_CreateComponent, reinterpret_cast<CreateInstanceFunc>(CreateComponentCreateInstance) },
+	{ CLSID_ClientComponent, reinterpret_cast<CreateInstanceFunc>(ClientComponentCreateInstance) },
+	{ CLSID_StartComponent, reinterpret_cast<CreateInstanceFunc>(StartComponentCreateInstance) }
 };
 
 STDAPI DllCanUnloadNow()
@@ -32,8 +35,8 @@ STDAPI DllGetClassObject(const CLSID& clsid, const IID& iid, void** ppv)
 {
 	logger << "DllGetClassObject: " << "Call" << std::endl;
 
-	std::map<GUID, CreateInstanceFunc>::iterator it = slcIdTable.find(clsid);
-	if (it == slcIdTable.end())
+	std::map<GUID, CreateInstanceFunc>::iterator it = clsIdTable.find(clsid);
+	if (it == clsIdTable.end())
 	{
 		logger << "DllGetClassObject: " << "CLASS_E_CLASSNOTAVAILABLE" << std::endl;
 		return CLASS_E_CLASSNOTAVAILABLE;

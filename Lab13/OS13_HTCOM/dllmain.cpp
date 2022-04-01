@@ -14,6 +14,7 @@ BOOL APIENTRY DllMain( HMODULE hModule,
     case DLL_PROCESS_ATTACH:
         g_hModule = hModule;
 
+        // TODO: how to set valid logger name or get it from 
         logger.open("StorageLog.txt", std::fstream::out);
         logger << "DllMain: " << "DLL_PROCESS_ATTACH" << std::endl;
         break;
