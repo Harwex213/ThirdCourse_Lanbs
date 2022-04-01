@@ -3,6 +3,11 @@
 #include "SharedMemory.h"
 #include "StorageConfig.h"
 #include "Element.h"
+#include "HashTableService.h"
+
+#define ELEMENT_NOUT_FOUND_ERROR "Element not found in storage."
+#define STORAGE_IS_FULL_ERROR "Storage is full already."
+#define ELEMENT_KEY_ALREADY_EXIST "Element with such key already exist in storage."
 
 struct StorageService
 {
@@ -10,6 +15,8 @@ public: // Constructors
 	StorageService();
 
 private: // Fields
+	HashTableService hashTableService;
+
 	LPVOID storageMemoryStart;
 	StorageConfig* storageConfig;
 	SharedMemory* sharedMemory;
@@ -29,6 +36,7 @@ public: // Public methods
 	void InitializeStorage(LPVOID storageMemoryStart, const StorageConfig& storageConfig);
 	void ReceiveStorage(LPVOID storageMemoryStart);
 	void ClearStorage();
+	Element* getElement(int index);
 	Element* findElement(const char* key, int keyLength);
 	void insertElement(const Element* element);
 	void updateElement(const Element* element);
