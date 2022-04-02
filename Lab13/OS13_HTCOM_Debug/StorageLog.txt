@@ -20,4 +20,11 @@ CFactory: Destructor call
 CreateComponent: AddRef - 2
 CreateComponent: QueryInterface - S_OK
 CreateComponent: Release - 1
+CreateStorage: call
+CreateStorage: mutex created
+CreateStorage: mutex taked
+CreateStorage: storage file created
+CreateStorage: storage initialized
+CreateStorage: storage file closed
+CreateStorage: mutex release
 DllMain: DLL_PROCESS_DETACH

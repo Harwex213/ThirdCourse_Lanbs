@@ -4,6 +4,23 @@
 HMODULE g_hModule = NULL;
 std::fstream logger;
 
+bool initLogger()
+{
+    HANDLE hFileMapping = OpenFileMappingA(FILE_MAP_ALL_ACCESS, FALSE, std::to_string(GetCurrentProcessId()).c_str());
+    if (hFileMapping == NULL)
+    {
+        return false;
+    }
+    LPVOID addr = MapViewOfFile(hFileMapping, FILE_MAP_ALL_ACCESS, 0, 0, 0);
+    if (addr == NULL)
+    {
+        return false;
+    }
+
+    logger.open((char*)addr, std::fstream::out);
+    return true;
+}
+
 BOOL APIENTRY DllMain( HMODULE hModule,
                        DWORD  ul_reason_for_call,
                        LPVOID lpReserved
@@ -13,9 +30,11 @@ BOOL APIENTRY DllMain( HMODULE hModule,
     {
     case DLL_PROCESS_ATTACH:
         g_hModule = hModule;
+        if (initLogger() == false)
+        {
+            logger.open("StorageLog.txt", std::fstream::out);
+        }
 
-        // TODO: how to set valid logger name or get it from 
-        logger.open("StorageLog.txt", std::fstream::out);
         logger << "DllMain: " << "DLL_PROCESS_ATTACH" << std::endl;
         break;
     case DLL_THREAD_ATTACH:
