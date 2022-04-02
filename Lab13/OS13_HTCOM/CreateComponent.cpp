@@ -71,8 +71,8 @@ HRESULT __stdcall CreateComponent::CreateStorage(int capacity, int secSnapshotIn
 	logger << "CreateStorage: call" << std::endl;
 
 	std::string mutexName = filePath; mutexName += "-mutex";
-	HANDLE hMutex = CreateMutexA(NULL, FALSE, mutexName.c_str());
-	if (hMutex == NULL)
+	HANDLE hStorageMutex = CreateMutexA(NULL, FALSE, mutexName.c_str());
+	if (hStorageMutex == NULL)
 	{
 		setLastError(CREATE_MUTEX_ERROR);
 		logger << "CreateStorage: " << CREATE_MUTEX_ERROR << std::endl;
@@ -80,7 +80,7 @@ HRESULT __stdcall CreateComponent::CreateStorage(int capacity, int secSnapshotIn
 	}
 	logger << "CreateStorage: mutex created" << std::endl;
 
-	WaitForSingleObject(hMutex, INFINITE);
+	WaitForSingleObject(hStorageMutex, INFINITE);
 	logger << "CreateStorage: mutex taked" << std::endl;
 
 	StorageConfig storageConfig(capacity, secSnapshotInterval, maxKeyLength, maxPayloadLength);
@@ -102,14 +102,14 @@ HRESULT __stdcall CreateComponent::CreateStorage(int capacity, int secSnapshotIn
 	{
 		setLastError(error.what());
 		this->storageFileService.ForceCloseStorage(addr, storageConfig.getStorageMemorySize());
-		ReleaseMutex(hMutex);
-		CloseHandle(hMutex);
+		ReleaseMutex(hStorageMutex);
+		CloseHandle(hStorageMutex);
 		logger << "CreateStorage: error - " << getLastError() << std::endl;
 		return E_FAIL;
 	}
 
-	ReleaseMutex(hMutex);
-	CloseHandle(hMutex);
+	ReleaseMutex(hStorageMutex);
+	CloseHandle(hStorageMutex);
 	logger << "CreateStorage: mutex release" << std::endl;
 	return S_OK;
 }
