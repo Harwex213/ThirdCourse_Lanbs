@@ -147,6 +147,9 @@
     <ClInclude Include="IntervalSnapshotsTask.h">
       <Filter>Файлы заголовков\Tasks</Filter>
     </ClInclude>
+    <ClInclude Include="IErrorHandler.h">
+      <Filter>Файлы заголовков\Interfaces</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="dllmain.cpp">

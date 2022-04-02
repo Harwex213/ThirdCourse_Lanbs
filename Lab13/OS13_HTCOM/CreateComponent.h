@@ -25,12 +25,21 @@ public:
 	virtual ULONG STDMETHODCALLTYPE Release();
 
 	virtual HRESULT STDMETHODCALLTYPE CreateStorage(int capacity, int secSnapshotInterval, int   maxKeyLength, int   maxPayloadLength, const char fileName[FILEPATH_SIZE]);
+	virtual HRESULT STDMETHODCALLTYPE GetLastError(char* error);
 
-private:
+
+private: // Fields
 	ULONG m_cRef;
 
 	StorageFileService storageFileService;
 	StorageService storageService;
+
+	char lastError[256];
+
+public: // Getters & Setters
+	void setLastError(const char* error);
+	char* getLastError();
+
 };
 
 HRESULT CreateComponentCreateInstance(REFIID riid, void** ppv);

@@ -7,6 +7,8 @@ CreateComponent::CreateComponent() : m_cRef(1)
 {
 	InterlockedIncrement(&currentComponentsAmount);
 
+	*this->lastError = '\0';
+
 	logger << "CreateComponent: Constructor call. currentComponentsAmount - " << currentComponentsAmount << std::endl;
 }
 
@@ -54,17 +56,32 @@ ULONG __stdcall CreateComponent::Release()
 	return m_cRef;
 }
 
+void CreateComponent::setLastError(const char* error)
+{
+	strcpy_s(this->lastError, strlen(error) + 1, error);
+}
+
+char* CreateComponent::getLastError()
+{
+	return this->lastError;
+}
+
 HRESULT __stdcall CreateComponent::CreateStorage(int capacity, int secSnapshotInterval, int maxKeyLength, int maxPayloadLength, const char filePath[FILEPATH_SIZE])
 {
+	logger << "CreateStorage: call" << std::endl;
+
 	std::string mutexName = filePath; mutexName += "-mutex";
 	HANDLE hMutex = CreateMutexA(NULL, FALSE, mutexName.c_str());
 	if (hMutex == NULL)
 	{
-		logger << "CreateStorage: CreateMutexA error" << std::endl;
-		return S_FALSE;
+		setLastError(CREATE_MUTEX_ERROR);
+		logger << "CreateStorage: " << CREATE_MUTEX_ERROR << std::endl;
+		return E_FAIL;
 	}
+	logger << "CreateStorage: mutex created" << std::endl;
 
 	WaitForSingleObject(hMutex, INFINITE);
+	logger << "CreateStorage: mutex taked" << std::endl;
 
 	StorageConfig storageConfig(capacity, secSnapshotInterval, maxKeyLength, maxPayloadLength);
 	LPVOID addr = NULL;
@@ -72,22 +89,42 @@ HRESULT __stdcall CreateComponent::CreateStorage(int capacity, int secSnapshotIn
 	try
 	{
 		addr = this->storageFileService.CreateStorage(filePath, storageConfig.getStorageMemorySize());
+		logger << "CreateStorage: storage file created" << std::endl;
 
 		this->storageService.InitializeStorage(addr, storageConfig);
+		logger << "CreateStorage: storage initialized" << std::endl;
 
 		this->storageFileService.CloseStorage(addr, storageConfig.getStorageMemorySize());
+
+		logger << "CreateStorage: storage file closed" << std::endl;
 	}
-	catch (const std::exception&)
+	catch (const std::exception& error)
 	{
+		setLastError(error.what());
 		this->storageFileService.ForceCloseStorage(addr, storageConfig.getStorageMemorySize());
 		ReleaseMutex(hMutex);
 		CloseHandle(hMutex);
-		return S_FALSE;
+		logger << "CreateStorage: error - " << getLastError() << std::endl;
+		return E_FAIL;
 	}
 
 	ReleaseMutex(hMutex);
 	CloseHandle(hMutex);
+	logger << "CreateStorage: mutex release" << std::endl;
 	return S_OK;
+}
+
+HRESULT __stdcall CreateComponent::GetLastError(char* error)
+{
+	try
+	{
+		strcpy_s(error, strlen(lastError) + 1, lastError);
+		return S_OK;
+	}
+	catch (const std::exception&)
+	{
+		return E_FAIL;
+	}
 }
 
 HRESULT CreateComponentCreateInstance(REFIID iid, void** ppv)

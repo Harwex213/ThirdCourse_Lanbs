@@ -169,6 +169,7 @@
     <ClInclude Include="ICreateComponent.h" />
     <ClInclude Include="ICreateStorage.h" />
     <ClInclude Include="ICrud.h" />
+    <ClInclude Include="IErrorHandler.h" />
     <ClInclude Include="ILoadStorage.h" />
     <ClInclude Include="IntervalSnapshotsTask.h" />
     <ClInclude Include="IOpenStorage.h" />

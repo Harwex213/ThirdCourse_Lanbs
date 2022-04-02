@@ -7,3 +7,5 @@
 #define INVALID_FILE_VIEW_ADDR NULL
 
 #define ELEMENT_NOT_FOUND_VALUE NULL
+
+#define CREATE_MUTEX_ERROR "CreateMutexA error"

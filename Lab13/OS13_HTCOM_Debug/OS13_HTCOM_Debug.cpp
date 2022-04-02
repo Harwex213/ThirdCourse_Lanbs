@@ -12,10 +12,12 @@ void testCreateComponent()
         throw std::exception("Failed create instance");
     }
 
-    hResult = pCreateComponent->CreateStorage(15, 5, 20, 50, "../input/storage.ht");
+    hResult = pCreateComponent->CreateStorage(15, 5, 20, 50, "../input/harwex/storage.ht");
     if (FAILED(hResult))
     {
-        throw std::exception("Failed create storage");
+        char error[256];
+        pCreateComponent->GetLastError(error);
+        throw std::exception(error);
     }
 }
 
@@ -32,5 +34,5 @@ int main()
         printf_s("Error: %s.\n", error.what());
     }
 
-    system("pause");
+    //system("pause");
 }

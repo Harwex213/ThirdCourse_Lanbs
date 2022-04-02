@@ -60,11 +60,20 @@ interface ISnap : IUnknown
 	virtual HRESULT STDMETHODCALLTYPE ExecuteSnap() = 0;
 };
 
+// {15EA397A-FE29-4380-BD86-CD106C100A52}
+static const GUID IID_IErrorHandler =
+{ 0x15ea397a, 0xfe29, 0x4380, { 0xbd, 0x86, 0xcd, 0x10, 0x6c, 0x10, 0xa, 0x52 } };
+
+interface IErrorHandler : IUnknown
+{
+	virtual HRESULT STDMETHODCALLTYPE GetLastError(char* error) = 0;
+};
+
 // {6480342D-3315-444A-A6FF-F5CEB435A20E}
 static const GUID IID_ICreateComponent =
 { 0x6480342d, 0x3315, 0x444a, { 0xa6, 0xff, 0xf5, 0xce, 0xb4, 0x35, 0xa2, 0xe } };
 
-interface ICreateComponent : ICreateStorage
+interface ICreateComponent : ICreateStorage, IErrorHandler
 {
 
 };
