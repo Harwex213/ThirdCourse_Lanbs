@@ -5,6 +5,8 @@ VisualStudioVersion = 17.0.31903.59
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "OS13_HTCOM", "OS13_HTCOM\OS13_HTCOM.vcxproj", "{497E0BD9-FD64-46F1-A109-C3BB439E3FE3}"
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "OS13_HTCOM_Debug", "OS13_HTCOM_Debug\OS13_HTCOM_Debug.vcxproj", "{139EA89D-49AC-4E36-B427-3286808142ED}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|x64 = Debug|x64
@@ -21,6 +23,14 @@ Global
 		{497E0BD9-FD64-46F1-A109-C3BB439E3FE3}.Release|x64.Build.0 = Release|x64
 		{497E0BD9-FD64-46F1-A109-C3BB439E3FE3}.Release|x86.ActiveCfg = Release|Win32
 		{497E0BD9-FD64-46F1-A109-C3BB439E3FE3}.Release|x86.Build.0 = Release|Win32
+		{139EA89D-49AC-4E36-B427-3286808142ED}.Debug|x64.ActiveCfg = Debug|x64
+		{139EA89D-49AC-4E36-B427-3286808142ED}.Debug|x64.Build.0 = Debug|x64
+		{139EA89D-49AC-4E36-B427-3286808142ED}.Debug|x86.ActiveCfg = Debug|Win32
+		{139EA89D-49AC-4E36-B427-3286808142ED}.Debug|x86.Build.0 = Debug|Win32
+		{139EA89D-49AC-4E36-B427-3286808142ED}.Release|x64.ActiveCfg = Release|x64
+		{139EA89D-49AC-4E36-B427-3286808142ED}.Release|x64.Build.0 = Release|x64
+		{139EA89D-49AC-4E36-B427-3286808142ED}.Release|x86.ActiveCfg = Release|Win32
+		{139EA89D-49AC-4E36-B427-3286808142ED}.Release|x86.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

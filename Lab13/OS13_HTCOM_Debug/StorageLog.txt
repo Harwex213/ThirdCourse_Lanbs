@@ -1,0 +1,23 @@
+DllMain: DLL_PROCESS_ATTACH
+DllGetClassObject: Call
+CFactory: Constructor call
+CFactory: QueryInterface call
+CFactory: AddRef - 2
+CFactory: QueryInterface - S_OK
+CFactory: Release - 1
+DllGetClassObject: CFactory instantiated. HResult - 0
+CFactory: CreateInstance call
+CreateComponent: Constructor call. currentComponentsAmount - 1
+CreateComponent: AddRef - 2
+CreateComponent: QueryInterface - S_OK
+CreateComponent: Release - 1
+CreateComponent: CreateInstance HResult - 0
+CFactory: CreateInstance - finished. HResult: 0
+CreateComponent: AddRef - 2
+CreateComponent: Release - 1
+CFactory: Full release 
+CFactory: Destructor call
+CreateComponent: AddRef - 2
+CreateComponent: QueryInterface - S_OK
+CreateComponent: Release - 1
+DllMain: DLL_PROCESS_DETACH
