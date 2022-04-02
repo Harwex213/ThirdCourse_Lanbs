@@ -13,17 +13,8 @@
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
-    <Filter Include="Файлы заголовков\Components">
-      <UniqueIdentifier>{e414d1e7-ec2d-40ea-b9a5-2fdd1e51302c}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Файлы заголовков\Config">
-      <UniqueIdentifier>{23256ef1-61cc-4744-8301-b7f62e5f95be}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Файлы заголовков\Interfaces">
       <UniqueIdentifier>{52ca430c-0712-4901-9774-950ac684fbf0}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Файлы заголовков\Ole32">
-      <UniqueIdentifier>{479049ae-cf1e-4f7e-8b58-76fe0311d6a1}</UniqueIdentifier>
     </Filter>
     <Filter Include="Исходные файлы\Config">
       <UniqueIdentifier>{9aa8d154-5082-41df-a440-2cea3c44dfe3}</UniqueIdentifier>
@@ -31,8 +22,44 @@
     <Filter Include="Исходные файлы\Ole32">
       <UniqueIdentifier>{39000476-b7a1-4d07-852f-105410970657}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Файлы заголовков\Config">
+      <UniqueIdentifier>{23256ef1-61cc-4744-8301-b7f62e5f95be}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Исходные файлы\Components">
+      <UniqueIdentifier>{7b7fe9c2-1188-4e5e-98fb-d8ee8023dcc7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Исходные файлы\Services">
+      <UniqueIdentifier>{f302baac-ba3d-4bc2-8ab8-84619d0b6928}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Файлы заголовков\Services">
+      <UniqueIdentifier>{9dd79291-ae3d-4c33-ac3b-fcad57ab1057}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Файлы заголовков\Components">
+      <UniqueIdentifier>{e414d1e7-ec2d-40ea-b9a5-2fdd1e51302c}</UniqueIdentifier>
+    </Filter>
     <Filter Include="Файлы заголовков\Components\Interfaces">
       <UniqueIdentifier>{64482d6a-7820-458f-a18c-4044a27ee199}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Файлы заголовков\Helper">
+      <UniqueIdentifier>{f3aef46c-0887-4b18-bf9e-003318f8363f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Исходные файлы\Helper">
+      <UniqueIdentifier>{5d944f93-328b-4585-b5f7-731e582caf28}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Файлы заголовков\Tasks">
+      <UniqueIdentifier>{e7d6d292-8035-4811-b6bb-6ba5c4fb7bda}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Исходные файлы\Tasks">
+      <UniqueIdentifier>{0b674362-222c-4f28-be79-cadf1691f7d7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Исходные файлы\Models">
+      <UniqueIdentifier>{40548bb0-fb1c-4c31-b5e0-408d47cc575a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Файлы заголовков\Models">
+      <UniqueIdentifier>{9651d81a-7241-42fd-80e9-7a898915765e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Файлы заголовков\Ole32">
+      <UniqueIdentifier>{479049ae-cf1e-4f7e-8b58-76fe0311d6a1}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -90,6 +117,36 @@
     <ClInclude Include="StartComponent.h">
       <Filter>Файлы заголовков\Components</Filter>
     </ClInclude>
+    <ClInclude Include="StorageFileService.h">
+      <Filter>Файлы заголовков\Services</Filter>
+    </ClInclude>
+    <ClInclude Include="StorageService.h">
+      <Filter>Файлы заголовков\Services</Filter>
+    </ClInclude>
+    <ClInclude Include="SnapshotService.h">
+      <Filter>Файлы заголовков\Services</Filter>
+    </ClInclude>
+    <ClInclude Include="SharedMemory.h">
+      <Filter>Файлы заголовков\Models</Filter>
+    </ClInclude>
+    <ClInclude Include="StorageConfig.h">
+      <Filter>Файлы заголовков\Models</Filter>
+    </ClInclude>
+    <ClInclude Include="Element.h">
+      <Filter>Файлы заголовков\Models</Filter>
+    </ClInclude>
+    <ClInclude Include="Helper.h">
+      <Filter>Файлы заголовков\Helper</Filter>
+    </ClInclude>
+    <ClInclude Include="HashTableService.h">
+      <Filter>Файлы заголовков\Services</Filter>
+    </ClInclude>
+    <ClInclude Include="Values.h">
+      <Filter>Файлы заголовков\Config</Filter>
+    </ClInclude>
+    <ClInclude Include="IntervalSnapshotsTask.h">
+      <Filter>Файлы заголовков\Tasks</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="dllmain.cpp">
@@ -106,6 +163,42 @@
     </ClCompile>
     <ClCompile Include="SelfRegistration.cpp">
       <Filter>Исходные файлы\Ole32</Filter>
+    </ClCompile>
+    <ClCompile Include="CreateComponent.cpp">
+      <Filter>Исходные файлы\Components</Filter>
+    </ClCompile>
+    <ClCompile Include="StorageFileService.cpp">
+      <Filter>Исходные файлы\Services</Filter>
+    </ClCompile>
+    <ClCompile Include="StorageService.cpp">
+      <Filter>Исходные файлы\Services</Filter>
+    </ClCompile>
+    <ClCompile Include="Helper.cpp">
+      <Filter>Исходные файлы\Helper</Filter>
+    </ClCompile>
+    <ClCompile Include="HashTableService.cpp">
+      <Filter>Исходные файлы\Services</Filter>
+    </ClCompile>
+    <ClCompile Include="SnapshotService.cpp">
+      <Filter>Исходные файлы\Services</Filter>
+    </ClCompile>
+    <ClCompile Include="IntervalSnapshotsTask.cpp">
+      <Filter>Исходные файлы\Tasks</Filter>
+    </ClCompile>
+    <ClCompile Include="Element.cpp">
+      <Filter>Исходные файлы\Models</Filter>
+    </ClCompile>
+    <ClCompile Include="SharedMemory.cpp">
+      <Filter>Исходные файлы\Models</Filter>
+    </ClCompile>
+    <ClCompile Include="StorageConfig.cpp">
+      <Filter>Исходные файлы\Models</Filter>
+    </ClCompile>
+    <ClCompile Include="StartComponent.cpp">
+      <Filter>Исходные файлы\Components</Filter>
+    </ClCompile>
+    <ClCompile Include="ClientComponent.cpp">
+      <Filter>Исходные файлы\Components</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

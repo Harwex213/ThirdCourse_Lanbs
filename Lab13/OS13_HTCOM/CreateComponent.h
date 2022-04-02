@@ -1,6 +1,8 @@
 #pragma once
 #include "pch.h"
 #include "ICreateComponent.h"
+#include "StorageFileService.h"
+#include "StorageService.h"
 
 // {00DB7A85-8321-4530-8D2A-FD4AA3492585}
 static const GUID CLSID_CreateComponent =
@@ -22,10 +24,13 @@ public:
 	virtual ULONG STDMETHODCALLTYPE AddRef();
 	virtual ULONG STDMETHODCALLTYPE Release();
 
-	virtual HRESULT STDMETHODCALLTYPE CreateStorage();
+	virtual HRESULT STDMETHODCALLTYPE CreateStorage(int capacity, int secSnapshotInterval, int   maxKeyLength, int   maxPayloadLength, const char fileName[FILEPATH_SIZE]);
 
 private:
 	ULONG m_cRef;
+
+	StorageFileService storageFileService;
+	StorageService storageService;
 };
 
 HRESULT CreateComponentCreateInstance(REFIID riid, void** ppv);
