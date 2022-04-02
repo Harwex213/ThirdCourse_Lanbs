@@ -7,8 +7,22 @@
 
 // TODO: Array of components info: clsid, fname, vindx, pgid
 
+void guidToChar(GUID guid, char* input) {
+	sprintf_s(input, 77, "Guid = {%08lX-%04hX-%04hX-%02hhX%02hhX-%02hhX%02hhX%02hhX%02hhX%02hhX%02hhX}",
+		guid.Data1, guid.Data2, guid.Data3,
+		guid.Data4[0], guid.Data4[1], guid.Data4[2], guid.Data4[3],
+		guid.Data4[4], guid.Data4[5], guid.Data4[6], guid.Data4[7]);
+}
+
+STDAPI DllInstall(BOOL b, PCWSTR s)
+{
+	logger << "DllInstall: Call" << std::endl;
+	return S_OK;
+}
+
 STDAPI DllRegisterServer()
 {
+	char input[77];
 	HRESULT hResult = NULL;
 	logger << "DllRegisterServer: " << "Start" << std::endl;
 
@@ -25,6 +39,9 @@ STDAPI DllRegisterServer()
 		logger << "DllRegisterServer: CreateComponent registration failed. HResult - " << hResult << std::endl;
 		return hResult;
 	}
+	guidToChar(CLSID_CreateComponent, input);
+	logger << "DllRegisterServer: CreateComponent registration - " << input << std::endl;
+
 	hResult = RegisterServer(
 		g_hModule,
 		CLSID_ClientComponent,
@@ -37,6 +54,9 @@ STDAPI DllRegisterServer()
 		logger << "DllRegisterServer: ClientComponent registration failed. HResult - " << hResult << std::endl;
 		return hResult;
 	}
+	guidToChar(CLSID_ClientComponent, input);
+	logger << "DllRegisterServer: CreateComponent registration - " << input << std::endl;
+
 	hResult = RegisterServer(
 		g_hModule,
 		CLSID_StartComponent,
@@ -49,6 +69,8 @@ STDAPI DllRegisterServer()
 		logger << "DllRegisterServer: StartComponent registration failed. HResult - " << hResult << std::endl;
 		return hResult;
 	}
+	guidToChar(CLSID_StartComponent, input);
+	logger << "DllRegisterServer: CreateComponent registration - " << input << std::endl;
 
 	logger << "DllRegisterServer: Success" << std::endl;
 	return hResult;
@@ -97,6 +119,8 @@ STDAPI DllUnregisterServer()
 
 const int CLSID_STRING_SIZE = 39;
 
+#define CHECK(b) if (b == FALSE) { return S_FALSE; }
+
 HRESULT RegisterServer(HMODULE hModule,            // DLL module handle
 	const CLSID& clsid,         // Class ID
 	const WCHAR* szFriendlyName, // Friendly Name
@@ -115,15 +139,15 @@ HRESULT RegisterServer(HMODULE hModule,            // DLL module handle
 	wcscpy_s(szKey, L"CLSID\\");
 	wcscat_s(szKey, szCLSID);
 
-	setKeyAndValue(szKey, NULL, szFriendlyName);
-	setKeyAndValue(szKey, L"InprocServer32", szModule);
-	setKeyAndValue(szKey, L"ProgID", szProgID);
-	setKeyAndValue(szKey, L"VersionIndependentProgID", szVerIndProgID);
-	setKeyAndValue(szVerIndProgID, NULL, szFriendlyName);
-	setKeyAndValue(szVerIndProgID, L"CLSID", szCLSID);
-	setKeyAndValue(szVerIndProgID, L"CurVer", szProgID);
-	setKeyAndValue(szProgID, NULL, szFriendlyName);
-	setKeyAndValue(szProgID, L"CLSID", szCLSID);
+	CHECK(setKeyAndValue(szKey, NULL, szFriendlyName));
+	CHECK(setKeyAndValue(szKey, L"InprocServer32", szModule));
+	CHECK(setKeyAndValue(szKey, L"ProgID", szProgID));
+	CHECK(setKeyAndValue(szKey, L"VersionIndependentProgID", szVerIndProgID));
+	CHECK(setKeyAndValue(szVerIndProgID, NULL, szFriendlyName));
+	CHECK(setKeyAndValue(szVerIndProgID, L"CLSID", szCLSID));
+	CHECK(setKeyAndValue(szVerIndProgID, L"CurVer", szProgID));
+	CHECK(setKeyAndValue(szProgID, NULL, szFriendlyName));
+	CHECK(setKeyAndValue(szProgID, L"CLSID", szCLSID));
 
 	return S_OK;
 }
