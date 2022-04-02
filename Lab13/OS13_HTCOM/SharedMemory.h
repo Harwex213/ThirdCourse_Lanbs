@@ -7,7 +7,7 @@ public: // Constructors
 
 private: // Fields
 	int currentSize;
-	bool isChangedFromLastSnap;
+	std::atomic<bool> isChangedFromLastSnap;
 
 public: // Getters; Setters;
 	int getCurrentSize();
