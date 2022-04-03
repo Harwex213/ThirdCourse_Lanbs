@@ -9,6 +9,7 @@ StorageConfig::StorageConfig(const StorageConfig& storageConfig)
 	this->maxKeyLength = storageConfig.maxKeyLength;
 	this->maxPayloadLength = storageConfig.maxPayloadLength;
 	this->secSnapshotInterval = storageConfig.secSnapshotInterval;
+	strcpy_s(usersGroupName, USERS_GROUP_NAME_SIZE, storageConfig.usersGroupName);
 
 	this->storageMemorySize = storageConfig.storageMemorySize;
 	this->elementMemorySize = storageConfig.elementMemorySize;
@@ -17,12 +18,14 @@ StorageConfig::StorageConfig(const StorageConfig& storageConfig)
 StorageConfig::StorageConfig(int capacity,
 	int secSnapshotInterval,
 	int maxKeyLength,
-	int maxPayloadLength)
+	int maxPayloadLength,
+	const char usersGroupName[USERS_GROUP_NAME_SIZE])
 {
 	this->capacity = capacity;
 	this->maxKeyLength = maxKeyLength;
 	this->maxPayloadLength = maxPayloadLength;
 	this->secSnapshotInterval = secSnapshotInterval;
+	strcpy_s(this->usersGroupName, USERS_GROUP_NAME_SIZE, usersGroupName);
 
 	this->storageMemorySize = CalcStorageMaxSizeMemory();
 	this->elementMemorySize = CalcElementMaxSizeMemory();

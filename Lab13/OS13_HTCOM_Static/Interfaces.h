@@ -3,6 +3,7 @@
 #include "Models.h"
 
 #define FILEPATH_SIZE 512
+#define USER_NAME_SIZE 256
 
 // {B79F21B4-34FF-48C7-A6FC-7A9CB1771E83}
 static const GUID IID_ICloseStorage =
@@ -69,6 +70,7 @@ static const GUID IID_ILoadStorage =
 
 interface ILoadStorage : IUnknown
 {
+	virtual HRESULT STDMETHODCALLTYPE LoadStorage(const char fileName[FILEPATH_SIZE], const char snapshotsDirectoryPath[FILEPATH_SIZE], const char user[USER_NAME_SIZE], const char password[USER_NAME_SIZE]) = 0;
 	virtual HRESULT STDMETHODCALLTYPE LoadStorage(const char fileName[FILEPATH_SIZE], const char snapshotsDirectoryPath[FILEPATH_SIZE]) = 0;
 };
 

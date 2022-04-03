@@ -105,7 +105,7 @@ HRESULT __stdcall CreateComponent::CreateStorage(int capacity, int secSnapshotIn
 	WaitForSingleObject(hStorageMutex, INFINITE);
 	logger << "CreateStorage: mutex taked" << std::endl;
 
-	StorageConfig storageConfig(capacity, secSnapshotInterval, maxKeyLength, maxPayloadLength);
+	StorageConfig storageConfig(capacity, secSnapshotInterval, maxKeyLength, maxPayloadLength, HTUsersGroupName);
 	LPVOID addr = NULL;
 
 	try

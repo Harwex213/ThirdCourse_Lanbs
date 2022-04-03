@@ -1,5 +1,6 @@
 #pragma once
 #include "pch.h"
+#include "Values.h"
 
 // {4B4EBD11-7B8B-467F-99AC-E6943C123DB7}
 static const GUID IID_ILoadStorage =
@@ -7,6 +8,7 @@ static const GUID IID_ILoadStorage =
 
 interface ILoadStorage : IUnknown
 {
+	virtual HRESULT STDMETHODCALLTYPE LoadStorage(const char fileName[FILEPATH_SIZE], const char snapshotsDirectoryPath[FILEPATH_SIZE], const char user[USER_NAME_SIZE], const char password[USER_NAME_SIZE]) = 0;
 	virtual HRESULT STDMETHODCALLTYPE LoadStorage(const char fileName[FILEPATH_SIZE], const char snapshotsDirectoryPath[FILEPATH_SIZE]) = 0;
 };
 

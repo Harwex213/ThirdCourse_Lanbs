@@ -1,5 +1,7 @@
 #pragma once
 
+#define USERS_GROUP_NAME_SIZE 512
+
 struct Element
 {
 public: // Constructors
@@ -36,14 +38,14 @@ public: // Public methods
 
 };
 
-
 struct StorageConfig
 {
 public: // Constructors
 	StorageConfig(int capacity,
 		int secSnapshotInterval,
 		int maxKeyLength,
-		int maxPayloadLength);
+		int maxPayloadLength,
+		const char usersGroupName[USERS_GROUP_NAME_SIZE]);
 	StorageConfig(const StorageConfig& storageConfig);
 
 public: // Fields
@@ -51,6 +53,7 @@ public: // Fields
 	int maxKeyLength;
 	int maxPayloadLength;
 	int secSnapshotInterval;
+	char usersGroupName[USERS_GROUP_NAME_SIZE];
 
 	DWORD elementMemorySize;
 	DWORD storageMemorySize;
@@ -70,4 +73,3 @@ private: // Private methods
 public: // Public methods
 
 };
-

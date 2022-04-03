@@ -1,4 +1,5 @@
 #pragma once
+#include "Values.h"
 
 struct StorageConfig
 {
@@ -6,7 +7,8 @@ public: // Constructors
 	StorageConfig(int capacity,
 		int secSnapshotInterval,
 		int maxKeyLength,
-		int maxPayloadLength);
+		int maxPayloadLength,
+		const char usersGroupName[USERS_GROUP_NAME_SIZE]);
 	StorageConfig(const StorageConfig& storageConfig);
 
 public: // Fields
@@ -14,6 +16,7 @@ public: // Fields
 	int maxKeyLength;
 	int maxPayloadLength;
 	int secSnapshotInterval;
+	char usersGroupName[USERS_GROUP_NAME_SIZE];
 
 	DWORD elementMemorySize;
 	DWORD storageMemorySize;

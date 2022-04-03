@@ -20,9 +20,10 @@ int main(int argc, char* argv[])
 
 		StorageConfig* storageConfig = NULL;
 		pComponent->GetStorageConfig(storageConfig);
-		printf_s("HT-Storage Loaded: filePath = %s, loggerPath = %s, snapshotsDirectoryPath = %s, secSnapshotInterval = %d, capacity = %d, maxKeyLength = %d, maxPayloadLength = %d\n",
+		printf_s("HT-Storage Loaded: filePath = %s, loggerPath = %s, snapshotsDirectoryPath = %s, secSnapshotInterval = %d, capacity = %d, maxKeyLength = %d, maxPayloadLength = %d, usersGroupName = %s\n",
 			storagePath, loggerPath.c_str(), snapshotsDirectoryPath,
-			storageConfig->secSnapshotInterval, storageConfig->capacity, storageConfig->maxKeyLength, storageConfig->maxPayloadLength);
+			storageConfig->secSnapshotInterval, storageConfig->capacity, storageConfig->maxKeyLength, storageConfig->maxPayloadLength,
+			storageConfig->usersGroupName);
 
 		std::string closeEventName = storagePath; closeEventName += "-closeEvent";
 		HANDLE hCloseEvent = CreateEventA(NULL, TRUE, FALSE, closeEventName.c_str());

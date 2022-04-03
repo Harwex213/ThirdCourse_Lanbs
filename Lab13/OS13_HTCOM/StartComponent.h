@@ -6,6 +6,7 @@
 #include "StorageService.h"
 #include "IntervalSnapshotsTask.h"
 #include "AliveEventEmitterTask.h"
+#include "AuthService.h"
 
 // {E26D3691-759D-427E-B3D3-697DEF7AA33C}
 static const GUID CLSID_StartComponent =
@@ -27,6 +28,7 @@ public:
 	virtual ULONG STDMETHODCALLTYPE AddRef();
 	virtual ULONG STDMETHODCALLTYPE Release();
 
+	virtual HRESULT STDMETHODCALLTYPE LoadStorage(const char fileName[FILEPATH_SIZE], const char snapshotsDirectoryPath[FILEPATH_SIZE], const char user[USER_NAME_SIZE], const char password[USER_NAME_SIZE]);
 	virtual HRESULT STDMETHODCALLTYPE LoadStorage(const char fileName[FILEPATH_SIZE], const char snapshotsDirectoryPath[FILEPATH_SIZE]);
 	virtual HRESULT STDMETHODCALLTYPE CloseStorage();
 	virtual HRESULT STDMETHODCALLTYPE ExecuteSnap();
@@ -36,6 +38,7 @@ public:
 private: // Fields
 	ULONG m_cRef;
 
+	AuthService authService;
 	StorageFileService storageFileService;
 	StorageService storageService;
 	SnapshotService* snapshotService;
@@ -49,7 +52,6 @@ public: // Getters & Setters
 	void setLastError(const char* error);
 	char* getLastError();
 	void openStorageMutex(const char prefix[FILEPATH_SIZE]);
-
 };
 
 HRESULT StartComponentCreateInstance(REFIID riid, void** ppv);

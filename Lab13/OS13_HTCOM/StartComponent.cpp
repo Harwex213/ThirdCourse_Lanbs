@@ -89,6 +89,67 @@ void StartComponent::openStorageMutex(const char prefix[FILEPATH_SIZE])
 	logger << "StartComponent: storage mutex created" << std::endl;
 }
 
+HRESULT __stdcall StartComponent::LoadStorage(const char filePath[FILEPATH_SIZE], const char snapshotsDirectoryPath[FILEPATH_SIZE], const char user[USER_NAME_SIZE], const char password[USER_NAME_SIZE])
+{
+	logger << "StartComponent::LoadStorage: call" << std::endl;
+
+	openStorageMutex(filePath);
+
+	WaitForSingleObject(hStorageMutex, INFINITE);
+	logger << "StartComponent::LoadStorage: storage mutex taked" << std::endl;
+
+	StorageConfig* storageConfig = NULL;
+	LPVOID addr = NULL;
+
+	try
+	{
+		addr = this->storageFileService.LoadStorage(filePath, ALLOC_ALL_MEMORY_VALUE);
+		logger << "StartComponent::LoadStorage: storage file loaded" << std::endl;
+
+		this->storageService.ReceiveStorage(addr);
+		storageConfig = this->storageService.getStorageConfig();
+		logger << "StartComponent::LoadStorage: storage info loaded" << std::endl;
+
+		this->snapshotService = new SnapshotService(
+			filePath,
+			snapshotsDirectoryPath,
+			this->storageService.getStorageMemoryStart(),
+			storageConfig->getStorageMemorySize(),
+			this->storageService.getSharedMemory());
+		logger << "StartComponent::LoadStorage: snapshotService initialized" << std::endl;
+
+		this->authService.loginAsUser(user, password);
+		logger << "CreateStorage: user login success" << std::endl;
+
+		this->authService.checkUserOnAdmin(user);
+		logger << "CreateStorage: user belonging to admin group verified" << std::endl;
+
+		this->authService.checkUserOnHtGroups(this->storageService.getStorageConfig()->usersGroupName, user);
+		logger << "CreateStorage: user belonging to HT group verified" << std::endl;
+
+		this->intervalSnapshotTask.start(this->snapshotService, storageConfig->getSecSnapshotInterval());
+		logger << "StartComponent::LoadStorage: interval snapshots task started" << std::endl;
+
+		this->aliveEventEmitterTask.start(filePath);
+		logger << "StartComponent::LoadStorage: alive events emitter task started" << std::endl;
+	}
+	catch (const std::exception& error)
+	{
+		setLastError(error.what());
+		if (storageConfig != NULL)
+		{
+			this->storageFileService.ForceCloseStorage(addr, storageConfig->getStorageMemorySize());
+		}
+		ReleaseMutex(hStorageMutex);
+		CloseHandle(hStorageMutex);
+		logger << "StartComponent::LoadStorage: error - " << getLastError() << std::endl;
+		return E_FAIL;
+	}
+
+	ReleaseMutex(hStorageMutex);
+	logger << "StartComponent::CreateStorage: storage mutex release" << std::endl;
+	return S_OK;
+}
 
 HRESULT __stdcall StartComponent::LoadStorage(const char filePath[FILEPATH_SIZE], const char snapshotsDirectoryPath[FILEPATH_SIZE])
 {
@@ -112,12 +173,21 @@ HRESULT __stdcall StartComponent::LoadStorage(const char filePath[FILEPATH_SIZE]
 		logger << "StartComponent::LoadStorage: storage info loaded" << std::endl;
 
 		this->snapshotService = new SnapshotService(
-			filePath, 
-			snapshotsDirectoryPath, 
-			this->storageService.getStorageMemoryStart(), 
+			filePath,
+			snapshotsDirectoryPath,
+			this->storageService.getStorageMemoryStart(),
 			storageConfig->getStorageMemorySize(),
 			this->storageService.getSharedMemory());
 		logger << "StartComponent::LoadStorage: snapshotService initialized" << std::endl;
+
+		WCHAR userName[512];
+		DWORD userNameLength = 512;
+		GetUserName(userName, &userNameLength);
+		this->authService.checkUserOnAdmin(userName);
+		logger << "CreateStorage: user belonging to admin group verified" << std::endl;
+
+		this->authService.checkUserOnHtGroups(this->storageService.getStorageConfig()->usersGroupName, userName);
+		logger << "CreateStorage: user belonging to HT group verified" << std::endl;
 
 		this->intervalSnapshotTask.start(this->snapshotService, storageConfig->getSecSnapshotInterval());
 		logger << "StartComponent::LoadStorage: interval snapshots task started" << std::endl;
@@ -139,7 +209,7 @@ HRESULT __stdcall StartComponent::LoadStorage(const char filePath[FILEPATH_SIZE]
 	}
 
 	ReleaseMutex(hStorageMutex);
-	logger << "CreateStorage: storage mutex release" << std::endl;
+	logger << "StartComponent::CreateStorage: storage mutex release" << std::endl;
 	return S_OK;
 }
 
