@@ -7,5 +7,5 @@ static const GUID IID_ICreateStorage =
 
 interface ICreateStorage : IUnknown
 {
-	virtual HRESULT STDMETHODCALLTYPE CreateStorage(int capacity, int secSnapshotInterval, int   maxKeyLength, int   maxPayloadLength, const char fileName[FILEPATH_SIZE]) = 0;
+	virtual HRESULT STDMETHODCALLTYPE CreateStorage(int capacity, int secSnapshotInterval, int   maxKeyLength, int   maxPayloadLength, const char fileName[FILEPATH_SIZE], const char HTUsersGroupName[FILEPATH_SIZE]) = 0;
 };

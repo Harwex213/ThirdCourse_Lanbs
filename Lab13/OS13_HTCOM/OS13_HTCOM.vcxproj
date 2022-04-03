@@ -158,6 +158,7 @@
   <ItemGroup>
     <ClInclude Include="AliveEventReceiverTask.h" />
     <ClInclude Include="AliveEventEmitterTask.h" />
+    <ClInclude Include="AuthService.h" />
     <ClInclude Include="CFactory.h" />
     <ClInclude Include="ClientComponent.h" />
     <ClInclude Include="ComApi.h" />
@@ -193,6 +194,7 @@
   <ItemGroup>
     <ClCompile Include="AliveEventEmitterTask.cpp" />
     <ClCompile Include="AliveEventReceiverTask.cpp" />
+    <ClCompile Include="AuthService.cpp" />
     <ClCompile Include="CFactory.cpp" />
     <ClCompile Include="ClientComponent.cpp" />
     <ClCompile Include="ComApi.cpp" />

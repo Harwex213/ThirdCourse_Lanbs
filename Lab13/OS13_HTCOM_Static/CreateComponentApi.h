@@ -5,6 +5,6 @@
 namespace CreateComponentApi
 {
 	ICreateComponent* Init(std::string loggerPath);
-	void CreateStorage(ICreateComponent* pCreateComponent, int capacity, int secSnapshotInterval, int   maxKeyLength, int   maxPayloadLength, const char fileName[FILEPATH_SIZE]);
+	void CreateStorage(ICreateComponent* pCreateComponent, int capacity, int secSnapshotInterval, int   maxKeyLength, int   maxPayloadLength, const char fileName[FILEPATH_SIZE], const char HTUsersGroupName[FILEPATH_SIZE]);
 	void Dispose(ICreateComponent* pCreateComponent);
 }

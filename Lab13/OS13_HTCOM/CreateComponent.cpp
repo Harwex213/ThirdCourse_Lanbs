@@ -66,9 +66,31 @@ char* CreateComponent::getLastError()
 	return this->lastError;
 }
 
-HRESULT __stdcall CreateComponent::CreateStorage(int capacity, int secSnapshotInterval, int maxKeyLength, int maxPayloadLength, const char filePath[FILEPATH_SIZE])
+HRESULT __stdcall CreateComponent::CreateStorage(int capacity, int secSnapshotInterval, int maxKeyLength, int maxPayloadLength, const char filePath[FILEPATH_SIZE], const char HTUsersGroupName[FILEPATH_SIZE])
 {
 	logger << "CreateStorage: call" << std::endl;
+
+	try
+	{
+		authService.checkHtGroupOnExist(HTUsersGroupName);
+		logger << "CreateStorage: users group verified" << std::endl;
+
+		WCHAR userName[512];
+		DWORD userNameLength = 512;
+		GetUserName(userName, &userNameLength);
+		authService.checkUserOnAdmin(userName);
+		logger << "CreateStorage: user belonging to admin group verified" << std::endl;
+
+		authService.checkUserOnHtGroups(HTUsersGroupName, userName);
+		logger << "CreateStorage: user belonging to HT group verified" << std::endl;
+	}
+	catch (const std::exception& error)
+	{
+		setLastError(error.what());
+		logger << "CreateStorage: error - " << getLastError() << std::endl;
+		return E_FAIL;
+	}
+
 
 	std::string mutexName = filePath; mutexName += "-mutex";
 	HANDLE hStorageMutex = CreateMutexA(NULL, FALSE, mutexName.c_str());

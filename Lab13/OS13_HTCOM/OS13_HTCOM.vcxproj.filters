@@ -162,6 +162,9 @@
     <ClInclude Include="IElementPrinter.h">
       <Filter>Файлы заголовков\Interfaces</Filter>
     </ClInclude>
+    <ClInclude Include="AuthService.h">
+      <Filter>Файлы заголовков\Services</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="dllmain.cpp">
@@ -220,6 +223,9 @@
     </ClCompile>
     <ClCompile Include="AliveEventReceiverTask.cpp">
       <Filter>Исходные файлы\Tasks</Filter>
+    </ClCompile>
+    <ClCompile Include="AuthService.cpp">
+      <Filter>Исходные файлы\Services</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

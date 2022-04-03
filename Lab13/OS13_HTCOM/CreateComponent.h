@@ -3,6 +3,7 @@
 #include "ICreateComponent.h"
 #include "StorageFileService.h"
 #include "StorageService.h"
+#include "AuthService.h"
 
 // {00DB7A85-8321-4530-8D2A-FD4AA3492585}
 static const GUID CLSID_CreateComponent =
@@ -24,13 +25,14 @@ public:
 	virtual ULONG STDMETHODCALLTYPE AddRef();
 	virtual ULONG STDMETHODCALLTYPE Release();
 
-	virtual HRESULT STDMETHODCALLTYPE CreateStorage(int capacity, int secSnapshotInterval, int   maxKeyLength, int   maxPayloadLength, const char fileName[FILEPATH_SIZE]);
+	virtual HRESULT STDMETHODCALLTYPE CreateStorage(int capacity, int secSnapshotInterval, int   maxKeyLength, int   maxPayloadLength, const char fileName[FILEPATH_SIZE], const char HTUsersGroupName[FILEPATH_SIZE]);
 	virtual HRESULT STDMETHODCALLTYPE GetLastError(char* error);
 
 
 private: // Fields
 	ULONG m_cRef;
 
+	AuthService authService;
 	StorageFileService storageFileService;
 	StorageService storageService;
 

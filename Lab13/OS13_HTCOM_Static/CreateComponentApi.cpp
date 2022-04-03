@@ -19,9 +19,9 @@ namespace CreateComponentApi
         return pCreateComponent;
     }
 
-    void CreateStorage(ICreateComponent* pCreateComponent, int capacity, int secSnapshotInterval, int   maxKeyLength, int   maxPayloadLength, const char fileName[FILEPATH_SIZE])
+    void CreateStorage(ICreateComponent* pCreateComponent, int capacity, int secSnapshotInterval, int   maxKeyLength, int   maxPayloadLength, const char fileName[FILEPATH_SIZE], const char HTUsersGroupName[FILEPATH_SIZE])
     {
-        HRESULT hResult = pCreateComponent->CreateStorage(capacity, secSnapshotInterval, maxKeyLength, maxPayloadLength, fileName);
+        HRESULT hResult = pCreateComponent->CreateStorage(capacity, secSnapshotInterval, maxKeyLength, maxPayloadLength, fileName, HTUsersGroupName);
         if (FAILED(hResult))
         {
             char error[256];
