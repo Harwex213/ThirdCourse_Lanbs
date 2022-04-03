@@ -42,6 +42,7 @@ void IntervalSnapshotsTask::startIntervalSnapshots(SnapshotService* snapshotServ
 	}
 	catch (const std::exception&)
 	{
+		delete isIntervalSnapOn;
 		// TODO: log
 	}
 }

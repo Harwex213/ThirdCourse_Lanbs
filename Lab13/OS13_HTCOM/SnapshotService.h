@@ -4,6 +4,7 @@
 #include "StorageConfig.h"
 #include "SharedMemory.h"
 
+#define MEMORY_NULL_ERROR "Cannot create snapshot due to storage memory was null"
 #define CREATE_SNAPS_DIRECTORY_ERROR "Cannot create directory for snapshots"
 #define CREATE_SNAP_FILE_ERROR "Cannot create snapshot file of storage"
 #define WRITE_TO_SNAP_FILE_ERROR "Cannot save storage to opened snapshot file"

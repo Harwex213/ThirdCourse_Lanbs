@@ -48,6 +48,10 @@ std::string SnapshotService::generateSnapFileName()
 
 void SnapshotService::executeSnap()
 {
+	if (storageMemoryStart == NULL)
+	{
+		throw std::exception(MEMORY_NULL_ERROR);
+	}
 	if (sharedMemory->getIsChangedFromLastSnap() == false)
 	{
 		return;
