@@ -1,5 +1,6 @@
 #include "pch.h"
 #include "IntervalSnapshotsTask.h"
+#include "Logger.h"
 
 IntervalSnapshotsTask::IntervalSnapshotsTask()
 {
@@ -20,29 +21,30 @@ void IntervalSnapshotsTask::start(SnapshotService* snapshotService, int secSnaps
 {
 	this->setIsIntervalSnapOn(true);
 
-	std::thread _startIntervalSnap(&IntervalSnapshotsTask::startIntervalSnapshots, this, snapshotService, this->isIntervalSnapOn, secSnapshotInterval);
+	std::thread _startIntervalSnap(&IntervalSnapshotsTask::startIntervalSnapshots, this, snapshotService, secSnapshotInterval);
 	_startIntervalSnap.detach();
 }
 
-void IntervalSnapshotsTask::startIntervalSnapshots(SnapshotService* snapshotService, std::atomic<bool>* isIntervalSnapOn, int secSnapshotInterval)
+void IntervalSnapshotsTask::startIntervalSnapshots(SnapshotService* snapshotService, int secSnapshotInterval)
 {
+	logger << "startIntervalSnapshots: start" << std::endl;
+
 	try
 	{
-		if (isIntervalSnapOn->load(std::memory_order_seq_cst))
+		do
 		{
-			do
+			std::this_thread::sleep_for(std::chrono::seconds(secSnapshotInterval));
+			if (snapshotService != NULL)
 			{
-				std::this_thread::sleep_for(std::chrono::seconds(secSnapshotInterval));
 				snapshotService->executeSnap();
-			} while (isIntervalSnapOn->load(std::memory_order_seq_cst));
-		}
-
-		delete isIntervalSnapOn;
-		delete snapshotService;
+			}
+		} while (this->getIsIntervalSnapOn());
 	}
-	catch (const std::exception&)
+	catch (const std::exception& error)
 	{
-		delete isIntervalSnapOn;
-		// TODO: log
+		logger << "startIntervalSnapshots: snapshot error - " << error.what() << std::endl;
 	}
+
+	delete isIntervalSnapOn;
+	logger << "startIntervalSnapshots: finish" << std::endl;
 }
