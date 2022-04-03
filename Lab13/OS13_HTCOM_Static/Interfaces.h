@@ -92,7 +92,7 @@ static const GUID IID_IClientComponent =
 
 interface IClientComponent : IOpenStorage, ICloseStorage, ICrud, IErrorHandler, IElementCreator, IElementPrinter
 {
-
+	virtual HRESULT STDMETHODCALLTYPE GetIsStorageClosed() = 0;
 };
 
 // {6480342D-3315-444A-A6FF-F5CEB435A20E}
@@ -110,7 +110,7 @@ static const GUID IID_IStartComponent =
 
 interface IStartComponent : ILoadStorage, ICloseStorage, ISnap, IErrorHandler
 {
-
+	virtual HRESULT STDMETHODCALLTYPE GetStorageConfig(StorageConfig*& storageConfig) = 0;
 };
 
 // {C9DCCD71-3627-41B2-A434-343C5E661089}

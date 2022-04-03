@@ -39,6 +39,7 @@ public:
 	virtual HRESULT STDMETHODCALLTYPE CreateElementWithKeyPayload(Element*& element, const void* key, int keyLength, const void* payload, int payloadLength);
 	virtual HRESULT STDMETHODCALLTYPE PrintElement(Element* element);
 	virtual HRESULT STDMETHODCALLTYPE PrintAllElements();
+	virtual HRESULT STDMETHODCALLTYPE GetIsStorageClosed();
 
 private: // Fields
 	ULONG m_cRef;

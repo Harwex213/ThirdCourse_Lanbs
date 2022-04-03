@@ -356,6 +356,13 @@ HRESULT __stdcall ClientComponent::PrintAllElements()
 	return S_OK;
 }
 
+HRESULT __stdcall ClientComponent::GetIsStorageClosed()
+{
+	bool isOpened = this->storageService.getIsMemoryReceived() && this->storageFileService.getIsMapped();
+
+	return isOpened ? S_FALSE : S_OK;
+}
+
 HRESULT ClientComponentCreateInstance(REFIID iid, void** ppv)
 {
 	ClientComponent* pComponent = new ClientComponent();

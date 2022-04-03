@@ -31,6 +31,7 @@ public:
 	virtual HRESULT STDMETHODCALLTYPE CloseStorage();
 	virtual HRESULT STDMETHODCALLTYPE ExecuteSnap();
 	virtual HRESULT STDMETHODCALLTYPE GetLastError(char* error);
+	virtual HRESULT STDMETHODCALLTYPE GetStorageConfig(StorageConfig*& storageConfig);
 
 private: // Fields
 	ULONG m_cRef;

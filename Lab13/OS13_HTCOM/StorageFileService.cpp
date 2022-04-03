@@ -148,3 +148,8 @@ void StorageFileService::CloseStorage(LPVOID addr, DWORD storageMemory)
 	this->hFileMapping = NULL;
 	isMapped = false;
 }
+
+bool StorageFileService::getIsMapped()
+{
+	return this->isMapped;
+}

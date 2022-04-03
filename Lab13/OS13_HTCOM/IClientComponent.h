@@ -13,5 +13,5 @@ static const GUID IID_IClientComponent =
 
 interface IClientComponent: IOpenStorage, ICloseStorage, ICrud, IErrorHandler, IElementCreator, IElementPrinter
 {
-
+	virtual HRESULT STDMETHODCALLTYPE GetIsStorageClosed() = 0;
 };

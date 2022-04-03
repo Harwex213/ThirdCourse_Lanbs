@@ -203,6 +203,12 @@ HRESULT __stdcall StartComponent::GetLastError(char* error)
 	}
 }
 
+HRESULT __stdcall StartComponent::GetStorageConfig(StorageConfig*& storageConfig)
+{
+	storageConfig = this->storageService.getStorageConfig();
+	return S_OK;
+}
+
 HRESULT StartComponentCreateInstance(REFIID iid, void** ppv)
 {
 	StartComponent* pComponent = new StartComponent();

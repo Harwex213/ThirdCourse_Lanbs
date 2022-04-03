@@ -24,6 +24,9 @@ private:
 	bool isMapped;
 
 public:
+	bool getIsMapped();
+
+public:
 	LPVOID CreateStorage(const char filePath[FILEPATH_SIZE], DWORD memoryToAlloc);
 	LPVOID LoadStorage(const char filePath[FILEPATH_SIZE], DWORD memoryToAlloc);
 	LPVOID OpenStorage(const char filePath[FILEPATH_SIZE]);

@@ -4,6 +4,7 @@
 #include "ICloseStorage.h"
 #include "ISnap.h"
 #include "IErrorHandler.h"
+#include "StorageConfig.h"
 
 // {E3DD01E3-80C3-4B7B-8E06-A72D36379043}
 static const GUID IID_IStartComponent =
@@ -11,5 +12,5 @@ static const GUID IID_IStartComponent =
 
 interface IStartComponent : ILoadStorage, ICloseStorage, ISnap, IErrorHandler
 {
-
+	virtual HRESULT STDMETHODCALLTYPE GetStorageConfig(StorageConfig*& storageConfig) = 0;
 };
