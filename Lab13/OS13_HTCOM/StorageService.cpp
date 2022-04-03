@@ -8,6 +8,7 @@ StorageService::StorageService()
 	this->storageConfig = NULL;
 	this->sharedMemory = NULL;
 	this->elementsMemoryStart = NULL;
+	this->isMemoryReceived = false;
 }
 
 LPVOID StorageService::getStorageMemoryStart()
@@ -23,6 +24,16 @@ StorageConfig* StorageService::getStorageConfig()
 SharedMemory* StorageService::getSharedMemory()
 {
 	return this->sharedMemory;
+}
+
+void StorageService::setIsMemoryReceived(bool value)
+{
+	this->isMemoryReceived = value;
+}
+
+bool StorageService::getIsMemoryReceived()
+{
+	return this->isMemoryReceived;
 }
 
 Element* StorageService::getElementAddr(int index)
@@ -41,6 +52,10 @@ void StorageService::correctElementPointers(Element* element)
 
 void StorageService::InitializeStorage(LPVOID storageMemoryStart, const StorageConfig& storageConfig)
 {
+	if (this->getIsMemoryReceived())
+	{
+		throw std::exception(STORAGE_ALREADY_RECEIVED_ERROR);
+	}
 	//ZeroMemory(this->storageMemoryStart, storageConfig.getStorageMemorySize());
 
 	this->storageMemoryStart = storageMemoryStart;
@@ -51,10 +66,17 @@ void StorageService::InitializeStorage(LPVOID storageMemoryStart, const StorageC
 
 	LPVOID elementsMemoryPointer = this->sharedMemory + 1;
 	this->elementsMemoryStart = elementsMemoryPointer;
+
+	this->setIsMemoryReceived(true);
 }
 
 void StorageService::ReceiveStorage(LPVOID storageMemoryStart)
 {
+	if (this->getIsMemoryReceived())
+	{
+		throw std::exception(STORAGE_ALREADY_RECEIVED_ERROR);
+	}
+
 	this->storageMemoryStart = storageMemoryStart;
 	this->storageConfig = (StorageConfig*)storageMemoryStart;
 
@@ -63,18 +85,32 @@ void StorageService::ReceiveStorage(LPVOID storageMemoryStart)
 
 	LPVOID elementsMemoryPointer = this->sharedMemory + 1;
 	this->elementsMemoryStart = elementsMemoryPointer;
+
+	this->setIsMemoryReceived(true);
 }
 
 void StorageService::ClearStorage()
 {
+	if (this->getIsMemoryReceived() == false)
+	{
+		throw std::exception(STORAGE_CLEAR_ERROR);
+	}
+
 	storageMemoryStart = NULL;
 	storageConfig = NULL;
 	sharedMemory = NULL;
 	elementsMemoryStart = NULL;
+
+	this->setIsMemoryReceived(false);
 }
 
 Element* StorageService::getElement(int index)
 {
+	if (this->getIsMemoryReceived() == false)
+	{
+		throw std::exception(STORAGE_CLEAR_ERROR);
+	}
+
 	Element* element = getElementAddr(index);
 	if ((*(int*)element == NULL || element->getIsDeleted()))
 	{
@@ -89,6 +125,11 @@ Element* StorageService::getElement(int index)
 
 Element* StorageService::findElement(const char* pKey, int pKeyLength)
 {
+	if (this->getIsMemoryReceived() == false)
+	{
+		throw std::exception(STORAGE_CLEAR_ERROR);
+	}
+
 	if (sharedMemory->getCurrentSize() == 0)
 	{
 		return NULL;
@@ -148,6 +189,11 @@ Element* StorageService::findUnallocatedMemory(const char* key)
 
 void StorageService::insertElement(const Element* element)
 {
+	if (this->getIsMemoryReceived() == false)
+	{
+		throw std::exception(STORAGE_CLEAR_ERROR);
+	}
+
 	if (sharedMemory->getCurrentSize() == storageConfig->getCapacity())
 	{
 		throw std::exception(STORAGE_IS_FULL_ERROR);
@@ -174,6 +220,11 @@ void StorageService::insertElement(const Element* element)
 
 void StorageService::updateElement(const Element* element)
 {
+	if (this->getIsMemoryReceived() == false)
+	{
+		throw std::exception(STORAGE_CLEAR_ERROR);
+	}
+
 	if (sharedMemory->getCurrentSize() == 0)
 	{
 		throw std::exception(ELEMENT_NOUT_FOUND_ERROR);
@@ -194,6 +245,11 @@ void StorageService::updateElement(const Element* element)
 
 void StorageService::deleteElement(const char* key, int keyLength)
 {
+	if (this->getIsMemoryReceived() == false)
+	{
+		throw std::exception(STORAGE_CLEAR_ERROR);
+	}
+
 	if (sharedMemory->getCurrentSize() == 0)
 	{
 		throw std::exception(ELEMENT_NOUT_FOUND_ERROR);

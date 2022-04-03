@@ -5,6 +5,8 @@
 #include "Element.h"
 #include "HashTableService.h"
 
+#define STORAGE_ALREADY_RECEIVED_ERROR "Storage memory already received."
+#define STORAGE_CLEAR_ERROR "Storage memory not received yet."
 #define ELEMENT_NOUT_FOUND_ERROR "Element not found in storage."
 #define STORAGE_IS_FULL_ERROR "Storage is full already."
 #define ELEMENT_KEY_ALREADY_EXIST "Element with such key already exist in storage."
@@ -21,11 +23,14 @@ private: // Fields
 	StorageConfig* storageConfig;
 	SharedMemory* sharedMemory;
 	LPVOID elementsMemoryStart;
+	bool isMemoryReceived;
 
 public: // Getters; Setters;
 	LPVOID getStorageMemoryStart();
 	StorageConfig* getStorageConfig();
 	SharedMemory* getSharedMemory();
+	void setIsMemoryReceived(bool value);
+	bool getIsMemoryReceived();
 
 private: // Private methods
 	Element* getElementAddr(int index);
