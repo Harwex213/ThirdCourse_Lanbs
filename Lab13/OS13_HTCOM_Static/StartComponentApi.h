@@ -2,7 +2,7 @@
 #include "pch.h"
 #include "Interfaces.h"
 
-namespace StartComponent
+namespace StartComponentApi
 {
 	IStartComponent* Init(std::string loggerPath);
 	void LoadStorage(IStartComponent* pStartComponent, const char fileName[FILEPATH_SIZE], const char directoryPath[FILEPATH_SIZE]);

@@ -2,7 +2,7 @@
 #include "StartComponentApi.h"
 #include "LoggerApi.h"
 
-namespace StartComponent
+namespace StartComponentApi
 {
 	IStartComponent* Init(std::string loggerPath)
 	{
