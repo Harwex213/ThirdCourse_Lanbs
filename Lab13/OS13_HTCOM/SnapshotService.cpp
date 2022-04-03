@@ -26,12 +26,6 @@ std::string SnapshotService::createDirectoryForSnaps(const char* snapshotDirecto
 		throw std::exception(CREATE_SNAPS_DIRECTORY_ERROR);
 	}
 
-	directoryToCreate += "/" + Helper::generateRandomString(12);
-	if (!CreateDirectoryA(directoryToCreate.c_str(), NULL) && GetLastError() != ERROR_ALREADY_EXISTS)
-	{
-		throw std::exception(CREATE_SNAPS_DIRECTORY_ERROR);
-	}
-
 	return directoryToCreate;
 }
 
