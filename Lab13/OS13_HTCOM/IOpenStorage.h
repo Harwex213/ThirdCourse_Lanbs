@@ -7,6 +7,6 @@ static const GUID IID_IOpenStorage =
 
 interface IOpenStorage : IUnknown
 {
-	virtual HRESULT STDMETHODCALLTYPE OpenStorage() = 0;
+	virtual HRESULT STDMETHODCALLTYPE OpenStorage(const char filePath[FILEPATH_SIZE]) = 0;
 };
 

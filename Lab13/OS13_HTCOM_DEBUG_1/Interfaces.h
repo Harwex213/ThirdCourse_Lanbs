@@ -1,0 +1,15 @@
+#pragma once
+#include <objbase.h>
+#include "IOpenStorage.h"
+#include "ICloseStorage.h"
+#include "ICrud.h"
+#include "ICreateStorage.h"
+#include "IErrorHandler.h"
+#include "ILoadStorage.h"
+#include "ISnap.h"
+#include "ICreateComponent.h"
+#include "IClientComponent.h"
+#include "IStartComponent.h"
+#include "StartComponent.h"
+#include "ClientComponent.h"
+#include "CreateComponent.h"

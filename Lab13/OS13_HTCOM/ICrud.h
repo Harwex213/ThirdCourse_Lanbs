@@ -1,5 +1,6 @@
 #pragma once
 #include "pch.h"
+#include "Element.h"
 
 // {EB67EBBF-66C3-4E00-A346-0F5888A3834F}
 static const GUID IID_ICrud =
@@ -7,8 +8,8 @@ static const GUID IID_ICrud =
 
 interface ICrud : IUnknown
 {
-	virtual HRESULT STDMETHODCALLTYPE Find() = 0;
-	virtual HRESULT STDMETHODCALLTYPE Insert() = 0;
-	virtual HRESULT STDMETHODCALLTYPE Update() = 0;
-	virtual HRESULT STDMETHODCALLTYPE Delete() = 0;
+	virtual HRESULT STDMETHODCALLTYPE Find(Element* element) = 0;
+	virtual HRESULT STDMETHODCALLTYPE Insert(Element* element) = 0;
+	virtual HRESULT STDMETHODCALLTYPE Update(Element* element, const void* newPayload, int newPayloadLength) = 0;
+	virtual HRESULT STDMETHODCALLTYPE Delete(Element* element) = 0;
 };

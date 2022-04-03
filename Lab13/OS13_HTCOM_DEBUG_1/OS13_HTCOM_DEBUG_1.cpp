@@ -92,7 +92,7 @@ void testStartComponent()
 void testClientComponent()
 {
     std::string storagePath = proccessPath + "/storage.ht";
-    std::string loggerPath = "D:\\Wordplace\\2_Blue\\1University\\third_course\\OperatingSystems\\Labs\\Lab13\\input\\clients-log\\clientComponent-" 
+    std::string loggerPath = "D:\\Wordplace\\2_Blue\\1University\\third_course\\OperatingSystems\\Labs\\Lab13\\input\\clients-log\\clientComponent-"
         + std::to_string(GetCurrentProcessId()) + ".log";
     IClientComponent* pClientComponent = NULL;
 
@@ -193,8 +193,8 @@ int main()
     try
     {
         //testCreateComponent();
-        //testStartComponent();
-        testClientComponent();
+        testStartComponent();
+        //testClientComponent();
 
         printf_s("Success.\n");
     }

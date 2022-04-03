@@ -45,6 +45,10 @@ void AliveEventEmitterTask::startEmitting(std::atomic<bool>* isTaskOn)
 		ResetEvent(this->hEvent);
 		Sleep(50);
 		SetEvent(this->hEvent);
+
+#ifdef DEBUG
+		printf_s("ALIVE EVENT\n");
+#endif // DEBUG
 	}
 	ResetEvent(this->hEvent);
 	logger << "AliveEventEmitterTask: finish" << std::endl;

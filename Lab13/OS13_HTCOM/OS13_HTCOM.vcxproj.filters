@@ -156,6 +156,12 @@
     <ClInclude Include="AliveEventReceiverTask.h">
       <Filter>Файлы заголовков\Tasks</Filter>
     </ClInclude>
+    <ClInclude Include="IElementCreator.h">
+      <Filter>Файлы заголовков\Interfaces</Filter>
+    </ClInclude>
+    <ClInclude Include="IElementPrinter.h">
+      <Filter>Файлы заголовков\Interfaces</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="dllmain.cpp">

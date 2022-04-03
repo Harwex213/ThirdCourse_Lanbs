@@ -139,7 +139,6 @@ HRESULT __stdcall StartComponent::LoadStorage(const char filePath[FILEPATH_SIZE]
 	}
 
 	ReleaseMutex(hStorageMutex);
-	CloseHandle(hStorageMutex);
 	logger << "CreateStorage: storage mutex release" << std::endl;
 	return S_OK;
 }
@@ -177,6 +176,7 @@ HRESULT __stdcall StartComponent::CloseStorage()
 		ReleaseMutex(hStorageMutex);
 		CloseHandle(hStorageMutex);
 		logger << "StartComponent::CloseStorage: error - " << getLastError() << std::endl;
+		return E_FAIL;
 	}
 
 	ReleaseMutex(hStorageMutex);

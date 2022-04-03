@@ -1,0 +1,27 @@
+DllMain: DLL_PROCESS_ATTACH
+DllGetClassObject: Call
+CFactory: Constructor call
+CFactory: QueryInterface call
+CFactory: AddRef - 2
+CFactory: QueryInterface - S_OK
+CFactory: Release - 1
+DllGetClassObject: CFactory instantiated. HResult - 0
+CFactory: CreateInstance call
+StartComponent: Constructor call. currentComponentsAmount - 1
+StartComponent: AddRef - 2
+StartComponent: QueryInterface - S_OK
+StartComponent: Release - 1
+StartComponent: CreateInstance HResult - 0
+CFactory: CreateInstance - finished. HResult: 0
+StartComponent: AddRef - 2
+StartComponent: Release - 1
+CFactory: Full release 
+CFactory: Destructor call
+StartComponent: AddRef - 2
+StartComponent: QueryInterface - S_OK
+StartComponent: Release - 1
+StartComponent::LoadStorage: call
+StartComponent: storage mutex created
+StartComponent::LoadStorage: storage mutex taked
+StartComponent::LoadStorage: error - Cannot create mapping of file storage.
+DllMain: DLL_PROCESS_DETACH

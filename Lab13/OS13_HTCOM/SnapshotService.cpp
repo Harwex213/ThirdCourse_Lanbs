@@ -75,6 +75,8 @@ void SnapshotService::executeSnap()
 		throw std::exception(CLOSE_SNAP_FILE_ERROR);
 	}
 
+	sharedMemory->setIsChangedFromLastSnap(false);
+
 #ifdef DEBUG
 	printf_s("Snapshot created\n");
 #endif // DEBUG

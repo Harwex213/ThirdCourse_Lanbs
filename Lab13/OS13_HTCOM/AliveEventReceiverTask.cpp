@@ -45,15 +45,27 @@ void AliveEventReceiverTask::startReceiving(std::atomic<bool>* isTaskOn, ICloseS
 	DWORD result = 0;
 	do
 	{
-		result = WaitForSingleObject(this->hEvent, INFINITE);
+		result = WaitForSingleObject(this->hEvent, 100);
 		Sleep(100);
-	} while (result == WAIT_OBJECT_0 && isTaskOn->load(std::memory_order_seq_cst));
+
+#ifdef DEBUG
+		printf_s("ALIVE EVENT RECEIVED\n");
+#endif // DEBUG
+	} while (result == WAIT_OBJECT_0 && isTaskOn->load(std::memory_order_seq_cst) != false);
 
 	logger << "AliveEventReceiverTask: alive event from center has not been received. Try to close storage" << std::endl;
 
 	try
 	{
+#ifdef DEBUG
+		printf_s("TRY CLOSE STORAGE\n");
+#endif // DEBUG
+		
 		target.CloseStorage();
+
+#ifdef DEBUG
+		printf_s("STORAGE CLOSED\n");
+#endif // DEBUG
 	}
 	catch (const std::exception& error)
 	{

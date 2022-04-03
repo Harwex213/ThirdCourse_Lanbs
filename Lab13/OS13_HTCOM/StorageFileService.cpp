@@ -137,11 +137,11 @@ void StorageFileService::CloseStorage(LPVOID addr, DWORD storageMemory)
 	}
 	if (CloseHandle(this->hFileMapping) == FALSE)
 	{
-		throw std::exception(FLUSH_VIEW_OF_FILE_ERROR);
+		throw std::exception(CLOSE_FILE_MAPPING_ERROR);
 	}
-	if (CloseHandle(this->hFile) == FALSE)
+	if (this->hFile != NULL && CloseHandle(this->hFile) == FALSE)
 	{
-		throw std::exception(FLUSH_VIEW_OF_FILE_ERROR);
+		throw std::exception(CLOSE_FILE_STORAGE_ERROR);
 	}
 
 	this->hFile = NULL;
