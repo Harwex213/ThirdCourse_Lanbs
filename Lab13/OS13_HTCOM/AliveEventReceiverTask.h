@@ -19,7 +19,7 @@ public: // Getters & Setters
 	void setIsTaskOn(bool value);
 
 private: // Private methods
-	void startReceiving(ICloseStorage& target);
+	void startReceiving(std::atomic<bool>* isTaskOn, ICloseStorage& target);
 
 public: // Public methods
 	void start(const char filePath[FILEPATH_SIZE], ICloseStorage& target);

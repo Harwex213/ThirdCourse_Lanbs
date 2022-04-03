@@ -15,7 +15,7 @@ public: // Getters & Setters
 	void setIsIntervalSnapOn(bool value);
 
 private: // Private methods
-	void startIntervalSnapshots(SnapshotService* snapService, int secSnapshotInterval);
+	void startIntervalSnapshots(SnapshotService* snapService, std::atomic<bool>* isTaskOn, int secSnapshotInterval);
 
 public: // Public methods
 	void start(SnapshotService* snapService, int secSnapshotInterval);

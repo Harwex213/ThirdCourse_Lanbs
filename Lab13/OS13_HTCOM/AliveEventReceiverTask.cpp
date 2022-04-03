@@ -29,13 +29,17 @@ void AliveEventReceiverTask::start(const char filePath[FILEPATH_SIZE], ICloseSto
 
 	this->setIsTaskOn(true);
 
-	std::thread _startIntervalSnap(&AliveEventReceiverTask::startReceiving, this, target, this->isTaskOn);
+	std::thread _startIntervalSnap(&AliveEventReceiverTask::startReceiving, this, this->isTaskOn, std::ref(target));
 	_startIntervalSnap.detach();
 	Sleep(180);
 }
 
-void AliveEventReceiverTask::startReceiving(ICloseStorage& target)
+void AliveEventReceiverTask::startReceiving(std::atomic<bool>* isTaskOn, ICloseStorage& target)
 {
+#ifdef DEBUG
+	printf_s("AliveEventReceiverTask started\n");
+#endif // DEBUG
+
 	logger << "AliveEventReceiverTask: start" << std::endl;
 
 	DWORD result = 0;
@@ -43,7 +47,7 @@ void AliveEventReceiverTask::startReceiving(ICloseStorage& target)
 	{
 		result = WaitForSingleObject(this->hEvent, INFINITE);
 		Sleep(100);
-	} while (result == WAIT_OBJECT_0 && this->getIsTaskOn());
+	} while (result == WAIT_OBJECT_0 && isTaskOn->load(std::memory_order_seq_cst));
 
 	logger << "AliveEventReceiverTask: alive event from center has not been received. Try to close storage" << std::endl;
 
@@ -56,6 +60,10 @@ void AliveEventReceiverTask::startReceiving(ICloseStorage& target)
 		logger << "AliveEventReceiverTask: storage closing error - " << error.what() << std::endl;
 	}
 
-	this->setIsTaskOn(false);
+	isTaskOn->store(false, std::memory_order_seq_cst);
 	CloseHandle(this->hEvent);
+
+#ifdef DEBUG
+	printf_s("AliveEventReceiverTask finished\n");
+#endif // DEBUG
 }

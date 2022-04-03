@@ -28,22 +28,28 @@ void AliveEventEmitterTask::start(const char filePath[FILEPATH_SIZE])
 	}
 
 	this->setIsTaskOn(true);
-	std::thread eventReceiver(&AliveEventEmitterTask::startEmitting, this);
+	std::thread eventReceiver(&AliveEventEmitterTask::startEmitting, this, this->isTaskOn);
 	eventReceiver.detach();
 }
 
 
-void AliveEventEmitterTask::startEmitting()
+void AliveEventEmitterTask::startEmitting(std::atomic<bool>* isTaskOn)
 {
-	logger << "AliveEventEmitterTask: start" << std::endl;
+#ifdef DEBUG
+	printf_s("AliveEventEmitterTask started\n");
+#endif // DEBUG
 
-	while (this->getIsTaskOn())
+	logger << "AliveEventEmitterTask: start" << std::endl;
+	while (isTaskOn->load(std::memory_order_seq_cst))
 	{
 		ResetEvent(this->hEvent);
 		Sleep(50);
 		SetEvent(this->hEvent);
 	}
-
 	ResetEvent(this->hEvent);
 	logger << "AliveEventEmitterTask: finish" << std::endl;
+
+#ifdef DEBUG
+	printf_s("AliveEventEmitterTask finished\n");
+#endif // DEBUG
 }

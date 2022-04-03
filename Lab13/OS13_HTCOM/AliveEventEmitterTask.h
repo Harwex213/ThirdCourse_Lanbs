@@ -17,7 +17,7 @@ public: // Getters & Setters
 	void setIsTaskOn(bool value);
 
 private: // Private methods
-	void startEmitting();
+	void startEmitting(std::atomic<bool>* isTaskOn);
 
 public: // Public methods
 	void start(const char filePath[FILEPATH_SIZE]);

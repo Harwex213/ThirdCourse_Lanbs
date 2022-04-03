@@ -21,12 +21,16 @@ void IntervalSnapshotsTask::start(SnapshotService* snapshotService, int secSnaps
 {
 	this->setIsIntervalSnapOn(true);
 
-	std::thread _startIntervalSnap(&IntervalSnapshotsTask::startIntervalSnapshots, this, snapshotService, secSnapshotInterval);
+	std::thread _startIntervalSnap(&IntervalSnapshotsTask::startIntervalSnapshots, this, snapshotService, this->isIntervalSnapOn, secSnapshotInterval);
 	_startIntervalSnap.detach();
 }
 
-void IntervalSnapshotsTask::startIntervalSnapshots(SnapshotService* snapshotService, int secSnapshotInterval)
+void IntervalSnapshotsTask::startIntervalSnapshots(SnapshotService* snapshotService, std::atomic<bool>* isTaskOn, int secSnapshotInterval)
 {
+#ifdef DEBUG
+	printf_s("IntervalSnapshotsTask started\n");
+#endif // DEBUG
+
 	logger << "startIntervalSnapshots: start" << std::endl;
 
 	try
@@ -38,13 +42,19 @@ void IntervalSnapshotsTask::startIntervalSnapshots(SnapshotService* snapshotServ
 			{
 				snapshotService->executeSnap();
 			}
-		} while (this->getIsIntervalSnapOn());
+		} while (isTaskOn->load(std::memory_order_seq_cst));
 	}
 	catch (const std::exception& error)
 	{
 		logger << "startIntervalSnapshots: snapshot error - " << error.what() << std::endl;
+
+#ifdef DEBUG
+		printf_s("IntervalSnapshotsTask storage closing error\n");
+#endif // DEBUG
 	}
 
-	delete isIntervalSnapOn;
 	logger << "startIntervalSnapshots: finish" << std::endl;
+#ifdef DEBUG
+	printf_s("IntervalSnapshotsTask finished\n");
+#endif // DEBUG
 }

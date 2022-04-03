@@ -12,4 +12,6 @@
 
 #define FILEPATH_SIZE 512
 
+#define DEBUG
+
 #endif //PCH_H
