@@ -3,10 +3,8 @@
 #include "Interfaces.h"
 
 std::string proccessPath = "../input";
-std::string storagePath = proccessPath + "/storage.ht";
-std::string loggerPath = proccessPath + "/createComponent.log";
 
-void setLogger()
+void setLogger(std::string loggerPath)
 {
     HANDLE hFileMapping = CreateFileMappingA(INVALID_HANDLE_VALUE, NULL, PAGE_READWRITE, 0, 256, std::to_string(GetCurrentProcessId()).c_str());
     if (hFileMapping == NULL)
@@ -23,8 +21,11 @@ void setLogger()
 
 void testCreateComponent()
 {
+    std::string storagePath = proccessPath + "/storage.ht";
+    std::string loggerPath = proccessPath + "/createComponent.log";
     ICreateComponent* pCreateComponent = NULL;
 
+    setLogger(loggerPath);
     CoInitialize(NULL);
     HRESULT hResult = CoCreateInstance(CLSID_CreateComponent, NULL, CLSCTX_INPROC_SERVER, IID_ICreateComponent, (void**)&pCreateComponent);
     if (FAILED(hResult))
@@ -45,12 +46,55 @@ void testCreateComponent()
     CoFreeUnusedLibraries();
 }
 
+void testStartComponent()
+{
+    std::string storagePath = proccessPath + "/storage.ht";
+    std::string snapshotsDirectoryPath = proccessPath + "/snapshots";
+    std::string loggerPath = proccessPath + "/startComponent.log";
+    IStartComponent* pStartComponent = NULL;
+
+    setLogger(loggerPath);
+    CoInitialize(NULL);
+    HRESULT hResult = CoCreateInstance(CLSID_StartComponent, NULL, CLSCTX_INPROC_SERVER, IID_IStartComponent, (void**)&pStartComponent);
+    if (FAILED(hResult))
+    {
+        throw std::exception("Failed create instance");
+    }
+
+    hResult = pStartComponent->LoadStorage(storagePath.c_str(), snapshotsDirectoryPath.c_str());
+    if (FAILED(hResult))
+    {
+        char error[256];
+        pStartComponent->GetLastError(error);
+        throw std::exception(error);
+    }
+
+    for (int i = 0; i < 15; i++)
+    {
+        Sleep(1000);
+    }
+
+    hResult = pStartComponent->CloseStorage();
+    if (FAILED(hResult))
+    {
+        char error[256];
+        pStartComponent->GetLastError(error);
+        throw std::exception(error);
+    }
+
+    Sleep(1000);
+
+    reinterpret_cast<IUnknown*>(pStartComponent)->Release();
+
+    CoFreeUnusedLibraries();
+}
+
 int main()
 {
     try
     {
-        setLogger();
-        testCreateComponent();
+        //testCreateComponent();
+        testStartComponent();
 
         printf_s("Success.\n");
     }

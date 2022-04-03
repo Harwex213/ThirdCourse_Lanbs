@@ -7,6 +7,6 @@ static const GUID IID_ILoadStorage =
 
 interface ILoadStorage : IUnknown
 {
-	virtual HRESULT STDMETHODCALLTYPE LoadStorage() = 0;
+	virtual HRESULT STDMETHODCALLTYPE LoadStorage(const char fileName[FILEPATH_SIZE], const char snapshotsDirectoryPath[FILEPATH_SIZE]) = 0;
 };
 
