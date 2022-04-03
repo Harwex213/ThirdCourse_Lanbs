@@ -150,6 +150,12 @@
     <ClInclude Include="IErrorHandler.h">
       <Filter>Файлы заголовков\Interfaces</Filter>
     </ClInclude>
+    <ClInclude Include="AliveEventEmitterTask.h">
+      <Filter>Файлы заголовков\Tasks</Filter>
+    </ClInclude>
+    <ClInclude Include="AliveEventReceiverTask.h">
+      <Filter>Файлы заголовков\Tasks</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="dllmain.cpp">
@@ -202,6 +208,12 @@
     </ClCompile>
     <ClCompile Include="ClientComponent.cpp">
       <Filter>Исходные файлы\Components</Filter>
+    </ClCompile>
+    <ClCompile Include="AliveEventEmitterTask.cpp">
+      <Filter>Исходные файлы\Tasks</Filter>
+    </ClCompile>
+    <ClCompile Include="AliveEventReceiverTask.cpp">
+      <Filter>Исходные файлы\Tasks</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

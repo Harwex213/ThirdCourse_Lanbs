@@ -156,6 +156,8 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="AliveEventReceiverTask.h" />
+    <ClInclude Include="AliveEventEmitterTask.h" />
     <ClInclude Include="CFactory.h" />
     <ClInclude Include="ClientComponent.h" />
     <ClInclude Include="ComApi.h" />
@@ -187,6 +189,8 @@
     <ClInclude Include="Values.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="AliveEventEmitterTask.cpp" />
+    <ClCompile Include="AliveEventReceiverTask.cpp" />
     <ClCompile Include="CFactory.cpp" />
     <ClCompile Include="ClientComponent.cpp" />
     <ClCompile Include="ComApi.cpp" />
