@@ -4,6 +4,7 @@
 #include "StorageService.h"
 #include "StorageFileService.h"
 #include "AliveEventReceiverTask.h"
+#include "AuthService.h"
 
 #define STORAGE_MUTEX_NULL_ERROR "Storage mutex was null."
 #define ELEMENT_ARGUMENT_NULL_ERROR "Element argument was null."
@@ -28,9 +29,10 @@ public:
 	virtual ULONG STDMETHODCALLTYPE AddRef();
 	virtual ULONG STDMETHODCALLTYPE Release();
 
+	virtual HRESULT STDMETHODCALLTYPE OpenStorage(const char filePath[FILEPATH_SIZE], const char user[USER_NAME_SIZE], const char password[USER_NAME_SIZE]);
 	virtual HRESULT STDMETHODCALLTYPE OpenStorage(const char filePath[FILEPATH_SIZE]);
 	virtual HRESULT STDMETHODCALLTYPE CloseStorage();
-	virtual HRESULT STDMETHODCALLTYPE Find(Element* element);
+	virtual HRESULT STDMETHODCALLTYPE Find(Element*& element);
 	virtual HRESULT STDMETHODCALLTYPE Insert(Element* element);
 	virtual HRESULT STDMETHODCALLTYPE Update(Element* element, const void* newPayload, int newPayloadLength);
 	virtual HRESULT STDMETHODCALLTYPE Delete(Element* element);
@@ -40,10 +42,13 @@ public:
 	virtual HRESULT STDMETHODCALLTYPE PrintElement(Element* element);
 	virtual HRESULT STDMETHODCALLTYPE PrintAllElements();
 	virtual HRESULT STDMETHODCALLTYPE GetIsStorageClosed();
+	virtual HRESULT STDMETHODCALLTYPE CheckPermissionOnClose();
+	virtual HRESULT STDMETHODCALLTYPE CheckPermissionOnClose(const char user[USER_NAME_SIZE], const char password[USER_NAME_SIZE]);
 
 private: // Fields
 	ULONG m_cRef;
 
+	AuthService authService;
 	StorageFileService storageFileService;
 	StorageService storageService;
 	AliveEventReceiverTask aliveEventReceiverTask;

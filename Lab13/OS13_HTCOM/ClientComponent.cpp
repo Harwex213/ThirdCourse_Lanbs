@@ -85,6 +85,55 @@ void ClientComponent::openStorageMutex(const char prefix[FILEPATH_SIZE])
 	logger << "ClientComponent: storage mutex created" << std::endl;
 }
 
+HRESULT __stdcall ClientComponent::OpenStorage(const char filePath[FILEPATH_SIZE], const char user[USER_NAME_SIZE], const char password[USER_NAME_SIZE])
+{
+	std::lock_guard<std::mutex> lock(this->internalMutex);
+	logger << "ClientComponent::OpenStorage: call" << std::endl;
+
+	openStorageMutex(filePath);
+
+	WaitForSingleObject(hStorageMutex, INFINITE);
+	logger << "ClientComponent::OpenStorage: storage mutex taked" << std::endl;
+
+	StorageConfig* storageConfig = NULL;
+	LPVOID addr = NULL;
+
+	try
+	{
+		addr = this->storageFileService.OpenStorage(filePath);
+		logger << "ClientComponent::OpenStorage: storage file opened" << std::endl;
+
+		this->storageService.ReceiveStorage(addr);
+		storageConfig = this->storageService.getStorageConfig();
+		logger << "ClientComponent::OpenStorage: storage memory loaded" << std::endl;
+
+		this->authService.loginAsUser(user, password);
+		logger << "CreateStorage: user login success" << std::endl;
+
+		this->authService.checkUserOnHtGroups(this->storageService.getStorageConfig()->usersGroupName, user);
+		logger << "CreateStorage: user belonging to HT group verified" << std::endl;
+
+		this->aliveEventReceiverTask.start(filePath, *this);
+		logger << "ClientComponent::OpenStorage: alive events receiver task started" << std::endl;
+	}
+	catch (const std::exception& error)
+	{
+		setLastError(error.what());
+		if (storageConfig != NULL)
+		{
+			this->storageFileService.ForceCloseStorage(addr, storageConfig->getStorageMemorySize());
+		}
+		ReleaseMutex(hStorageMutex);
+		CloseHandle(hStorageMutex);
+		logger << "ClientComponent::OpenStorage: error - " << getLastError() << std::endl;
+		return E_FAIL;
+	}
+
+	ReleaseMutex(hStorageMutex);
+	logger << "ClientComponent::OpenStorage: storage mutex release" << std::endl;
+	return S_OK;
+}
+
 HRESULT __stdcall ClientComponent::OpenStorage(const char filePath[FILEPATH_SIZE])
 {
 	std::lock_guard<std::mutex> lock(this->internalMutex);
@@ -106,6 +155,13 @@ HRESULT __stdcall ClientComponent::OpenStorage(const char filePath[FILEPATH_SIZE
 		this->storageService.ReceiveStorage(addr);
 		storageConfig = this->storageService.getStorageConfig();
 		logger << "ClientComponent::OpenStorage: storage memory loaded" << std::endl;
+
+		WCHAR userName[512];
+		DWORD userNameLength = 512;
+		GetUserName(userName, &userNameLength);
+
+		this->authService.checkUserOnHtGroups(this->storageService.getStorageConfig()->usersGroupName, userName);
+		logger << "CreateStorage: user belonging to HT group verified" << std::endl;
 
 		this->aliveEventReceiverTask.start(filePath, *this);
 		logger << "ClientComponent::OpenStorage: alive events receiver task started" << std::endl;
@@ -156,7 +212,7 @@ HRESULT __stdcall ClientComponent::CloseStorage()
 	return S_OK;
 }
 
-HRESULT __stdcall ClientComponent::Find(Element* element)
+HRESULT __stdcall ClientComponent::Find(Element*& element)
 {
 	std::lock_guard<std::mutex> lock(this->internalMutex);
 	logger << "ClientComponent::Find: call" << std::endl;
@@ -361,6 +417,52 @@ HRESULT __stdcall ClientComponent::GetIsStorageClosed()
 	bool isOpened = this->storageService.getIsMemoryReceived() && this->storageFileService.getIsMapped();
 
 	return isOpened ? S_FALSE : S_OK;
+}
+
+HRESULT __stdcall ClientComponent::CheckPermissionOnClose()
+{
+	try
+	{
+		WCHAR userName[512];
+		DWORD userNameLength = 512;
+		GetUserName(userName, &userNameLength);
+		this->authService.checkUserOnAdmin(userName);
+		logger << "ClientComponent::CheckPermissionOnClose: user belonging to admin group verified" << std::endl;
+
+		this->authService.checkUserOnHtGroups(this->storageService.getStorageConfig()->usersGroupName, userName);
+		logger << "ClientComponent::CheckPermissionOnClose: user belonging to HT group verified" << std::endl;
+	}
+	catch (const std::exception& error)
+	{
+		setLastError(error.what());
+		logger << "ClientComponent::CheckPermissionOnClose: error - " << getLastError() << std::endl;
+		return E_FAIL;
+	}
+
+	return S_OK;
+}
+
+HRESULT __stdcall ClientComponent::CheckPermissionOnClose(const char user[USER_NAME_SIZE], const char password[USER_NAME_SIZE])
+{
+	try
+	{
+		this->authService.loginAsUser(user, password);
+		logger << "ClientComponent::CheckPermissionOnClose: user login success" << std::endl;
+
+		this->authService.checkUserOnAdmin(user);
+		logger << "ClientComponent::CheckPermissionOnClose: user belonging to admin group verified" << std::endl;
+
+		this->authService.checkUserOnHtGroups(this->storageService.getStorageConfig()->usersGroupName, user);
+		logger << "ClientComponent::CheckPermissionOnClose: user belonging to HT group verified" << std::endl;
+	}
+	catch (const std::exception& error)
+	{
+		setLastError(error.what());
+		logger << "ClientComponent::CheckPermissionOnClose: error - " << getLastError() << std::endl;
+		return E_FAIL;
+	}
+
+	return S_OK;
 }
 
 HRESULT ClientComponentCreateInstance(REFIID iid, void** ppv)

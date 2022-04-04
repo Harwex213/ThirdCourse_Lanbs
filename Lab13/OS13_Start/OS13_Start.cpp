@@ -16,7 +16,8 @@ int main(int argc, char* argv[])
 		std::string loggerPath = argv[3];
 
 		pComponent = StartComponentApi::Init(loggerPath);
-		StartComponentApi::LoadStorage(pComponent, storagePath, snapshotsDirectoryPath);
+		HRESULT hResult = pComponent->LoadStorage(storagePath, snapshotsDirectoryPath);
+		StartComponentApi::CheckOnFailed(pComponent, hResult);
 
 		StorageConfig* storageConfig = NULL;
 		pComponent->GetStorageConfig(storageConfig);
@@ -34,7 +35,8 @@ int main(int argc, char* argv[])
 
 		WaitForSingleObject(hCloseEvent, INFINITE);
 
-		StartComponentApi::CloseStorage(pComponent);
+		hResult = pComponent->CloseStorage();
+		StartComponentApi::CheckOnFailed(pComponent, hResult);
 	}
 	catch (const std::exception& error)
 	{

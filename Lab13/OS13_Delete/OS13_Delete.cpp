@@ -3,6 +3,8 @@
 #pragma comment(lib, "../x64/Debug/OS13_HTCOM_Static.lib")
 #include "ClientComponentApi.h"
 
+#define MAX_AMOUNT 51;
+
 int main(int argc, char* argv[])
 {
 	IClientComponent* pComponent = NULL;
@@ -18,21 +20,36 @@ int main(int argc, char* argv[])
 		HRESULT hResult = pComponent->OpenStorage(storagePath);
 		ClientComponentApi::CheckOnFailed(pComponent, hResult);
 
-		hResult = pComponent->CheckPermissionOnClose();
-		ClientComponentApi::CheckOnFailed(pComponent, hResult);
-
-		std::string closeEventName = storagePath; closeEventName += "-closeEvent";
-		HANDLE hCloseEvent = OpenEventA(EVENT_ALL_ACCESS, FALSE, closeEventName.c_str());
-		if (hCloseEvent == NULL)
+		char error[512];
+		srand(time(0));
+		std::string keyName = "key ";
+		int number = 0;
+		BOOL result = false;
+		while (true)
 		{
-			throw std::exception("Cannot open event to notify to close start");
+			number = rand() % MAX_AMOUNT;
+			keyName += std::to_string(number);
+
+			printf_s("-----------------------\n");
+			printf_s("Attempt to delete element with key %s\n", keyName.c_str());
+			result = ClientComponentApi::Delete(pComponent, keyName.c_str(), keyName.size() + 1);
+			if (result)
+			{
+				printf_s("Successfully deleted\n");
+			}
+			else {
+				pComponent->GetLastError(error);
+				if (pComponent->GetIsStorageClosed() == S_OK)
+				{
+					throw std::exception("Program stopped due to closed storage");
+				}
+			}
+			printf_s("-----------------------\n");
+
+			keyName.resize(4);
+
+			Sleep(1000);
 		}
-
-		SetEvent(hCloseEvent);
-		Sleep(100);
-		ResetEvent(hCloseEvent);
-
-		printf_s("Success.\n");
 	}
 	catch (const std::exception& error)
 	{
@@ -43,6 +60,5 @@ int main(int argc, char* argv[])
 	{
 		ClientComponentApi::Dispose(pComponent);
 	}
-
 	system("pause");
 }

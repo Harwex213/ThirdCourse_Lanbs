@@ -1,5 +1,6 @@
 #pragma once
 #include "pch.h"
+#include "Values.h"
 
 // {0C0C240A-B673-492E-84DD-44A6B64CDCFC}
 static const GUID IID_ICreateStorage =

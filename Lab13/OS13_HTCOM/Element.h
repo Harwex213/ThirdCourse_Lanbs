@@ -8,7 +8,7 @@ public: // Constructors
 	Element(const void* key, int keyLength, const void* payload, int payloadLength);
 	Element(const Element* oldElement, const void* payload, int payloadLength);
 
-private: // Fields
+public: // Fields
 	int keyLength;
 	int payloadLength;
 	const void* key;

@@ -19,24 +19,34 @@ namespace StartComponentApi
 		return pComponent;
 	}
 
-	void LoadStorage(IStartComponent* pStartComponent, const char fileName[FILEPATH_SIZE], const char directoryPath[FILEPATH_SIZE])
+	//void LoadStorage(IStartComponent* pStartComponent, const char fileName[FILEPATH_SIZE], const char directoryPath[FILEPATH_SIZE])
+	//{
+	//	HRESULT hResult = pStartComponent->LoadStorage(fileName, directoryPath);
+	//	if (FAILED(hResult))
+	//	{
+	//		char error[256];
+	//		pStartComponent->GetLastError(error);
+	//		throw std::exception(error);
+	//	}
+	//}
+	//
+	//void CloseStorage(IStartComponent* pStartComponent)
+	//{
+	//	HRESULT hResult = pStartComponent->CloseStorage();
+	//	if (FAILED(hResult))
+	//	{
+	//		char error[256];
+	//		pStartComponent->GetLastError(error);
+	//		throw std::exception(error);
+	//	}
+	//}
+
+	void CheckOnFailed(IStartComponent* pComponent, HRESULT hResult)
 	{
-		HRESULT hResult = pStartComponent->LoadStorage(fileName, directoryPath);
 		if (FAILED(hResult))
 		{
 			char error[256];
-			pStartComponent->GetLastError(error);
-			throw std::exception(error);
-		}
-	}
-	
-	void CloseStorage(IStartComponent* pStartComponent)
-	{
-		HRESULT hResult = pStartComponent->CloseStorage();
-		if (FAILED(hResult))
-		{
-			char error[256];
-			pStartComponent->GetLastError(error);
+			pComponent->GetLastError(error);
 			throw std::exception(error);
 		}
 	}

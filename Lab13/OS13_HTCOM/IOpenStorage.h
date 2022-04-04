@@ -1,5 +1,6 @@
 #pragma once
 #include "pch.h"
+#include "Values.h"
 
 // {5A8DD7BD-75D2-448B-A8E6-CEDE5CD60C12}
 static const GUID IID_IOpenStorage =
@@ -7,6 +8,7 @@ static const GUID IID_IOpenStorage =
 
 interface IOpenStorage : IUnknown
 {
+	virtual HRESULT STDMETHODCALLTYPE OpenStorage(const char filePath[FILEPATH_SIZE], const char user[USER_NAME_SIZE], const char password[USER_NAME_SIZE]) = 0;
 	virtual HRESULT STDMETHODCALLTYPE OpenStorage(const char filePath[FILEPATH_SIZE]) = 0;
 };
 

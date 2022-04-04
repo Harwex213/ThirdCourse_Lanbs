@@ -10,8 +10,6 @@
 // Добавьте сюда заголовочные файлы для предварительной компиляции
 #include "framework.h"
 
-#define FILEPATH_SIZE 512
-
-#define DEBUG
+//#define DEBUG
 
 #endif //PCH_H

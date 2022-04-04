@@ -8,7 +8,7 @@ static const GUID IID_ICrud =
 
 interface ICrud : IUnknown
 {
-	virtual HRESULT STDMETHODCALLTYPE Find(Element* element) = 0;
+	virtual HRESULT STDMETHODCALLTYPE Find(Element*& element) = 0;
 	virtual HRESULT STDMETHODCALLTYPE Insert(Element* element) = 0;
 	virtual HRESULT STDMETHODCALLTYPE Update(Element* element, const void* newPayload, int newPayloadLength) = 0;
 	virtual HRESULT STDMETHODCALLTYPE Delete(Element* element) = 0;

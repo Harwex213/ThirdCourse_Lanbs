@@ -20,34 +20,43 @@ namespace ClientComponentApi
 		return pComponent;
 	}
 
-	void OpenStorage(IClientComponent* pClientComponent, const char fileName[FILEPATH_SIZE])
+	void CheckOnFailed(IClientComponent* pComponent, HRESULT hResult)
 	{
-		HRESULT hResult = pClientComponent->OpenStorage(fileName);
 		if (FAILED(hResult))
 		{
 			char error[256];
-			pClientComponent->GetLastError(error);
+			pComponent->GetLastError(error);
 			throw std::exception(error);
 		}
 	}
 
-	void CloseStorage(IClientComponent* pClientComponent)
-	{
-		HRESULT hResult = pClientComponent->CloseStorage();
-		if (FAILED(hResult))
-		{
-			char error[256];
-			pClientComponent->GetLastError(error);
-			throw std::exception(error);
-		}
-	}
+	//void OpenStorage(IClientComponent* pClientComponent, const char fileName[FILEPATH_SIZE])
+	//{
+	//	HRESULT hResult = pClientComponent->OpenStorage(fileName);
+	//	if (FAILED(hResult))
+	//	{
+	//		char error[256];
+	//		pClientComponent->GetLastError(error);
+	//		throw std::exception(error);
+	//	}
+	//}
 
-	bool Find(IClientComponent* pClientComponent, const void* key, int keyLength)
+	//void CloseStorage(IClientComponent* pClientComponent)
+	//{
+	//	HRESULT hResult = pClientComponent->CloseStorage();
+	//	if (FAILED(hResult))
+	//	{
+	//		char error[256];
+	//		pClientComponent->GetLastError(error);
+	//		throw std::exception(error);
+	//	}
+	//}
+
+	bool Find(IClientComponent* pClientComponent, const void* key, int keyLength, Element*& element)
 	{
-		Element* element = NULL;
 		pClientComponent->CreateElementWithKey(element, key, keyLength);
 
-		HRESULT hResult = pClientComponent->Insert(element);
+		HRESULT hResult = pClientComponent->Find(element);
 
 		return SUCCEEDED(hResult) ? true : false;
 	}
@@ -82,10 +91,10 @@ namespace ClientComponentApi
 		return SUCCEEDED(hResult) ? true : false;
 	}
 
-	void PrintStorage(IClientComponent* pClientComponent)
-	{
-		pClientComponent->PrintAllElements();
-	}
+	//void PrintStorage(IClientComponent* pClientComponent)
+	//{
+	//	pClientComponent->PrintAllElements();
+	//}
 
 	void Dispose(IClientComponent* pClientComponent)
 	{

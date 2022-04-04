@@ -1,5 +1,6 @@
 #pragma once
 #include "pch.h"
+#include "Values.h"
 
 #define CREATE_ALIVE_EVENT_ERROR "Cannot create event object for emitting alive events."
 

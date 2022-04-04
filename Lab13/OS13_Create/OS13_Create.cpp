@@ -23,8 +23,8 @@ int main(int argc, char* argv[])
 
 		CreateComponentApi::CreateStorage(pComponent, params[1], params[0], params[2], params[3], fileName, usersGroupName);
 
-		printf_s("HT-Storage Created: fileName = %s, loggerPath = %s, secSnapshotInterval = %d, capacity = %d, maxKeyLength = %d, maxPayloadLength = %d\n",
-			fileName, loggerName.c_str(), params[0], params[1], params[2], params[3]);
+		printf_s("HT-Storage Created: filePath = %s, loggerPath = %s, secSnapshotInterval = %d, capacity = %d, maxKeyLength = %d, maxPayloadLength = %d, usersGroupName = %s\n",
+			fileName, loggerName.c_str(), params[0], params[1], params[2], params[3], usersGroupName);
 	}
 	catch (const std::exception& error)
 	{
