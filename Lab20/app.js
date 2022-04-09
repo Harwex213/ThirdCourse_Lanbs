@@ -1,9 +1,13 @@
 const express = require("express");
 const bodyParser = require("body-parser");
 const { engine } = require("express-handlebars");
+const swaggerUI = require("swagger-ui-express");
 const controller = require("./controllers/MainController");
+const apiController = require("./controllers/RestApiController");
 
 const app = express();
+
+app.use("/swagger", swaggerUI.serve, swaggerUI.setup(require("./swagger.json")))
 
 app.engine(".hbs", engine({
     extname: ".hbs",
@@ -18,6 +22,7 @@ app.use(bodyParser.urlencoded({
 app.use(bodyParser.json());
 app.use("/static", express.static(__dirname + "/static"));
 
+app.use("/api/ts", apiController);
 app.use("/", controller);
 
 app.use((request, response, next) => {
@@ -36,6 +41,6 @@ app.use((error, request, response, next) => {
     });
 });
 
-app.listen(process.env.PORT || 80, () => {
+app.listen(process.env.PORT || 3000, () => {
     console.log("server successfully started");
 })

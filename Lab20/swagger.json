@@ -1,0 +1,178 @@
+{
+  "openapi": "3.0.1",
+  "info": {
+    "description": "",
+    "version": "1.0.0",
+    "title": "Telephone Number Directory Rest Api",
+    "contact": {
+      "email": "harwex213@mail.ru"
+    },
+    "license": {
+      "name": "Apache 2.0",
+      "url": "http://www.apache.org/licenses/LICENSE-2.0.html"
+    }
+  },
+  "servers": [
+    {
+      "url": "http://localhost:3000/api",
+      "variables": {
+        "port": {
+          "default": "3000"
+        }
+      }
+    }
+  ],
+  "paths": {
+    "/ts": {
+      "get": {
+        "tags": ["Record"],
+        "description": "Get all records",
+        "operationId": "getRecords",
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": { "type": "object"},
+                "example":
+                {
+                  "id": "58r56mfe46sdyzwe4xazy16l0d3q0",
+                  "fullName": "Капорцев Олег",
+                  "phoneNumber": "+375291170726"
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "tags": ["Record"],
+        "description": "Post record",
+        "operationId": "postRecord",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/RecordPost"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "201": {
+            "description": "Record successfully created",
+            "content": {
+              "text/plain": {}
+            }
+          }
+        }
+      },
+      "put": {
+        "tags": ["Record"],
+        "description": "Put record",
+        "operationId": "putRecord",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/RecordPut"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "text/plain": {}
+            }
+          },
+          "400": {
+            "description": "Record id not specified",
+            "content": {
+              "text/plain": {}
+            }
+          },
+          "404": {
+            "description": "Record with such id not found",
+            "content": {
+              "text/plain": {}
+            }
+          }
+        }
+      },
+      "delete": {
+        "tags": ["Record"],
+        "description": "Delete record",
+        "operationId": "deleteRecord",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            },
+            "required": true,
+            "description": "Id of record to delete"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Delete was successful",
+            "content": {
+              "text/plain": {}
+            }
+          },
+          "400": {
+            "description": "Record id not specified",
+            "content": {
+              "text/plain": {}
+              }
+          },
+          "404": {
+            "description": "Record with such id not found",
+            "content": {
+              "text/plain": {}
+            }
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "RecordPost": {
+        "type": "object",
+        "properties": {
+          "fullName": {
+            "type": "string",
+            "format": "{Surname} {Name}"
+          },
+          "phoneNumber": {
+            "type": "string",
+            "format": "+{xxx}{xx}{xxx}{xx}{xx}"
+          }
+        }
+      },
+      "RecordPut": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uid"
+          },
+          "fullName": {
+            "type": "string",
+            "format": "{Surname} {Name}"
+          },
+          "phoneNumber": {
+            "type": "string",
+            "format": "+{xxx}{xx}{xxx}{xx}{xx}"
+          }
+        }
+      }
+    }
+  }
+}

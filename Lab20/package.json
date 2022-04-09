@@ -14,7 +14,8 @@
     "body-parser": "^1.19.2",
     "dateformat": "^3.0.3",
     "express": "^4.17.3",
-    "express-handlebars": "^6.0.2"
+    "express-handlebars": "^6.0.2",
+    "swagger-ui-express": "^4.3.0"
   },
   "devDependencies": {
     "nodemon": "^2.0.15"

@@ -24,18 +24,20 @@ exports.addRecord = ({ fullName, phoneNumber }) => {
 }
 exports.updateRecord = ({ id, fullName, phoneNumber }) => {
     const record = directory.find(record => record.id === id);
-    if (record) {
-        record.fullName = fullName;
-        record.phoneNumber = phoneNumber;
+    if (!record) {
+        return null;
     }
+    record.fullName = fullName;
+    record.phoneNumber = phoneNumber;
     saveState();
     return record;
 }
 exports.deleteRecord = ({id}) => {
     const recordIndex = directory.findIndex(record => record.id === id);
-    if (recordIndex !== -1) {
-        directory.splice(recordIndex, 1);
+    if (recordIndex === -1) {
+        return false;
     }
+    directory.splice(recordIndex, 1);
     saveState();
     return true;
 }
