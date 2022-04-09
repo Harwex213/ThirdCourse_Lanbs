@@ -9,9 +9,14 @@ const options = {
 
 const app = express();
 
+app.use(require("body-parser").urlencoded({
+    extended: false
+}))
+
+let id = 18;
 app.get("/", (req, res) =>
 {
-    res.send("Hello from Harwex.");
+    res.send("Hello from Harwex. age " + id++);
 })
 
 https.createServer(options, app).listen({
