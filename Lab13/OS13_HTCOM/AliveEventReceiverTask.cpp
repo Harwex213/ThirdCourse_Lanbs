@@ -20,7 +20,7 @@ void AliveEventReceiverTask::setIsTaskOn(bool value)
 
 void AliveEventReceiverTask::start(const char filePath[FILEPATH_SIZE], ICloseStorage& target)
 {
-	std::string eventName = filePath; eventName += "-event";
+	std::string eventName = "Global\\"; eventName += filePath; eventName += "-event";
 	this->hEvent = OpenEventA(EVENT_ALL_ACCESS, FALSE, eventName.c_str());
 	if (this->hEvent == NULL)
 	{

@@ -1,6 +1,7 @@
 #include "pch.h"
 #include "AliveEventEmitterTask.h"
 #include "Logger.h"
+#include "Helper.h"
 
 AliveEventEmitterTask::AliveEventEmitterTask()
 {
@@ -20,8 +21,9 @@ void AliveEventEmitterTask::setIsTaskOn(bool value)
 
 void AliveEventEmitterTask::start(const char filePath[FILEPATH_SIZE])
 {
-	std::string eventName = filePath; eventName += "-event";
-	this->hEvent = CreateEventA(NULL, TRUE, TRUE, eventName.c_str());
+	std::string eventName = "Global\\"; eventName += filePath; eventName += "-event";
+	SECURITY_ATTRIBUTES SA = Helper::getSecurityAttributes();
+	this->hEvent = CreateEventA(&SA, TRUE, TRUE, eventName.c_str());
 	if (this->hEvent == NULL)
 	{
 		throw std::exception(CREATE_ALIVE_EVENT_ERROR);

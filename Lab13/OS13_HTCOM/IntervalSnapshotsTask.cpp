@@ -40,6 +40,7 @@ void IntervalSnapshotsTask::startIntervalSnapshots(SnapshotService* snapshotServ
 			std::this_thread::sleep_for(std::chrono::seconds(secSnapshotInterval));
 			if (snapshotService != NULL)
 			{
+				logger.flush();
 				snapshotService->executeSnap();
 			}
 		} while (isTaskOn->load(std::memory_order_seq_cst));

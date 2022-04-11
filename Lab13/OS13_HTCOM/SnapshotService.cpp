@@ -31,7 +31,7 @@ std::string SnapshotService::createDirectoryForSnaps(const char* snapshotDirecto
 
 std::string SnapshotService::generateSnapFileName()
 {
-	std::string snapFilename = this->storageFilePath + "/" + this->snapshotsDirectoryPath;
+	std::string snapFilename = this->snapshotsDirectoryPath;
 	snapFilename += "/" + this->storageFileName;
 	snapFilename += "-" + Helper::generateRandomString(12);
 	snapFilename += "." + Helper::timeToLocalString(time(NULL));

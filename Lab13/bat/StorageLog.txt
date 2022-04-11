@@ -1,0 +1,7 @@
+DllMain: DLL_PROCESS_ATTACH
+DllRegisterServer: Start
+DllRegisterServer: CreateComponent registration - Guid = {00DB7A85-8321-4530-8D2A-FD4AA3492585}
+DllRegisterServer: CreateComponent registration - Guid = {C9DCCD71-3627-41B2-A434-343C5E661089}
+DllRegisterServer: CreateComponent registration - Guid = {E26D3691-759D-427E-B3D3-697DEF7AA33C}
+DllRegisterServer: Success
+DllMain: DLL_PROCESS_DETACH

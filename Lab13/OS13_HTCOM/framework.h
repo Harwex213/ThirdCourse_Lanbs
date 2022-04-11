@@ -13,5 +13,6 @@
 #include <thread>
 #include <mutex>
 #include <random>
+#include "sddl.h"
 #include <Lm.h>
 #pragma comment (lib,"netapi32.lib")

@@ -4,7 +4,7 @@
 #include "StorageConfig.h"
 #include "Element.h"
 #include "SharedMemory.h"
-
+#include "Helper.h"
 
 StartComponent::StartComponent() : m_cRef(1)
 {
@@ -80,8 +80,9 @@ void StartComponent::openStorageMutex(const char prefix[FILEPATH_SIZE])
 		logger << "StartComponent: old storage mutex destroyed" << std::endl;
 	}
 
-	std::string mutexName = prefix; mutexName += "-mutex";
-	HANDLE hStorageMutex = CreateMutexA(NULL, FALSE, mutexName.c_str());
+	std::string mutexName = "Global\\"; mutexName += prefix; mutexName += "-mutex";
+	SECURITY_ATTRIBUTES SA = Helper::getSecurityAttributes();
+	hStorageMutex = CreateMutexA(&SA, FALSE, mutexName.c_str());
 	if (hStorageMutex == NULL)
 	{
 		throw std::exception(CREATE_MUTEX_ERROR);

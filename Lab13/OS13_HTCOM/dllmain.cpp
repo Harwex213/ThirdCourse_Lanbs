@@ -38,7 +38,11 @@ BOOL APIENTRY DllMain( HMODULE hModule,
         logger << "DllMain: " << "DLL_PROCESS_ATTACH" << std::endl;
         break;
     case DLL_THREAD_ATTACH:
+        logger << "DllMain: " << "DLL_THREAD_ATTACH" << std::endl;
+        break;
     case DLL_THREAD_DETACH:
+        logger << "DllMain: " << "DLL_THREAD_DETACH" << std::endl;
+        break;
     case DLL_PROCESS_DETACH:
         logger << "DllMain: " << "DLL_PROCESS_DETACH" << std::endl;
         logger.close();

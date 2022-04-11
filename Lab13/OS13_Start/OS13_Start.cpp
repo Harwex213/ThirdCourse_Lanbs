@@ -5,19 +5,32 @@
 
 int main(int argc, char* argv[])
 {
+	printf_s("pid: %d\n", GetCurrentProcessId());
 	IStartComponent* pComponent = NULL;
 	try
 	{
-		if (argc != 4) {
-			throw std::exception("Wrong process arguments. Should be storagePath(char*), snapshotsDirectoryPath(char*), loggerPath(char*)");
+		if (argc < 4) {
+			throw std::exception("Wrong process arguments. Should be storagePath(char*), snapshotsDirectoryPath(char*), loggerPath(char*) [, user(char*), password(char*) ]");
 		}
 		const char* storagePath = argv[1];
 		const char* snapshotsDirectoryPath = argv[2];
 		std::string loggerPath = argv[3];
 
+		HRESULT hResult = NULL;
 		pComponent = StartComponentApi::Init(loggerPath);
-		HRESULT hResult = pComponent->LoadStorage(storagePath, snapshotsDirectoryPath);
-		StartComponentApi::CheckOnFailed(pComponent, hResult);
+		if (argc == 6)
+		{
+			const char* user = argv[4];
+			const char* password = argv[5];
+
+			hResult = pComponent->LoadStorage(storagePath, snapshotsDirectoryPath, user, password);
+			StartComponentApi::CheckOnFailed(pComponent, hResult);
+		}
+		else
+		{
+			hResult = pComponent->LoadStorage(storagePath, snapshotsDirectoryPath);
+			StartComponentApi::CheckOnFailed(pComponent, hResult);
+		}
 
 		StorageConfig* storageConfig = NULL;
 		pComponent->GetStorageConfig(storageConfig);
@@ -40,7 +53,7 @@ int main(int argc, char* argv[])
 	}
 	catch (const std::exception& error)
 	{
-		printf_s("%s\n", error.what());
+		printf_s("Error - %s. GetLastError: %d\n", error.what(), GetLastError());
 	}
 
 	if (pComponent != NULL)

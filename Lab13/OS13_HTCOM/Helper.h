@@ -8,4 +8,5 @@ namespace Helper
 	std::string parseFileName(const char* filePath);
 	std::string parseFilePath(const char* filePath);
 	std::string timeToLocalString(time_t time);
+	SECURITY_ATTRIBUTES getSecurityAttributes();
 }

@@ -1,5 +1,7 @@
 #include "pch.h"
 #include "StorageFileService.h"
+#include "Logger.h"
+#include "Helper.h"
 
 StorageFileService::StorageFileService()
 {
@@ -29,7 +31,9 @@ LPVOID StorageFileService::CreateStorage(const char filePath[FILEPATH_SIZE], DWO
 		throw std::exception(CREATE_FILE_STORAGE_ERROR);
 	}
 
-	this->hFileMapping = CreateFileMappingA(hFile, NULL, PAGE_READWRITE, 0, memoryToAlloc, filePath);
+	std::string fileMappingName = "Global\\"; fileMappingName += filePath;
+	SECURITY_ATTRIBUTES SA = Helper::getSecurityAttributes();
+	this->hFileMapping = CreateFileMappingA(hFile, &SA, PAGE_READWRITE, 0, memoryToAlloc, fileMappingName.c_str());
 	if (this->hFileMapping == INVALID_FILE_MAPPING_HANDLE)
 	{
 		this->hFileMapping = NULL;
@@ -67,7 +71,9 @@ LPVOID StorageFileService::LoadStorage(const char filePath[FILEPATH_SIZE], DWORD
 		throw std::exception(OPEN_FILE_STORAGE_ERROR);
 	}
 
-	this->hFileMapping = CreateFileMappingA(hFile, NULL, PAGE_READWRITE, 0, memoryToAlloc, filePath);
+	std::string fileMappingName = "Global\\"; fileMappingName += filePath;
+	SECURITY_ATTRIBUTES SA = Helper::getSecurityAttributes();
+	this->hFileMapping = CreateFileMappingA(hFile, &SA, PAGE_READWRITE, 0, memoryToAlloc, fileMappingName.c_str());
 	if (this->hFileMapping == INVALID_FILE_MAPPING_HANDLE)
 	{
 		this->hFileMapping = NULL;
@@ -91,7 +97,8 @@ LPVOID StorageFileService::OpenStorage(const char filePath[FILEPATH_SIZE])
 		throw std::exception(ALREADY_MAPPED_ERROR);
 	}
 
-	this->hFileMapping = OpenFileMappingA(FILE_MAP_ALL_ACCESS, FALSE, filePath);
+	std::string fileMappingName = "Global\\"; fileMappingName += filePath;
+	this->hFileMapping = OpenFileMappingA(FILE_MAP_ALL_ACCESS, FALSE, fileMappingName.c_str());
 	if (this->hFileMapping == INVALID_FILE_MAPPING_HANDLE)
 	{
 		this->hFileMapping = NULL;

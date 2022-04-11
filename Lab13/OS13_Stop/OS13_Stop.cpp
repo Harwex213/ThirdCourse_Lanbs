@@ -8,20 +8,35 @@ int main(int argc, char* argv[])
 	IClientComponent* pComponent = NULL;
 	try
 	{
-		if (argc != 3) {
-			throw std::exception("Wrong process arguments. Should be storagePath(char*), loggerPath(char*)");
+		if (argc < 3) {
+			throw std::exception("Wrong process arguments. Should be storagePath(char*), loggerPath(char*) [, user(char*), password(char*) ]");
 		}
 		const char* storagePath = argv[1];
 		std::string loggerPath = argv[2];
+		HRESULT hResult = NULL;
 
 		pComponent = ClientComponentApi::Init(loggerPath);
-		HRESULT hResult = pComponent->OpenStorage(storagePath);
-		ClientComponentApi::CheckOnFailed(pComponent, hResult);
+		if (argc == 5)
+		{
+			const char* user = argv[3];
+			const char* password = argv[4];
 
-		hResult = pComponent->CheckPermissionOnClose();
-		ClientComponentApi::CheckOnFailed(pComponent, hResult);
+			hResult = pComponent->OpenStorage(storagePath, user, password);
+			ClientComponentApi::CheckOnFailed(pComponent, hResult);
 
-		std::string closeEventName = storagePath; closeEventName += "-closeEvent";
+			hResult = pComponent->CheckPermissionOnClose(user, password);
+			ClientComponentApi::CheckOnFailed(pComponent, hResult);
+		}
+		else
+		{
+			hResult = pComponent->OpenStorage(storagePath);
+			ClientComponentApi::CheckOnFailed(pComponent, hResult);
+
+			hResult = pComponent->CheckPermissionOnClose();
+			ClientComponentApi::CheckOnFailed(pComponent, hResult);
+		}
+
+		std::string closeEventName = "Global\\"; closeEventName += storagePath; closeEventName += "-closeEvent";
 		HANDLE hCloseEvent = OpenEventA(EVENT_ALL_ACCESS, FALSE, closeEventName.c_str());
 		if (hCloseEvent == NULL)
 		{
@@ -29,9 +44,8 @@ int main(int argc, char* argv[])
 		}
 
 		SetEvent(hCloseEvent);
-		Sleep(100);
-		ResetEvent(hCloseEvent);
-
+		CloseHandle(hCloseEvent);
+		
 		printf_s("Success.\n");
 	}
 	catch (const std::exception& error)

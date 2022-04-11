@@ -3,6 +3,7 @@
 #include "Logger.h"
 #include "StorageConfig.h"
 #include "Element.h"
+#include "Helper.h"
 
 ClientComponent::ClientComponent() : m_cRef(1)
 {
@@ -76,8 +77,9 @@ void ClientComponent::openStorageMutex(const char prefix[FILEPATH_SIZE])
 		logger << "ClientComponent: old storage mutex destroyed" << std::endl;
 	}
 
-	std::string mutexName = prefix; mutexName += "-mutex";
-	hStorageMutex = CreateMutexA(NULL, FALSE, mutexName.c_str());
+	std::string mutexName = "Global\\"; mutexName += prefix; mutexName += "-mutex";
+	SECURITY_ATTRIBUTES SA = Helper::getSecurityAttributes();
+	hStorageMutex = CreateMutexA(&SA, FALSE, mutexName.c_str());
 	if (hStorageMutex == NULL)
 	{
 		throw std::exception(CREATE_MUTEX_ERROR);
