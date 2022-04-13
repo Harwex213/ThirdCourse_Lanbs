@@ -1,3 +1,4 @@
 .idea
 
 node_modules
+/Lab30/config.json
