@@ -1,0 +1,36 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>WASM</title>
+    <style>
+        body {
+            font-family: "Open Sans", serif;
+        }
+    </style>
+</head>
+<body>
+<main>
+    <h1>Practice with WASM. task 1</h1>
+    <div>
+        <p>sum(10, 10): <span id="sum"></span></p>
+        <p>sub(10, 5): <span id="sub"></span></p>
+        <p>mul(10, 10): <span id="mul"></span></p>
+        <p>div(10, 5): <span id="div"></span></p>
+    </div>
+</main>
+<script>
+    const code = new Uint8Array([0,97,115,109,1,0,0,0,1,135,128,128,128,0,1,96,2,127,127,1,127,3,133,128,128,128,0,4,0,0,0,0,4,132,128,128,128,0,1,112,0,0,5,131,128,128,128,0,1,0,1,6,129,128,128,128,0,0,7,162,128,128,128,0,5,6,109,101,109,111,114,121,2,0,3,115,117,109,0,0,3,115,117,98,0,1,3,109,117,108,0,2,3,100,105,118,0,3,10,177,128,128,128,0,4,135,128,128,128,0,0,32,1,32,0,106,11,135,128,128,128,0,0,32,0,32,1,107,11,135,128,128,128,0,0,32,1,32,0,108,11,135,128,128,128,0,0,32,0,32,1,109,11]);
+    const module = new WebAssembly.Module(code);
+    const instance = new WebAssembly.Instance(module, {});
+
+    document.querySelector("#sum").innerHTML = instance.exports.sum(10, 10);
+    document.querySelector("#sub").innerHTML = instance.exports.sub(10, 5);
+    document.querySelector("#mul").innerHTML = instance.exports.mul(10, 10);
+    document.querySelector("#div").innerHTML = instance.exports.div(10, 5);
+</script>
+</body>
+</html>

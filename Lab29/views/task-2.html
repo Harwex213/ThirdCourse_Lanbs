@@ -1,0 +1,37 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>WASM</title>
+    <style>
+        body {
+            font-family: "Open Sans", serif;
+        }
+    </style>
+</head>
+<body>
+<main>
+    <h1>Practice with WASM. Task 2</h1>
+    <div>
+        <p>sum(10, 10): <span id="sum"></span></p>
+        <p>sub(10, 5): <span id="sub"></span></p>
+        <p>mul(10, 10): <span id="mul"></span></p>
+        <p>div(10, 5): <span id="div"></span></p>
+    </div>
+</main>
+<script>
+    (async () => {
+        const wasmCode = fetch("/code.wasm");
+        const { instance } = await WebAssembly.instantiateStreaming(wasmCode);
+
+        document.querySelector("#sum").innerHTML = instance.exports.sum(10, 10);
+        document.querySelector("#sub").innerHTML = instance.exports.sub(10, 5);
+        document.querySelector("#mul").innerHTML = instance.exports.mul(10, 10);
+        document.querySelector("#div").innerHTML = instance.exports.div(10, 5);
+    })();
+</script>
+</body>
+</html>
