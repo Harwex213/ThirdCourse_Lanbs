@@ -7,7 +7,7 @@ const {
 } = require("crypto");
 const { readFileSync } = require("fs");
 
-const serverResource = readFileSync("./server-resource.txt").toString();
+const serverResource = readFileSync("./src/server-resource.txt").toString();
 const serverDiffieHellman = createDiffieHellman(256);
 const serverDiffieHellmanContext = {
     serverKey: serverDiffieHellman.generateKeys("hex"),
@@ -119,4 +119,3 @@ app.get("/resource", (request, response) => {
 })
 
 app.listen(3000, () => console.log("We started"));
-
