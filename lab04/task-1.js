@@ -75,15 +75,15 @@ const decryptViaAffineSubstitutions = (encrypted) => {
     return decrypted;
 }
 
-// console.log(encryptTable);
-// console.log(decryptTable);
-// console.log(alphabetIndexes.join(" "));
-// console.log(cipherAlphabetIndexes.join(" "))
+console.log(encryptTable);
+console.log(decryptTable);
+console.log(alphabetIndexes.join(" "));
+console.log(cipherAlphabetIndexes.join(" "))
 
-const sample = "anya i aleg eto lubaw";
-const encrypted = encryptViaAffineSubstitutions(sample);
-console.log("-- encrypted --", encrypted);
-console.log("-- decrypted --", decryptViaAffineSubstitutions(encrypted))
+// const sample = "anya i aleg eto lubaw";
+// const encrypted = encryptViaAffineSubstitutions(sample);
+// console.log("-- encrypted --", encrypted);
+// console.log("-- decrypted --", decryptViaAffineSubstitutions(encrypted))
 
 const express = require("express");
 const bodyParser = require("body-parser");

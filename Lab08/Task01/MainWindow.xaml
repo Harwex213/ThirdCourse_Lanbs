@@ -1,0 +1,43 @@
+﻿<Window x:Class="Task01.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:Task01"
+        mc:Ignorable="d"
+        Title="MainWindow" Height="450" Width="800">
+    <Grid Margin="10" >
+        <Grid.RowDefinitions>
+            <RowDefinition Height="40"></RowDefinition>
+            <RowDefinition Height="50"></RowDefinition>
+        </Grid.RowDefinitions>
+
+        <StackPanel Orientation="Horizontal" Grid.Row="0">
+            <TextBlock Margin="0" FontFamily="Microsoft YaHei Bold" FontSize="24">x -</TextBlock>
+            <TextBlock Name="TextX" Margin="15, 0, 0, 0"
+                       FontFamily="Microsoft YaHei Bold" FontSize="24">1663</TextBlock>
+            
+            <TextBlock Margin="15, 0, 0, 0" FontFamily="Microsoft YaHei Bold" FontSize="24">a -</TextBlock>
+            <TextBlock Name="TextA" Margin="15, 0, 0, 0"
+                       FontFamily="Microsoft YaHei Bold" FontSize="24">421</TextBlock>
+            
+            <TextBlock Margin="15, 0, 0, 0" FontFamily="Microsoft YaHei Bold" FontSize="24">n -</TextBlock>
+            <TextBlock Name="TextN" Margin="15, 0, 0, 0"
+                       FontFamily="Microsoft YaHei Bold" FontSize="24">7875</TextBlock>
+        </StackPanel>
+        
+        <StackPanel Orientation="Horizontal"  Grid.Row="1">
+            <Button Padding="15, 0" FontFamily="Microsoft YaHei Bold" FontSize="24"
+                    Click="Calculate" >Next</Button>
+            <TextBlock Name="TextY" Margin="15, 0, 0, 0"
+                       VerticalAlignment="Center"
+                       FontFamily="Microsoft YaHei Bold" FontSize="24"> </TextBlock>
+            <TextBlock Margin="15, 0, 0, 0"
+                       VerticalAlignment="Center"
+                       FontFamily="Microsoft YaHei Bold" FontSize="24">Time: </TextBlock>
+            <TextBlock Name="TextTime" Margin="15, 0, 0, 0"
+                       VerticalAlignment="Center"
+                       FontFamily="Microsoft YaHei Bold" FontSize="24"></TextBlock>
+        </StackPanel>
+    </Grid>
+</Window>

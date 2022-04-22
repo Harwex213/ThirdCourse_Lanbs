@@ -1,5 +1,7 @@
 const germanStr = "A, B, C, D, E, F, G, H, I, J, K, L, M, N, O, P, Q, R, S, T, U, V, W, X, Y, Z, Ä, Ö, Ü, ß";
 const serbianStr = "абвгдђежзијклљмнњопрстћуфхцчџш";
+const russianStr = "абвгдеёжзийклмнопрстуфхцчшщъыьэюя";
+const englishStr = "abcdefghijklmnopqrstuvwxyz";
 const binaryStr = "01";
 
 const alphabetStrToMap = (alphabet) => {
@@ -38,6 +40,12 @@ const calcEntropy = (text, alphabet) => {
             break;
         case "serbian":
             alphabeticMap = alphabetStrToMap(serbianStr);
+            break;
+        case "russian":
+            alphabeticMap = alphabetStrToMap(russianStr);
+            break;
+        case "english":
+            alphabeticMap = alphabetStrToMap(englishStr);
             break;
         default:
             return null;
