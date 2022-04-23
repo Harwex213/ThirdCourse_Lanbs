@@ -16,8 +16,10 @@
             <StackPanel>
                 <Label>Text:</Label>
                 <TextBox Name="TextOrig" Margin="5" FontSize="15" TextWrapping="Wrap" AcceptsReturn="True" VerticalScrollBarVisibility="Visible"></TextBox>
-                <Label>Key:</Label>
-                <TextBox Name="Key" Margin="5" FontSize="15">123 125 41 84 203</TextBox>
+                <StackPanel Orientation="Horizontal">
+                    <Label FontSize="15">Key:</Label>
+                    <TextBlock Name="Key" Margin="5" FontSize="15">123 125 41 84 203</TextBlock>
+                </StackPanel>
                 <Button Margin="5" FontSize="15"  Click="Encrypt">Encrypt</Button>
                 <Button Margin="5" FontSize="15"  Click="Decrypt">Decrypt</Button>
             </StackPanel>

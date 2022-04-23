@@ -39,18 +39,18 @@ namespace Task02
             int[] key, box;
             byte[] cipher;
 
-            key = new int[64];
-            box = new int[64];
+            key = new int[256];
+            box = new int[256];
             cipher = new byte[data.Length];
 
-            for (i = 0; i < 64; i++)
+            for (i = 0; i < 256; i++)
             {
                 key[i] = pwd[i % pwd.Length];
                 box[i] = i;
             }
-            for (j = i = 0; i < 64; i++)
+            for (j = i = 0; i < 256; i++)
             {
-                j = (j + box[i] + key[i]) % 64;
+                j = (j + box[i] + key[i]) % 256;
                 tmp = box[i];
                 box[i] = box[j];
                 box[j] = tmp;
@@ -58,13 +58,13 @@ namespace Task02
             for (a = j = i = 0; i < data.Length; i++)
             {
                 a++;
-                a %= 64;
+                a %= 256;
                 j += box[a];
-                j %= 64;
+                j %= 256;
                 tmp = box[a];
                 box[a] = box[j];
                 box[j] = tmp;
-                k = box[((box[a] + box[j]) % 64)];
+                k = box[((box[a] + box[j]) % 256)];
                 cipher[i] = (byte)(data[i] ^ k);
             }
             return cipher;
@@ -76,18 +76,18 @@ namespace Task02
             int[] key, box;
             byte[] cipher;
 
-            key = new int[64];
-            box = new int[64];
+            key = new int[256];
+            box = new int[256];
             cipher = new byte[data.Length];
 
-            for (i = 0; i < 64; i++)
+            for (i = 0; i < 256; i++)
             {
                 key[i] = pwd[i % pwd.Length];
                 box[i] = i;
             }
-            for (j = i = 0; i < 64; i++)
+            for (j = i = 0; i < 256; i++)
             {
-                j = (j + box[i] + key[i]) % 64;
+                j = (j + box[i] + key[i]) % 256;
                 tmp = box[i];
                 box[i] = box[j];
                 box[j] = tmp;
@@ -95,13 +95,13 @@ namespace Task02
             for (a = j = i = 0; i < data.Length; i++)
             {
                 a++;
-                a %= 64;
+                a %= 256;
                 j += box[a];
-                j %= 64;
+                j %= 256;
                 tmp = box[a];
                 box[a] = box[j];
                 box[j] = tmp;
-                k = box[((box[a] + box[j]) % 64)];
+                k = box[((box[a] + box[j]) % 256)];
                 cipher[i] = (byte)(data[i] ^ k);
             }
             return cipher;
