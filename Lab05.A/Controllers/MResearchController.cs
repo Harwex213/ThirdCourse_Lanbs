@@ -39,9 +39,9 @@ namespace Lab05.A.Controllers
         }
         
         [Route("MResearch/MMX")]
-        public string MMX()
+        public string MXX()
         {
-            return "GET:MMX";
+            return "GET:MXX";
         }
     }
 }
