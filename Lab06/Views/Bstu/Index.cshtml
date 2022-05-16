@@ -1,0 +1,23 @@
+@{
+    ViewBag.Title = "BSTU - Index";
+}
+
+<div class="row">
+    <div class="col">
+        <h2>BSTU - Index</h2>
+        <p>
+            Lorem ipsum dolor sit amet, consectetur adipisicing elit.
+            Alias aliquid aperiam cum doloribus eum, fugit, impedit ipsa iste iusto magnam maxime molestiae nisi non
+            placeat quae sunt tempore unde voluptatum?
+        </p>
+        <ul>
+            <li>@Html.ActionLink("FIT/Index", "Index", "Fit")</li>
+            <li>@Html.ActionLink("FLT/Index", "Index", "Flt")</li>
+            <li>@Html.ActionLink("FIE/Index", "Index", "Fie")</li>
+            @if (User.Identity.IsAuthenticated && User.IsInRole("Administrator"))
+            {
+                <li>@Html.ActionLink("Config", "Config", "BSTU")</li>
+            }
+        </ul>
+    </div>
+</div>

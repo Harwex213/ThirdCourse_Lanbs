@@ -1,0 +1,36 @@
+@model Lab06.DTO.LoginDto
+@{
+    ViewBag.Title = "Login";
+}
+
+<div class="row">
+    <div class="col">
+        <h2>Вход</h2>
+        @using (Html.BeginForm()) 
+        {
+            @Html.AntiForgeryToken()
+             
+            <div>
+                @Html.ValidationSummary()
+                
+                <p>
+                    <label>Email</label><br />
+                    @Html.EditorFor(x => x.Email)
+                </p>
+                <p>
+                    <label>Пароль</label><br />
+                    @Html.EditorFor(x => x.Password)
+                </p>
+                <p><button class="btn btn-primary" type="submit">Войти</button></p>
+            </div>
+        }
+    </div>
+    <div class="col">
+        @using (Html.BeginForm("GoogleLogin", "Account", FormMethod.Post, new { style = "margin-top:12px" }))
+        {
+            <button class="btn btn-default" type="submit">
+                Войти с помощью аккаунта Google
+            </button>
+        }
+    </div>
+</div>
